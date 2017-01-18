@@ -6,11 +6,15 @@ import main.dao.UserDAO;
 import main.hibernate.HibernateUtil;
 import main.hibernate.serializer.UserSerializer;
 import main.model.User;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
     @Override
@@ -53,6 +57,37 @@ public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
         session.beginTransaction();
         User user = ((User) session.get(User.class, id));
         session.refresh(user);
+        session.getTransaction().commit();
+
+        return user;
+    }
+
+    @Override
+    public User getByUsernameOrEmail(String usernameOrEmail, String password) {
+        Session session = HibernateUtil.getSession();
+        User user = null;
+        Criteria criteria;
+
+        session.beginTransaction();
+
+        // Try to get by username
+        criteria = session.createCriteria(User.class)
+                .add(Expression.sql("BINARY username=?", usernameOrEmail, new StringType()))
+                .add(Expression.sql("BINARY password=?", password, new StringType()));
+
+        if (criteria.list().size() == 0) {
+            // Try to get by email
+            criteria = session.createCriteria(User.class)
+                    .add(Expression.sql("BINARY email=?", usernameOrEmail, new StringType()))
+                    .add(Expression.sql("BINARY password=?", password, new StringType()));
+        }
+
+        try {
+            user = ((User) criteria.list().get(0));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
         session.getTransaction().commit();
 
         return user;

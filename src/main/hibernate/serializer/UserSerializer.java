@@ -15,6 +15,10 @@ public class UserSerializer implements JsonSerializer<User> {
         object.addProperty("id", src.getId());
         object.addProperty("name", src.getName());
         object.addProperty("surname", src.getSurname());
+        object.addProperty("middleName", src.getMiddleName());
+        object.addProperty("email", src.getEmail());
+        object.addProperty("username", src.getUsername());
+        object.addProperty("password", src.getPassword());
         return object;
     }
 }

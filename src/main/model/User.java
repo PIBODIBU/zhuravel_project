@@ -13,10 +13,14 @@ public class User {
     private Integer id;
     private String name;
     private String surname;
+    private String middleName;
     private String email;
     private String username;
     private String password;
     private List<UserRole> userRoles;
+    private List<Order> ordersAsAgent;
+    private List<Order> ordersAsBuyer;
+    private UserData userData;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +33,7 @@ public class User {
         this.id = id;
     }
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name", length = 50, nullable = false)
     public String getName() {
         return name;
     }
@@ -38,7 +42,7 @@ public class User {
         this.name = name;
     }
 
-    @Column(name = "surname", length = 50)
+    @Column(name = "surname", length = 50, nullable = false)
     public String getSurname() {
         return surname;
     }
@@ -47,7 +51,16 @@ public class User {
         this.surname = surname;
     }
 
-    @Column(name = "email", length = 50, unique = true)
+    @Column(name = "middle_name", length = 50, nullable = false)
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    @Column(name = "email", length = 50, unique = true, nullable = false)
     public String getEmail() {
         return email;
     }
@@ -56,7 +69,7 @@ public class User {
         this.email = email;
     }
 
-    @Column(name = "username", length = 30, unique = true)
+    @Column(name = "username", length = 30, unique = true, nullable = false)
     public String getUsername() {
         return username;
     }
@@ -65,7 +78,7 @@ public class User {
         this.username = username;
     }
 
-    @Column(name = "password", length = 30)
+    @Column(name = "password", length = 30, nullable = false)
     public String getPassword() {
         return password;
     }
@@ -83,5 +96,39 @@ public class User {
 
     public void setUserRoles(List<UserRole> userRoles) {
         this.userRoles = userRoles;
+    }
+
+    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "agent", orphanRemoval = true)
+    @Fetch(FetchMode.SELECT)
+    @OrderBy("id DESC")
+    public List<Order> getOrdersAsAgent() {
+        return ordersAsAgent;
+    }
+
+    public void setOrdersAsAgent(List<Order> ordersAsAgent) {
+        this.ordersAsAgent = ordersAsAgent;
+    }
+
+    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "buyer", orphanRemoval = true)
+    @Fetch(FetchMode.SELECT)
+    @OrderBy("id DESC")
+    public List<Order> getOrdersAsBuyer() {
+        return ordersAsBuyer;
+    }
+
+    public void setOrdersAsBuyer(List<Order> ordersAsBuyer) {
+        this.ordersAsBuyer = ordersAsBuyer;
+    }
+
+    @OneToOne(cascade = CascadeType.PERSIST, mappedBy = "user",
+            fetch = FetchType.EAGER, orphanRemoval = true)
+    public UserData getUserData() {
+        return userData;
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
     }
 }
