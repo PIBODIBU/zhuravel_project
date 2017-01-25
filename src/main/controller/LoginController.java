@@ -23,7 +23,7 @@ public class LoginController {
                               HttpServletResponse servletResponse) throws IOException {
         if (session.getAttribute(ATTRIBUTE_USER) != null) {
             // If user is logged in - send redirect to default page
-            servletResponse.sendRedirect("/order/my");
+            servletResponse.sendRedirect("/order/active");
             return null;
         }
 
@@ -41,7 +41,7 @@ public class LoginController {
                       @RequestParam(value = "password") String password) throws IOException {
         if (session.getAttribute(ATTRIBUTE_USER) != null) {
             // If user is logged in - send redirect to default page
-            servletResponse.sendRedirect("/order/my");
+            servletResponse.sendRedirect("/order/active");
             return;
         }
 
@@ -61,7 +61,7 @@ public class LoginController {
         session.setAttribute(ATTRIBUTE_USER, user);
 
         // Send redirect
-        servletResponse.sendRedirect("/order/my");
+        servletResponse.sendRedirect("/order/active");
     }
 
     @RequestMapping("/logout")

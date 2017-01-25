@@ -1,11 +1,14 @@
 package main.security;
 
 import main.controller.LoginController;
+import main.dao.OrderDAO;
+import main.model.Order;
 import main.model.User;
 import main.model.UserRole;
 
 import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SecurityFilter {
@@ -157,5 +160,11 @@ public class SecurityFilter {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public static class Orders {
+        public static Boolean ownsAsAgent(Order order, User user) {
+            return Objects.equals(order.getAgent().getId(), user.getId());
+        }
     }
 }

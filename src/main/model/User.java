@@ -5,7 +5,9 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -130,5 +132,17 @@ public class User {
 
     public void setUserData(UserData userData) {
         this.userData = userData;
+    }
+
+    public Boolean hasRole(String role) {
+        Boolean passed = false;
+
+        for (UserRole userRole : getUserRoles()) {
+            if (userRole.getRole().equals(role)) {
+                passed = true;
+            }
+        }
+
+        return passed;
     }
 }

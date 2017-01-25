@@ -10,57 +10,11 @@
     <jsp:include page="template/angular_common.jsp"/>
 </head>
 
-<body ng-app="MyApp" ng-cloak>
+<body ng-app="BaseApp" ng-cloak>
 
-<md-toolbar ng-controller="ToolbarController as ctrl">
-    <div class="md-toolbar-tools">
-        <h3>
-            <span>My orders</span>
-        </h3>
-
-        <span flex></span>
-
-        <md-menu>
-            <md-button aria-label="Open phone interactions menu" class="md-icon-button"
-                       ng-click="ctrl.openMenu($mdOpenMenu, $event)">
-                <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
-            </md-button>
-
-            <md-menu-content width="4">
-                <md-menu-item>
-                    <md-button ng-click="ctrl.checkVoicemail()">
-                        <md-icon md-svg-icon="tag-plus"></md-icon>
-                        New order
-                    </md-button>
-                </md-menu-item>
-
-                <md-menu-item>
-                    <md-button ng-click="ctrl.checkVoicemail()">
-                        <md-icon md-svg-icon="close-circle"></md-icon>
-                        Closed orders
-                    </md-button>
-                </md-menu-item>
-
-                <md-menu-divider></md-menu-divider>
-
-                <md-menu-item>
-                    <md-button ng-click="ctrl.toggleNotifications()">
-                        <md-icon md-svg-icon="account"></md-icon>
-                        My profile
-                    </md-button>
-                </md-menu-item>
-
-                <md-menu-divider></md-menu-divider>
-
-                <md-menu-item>
-                    <md-button ng-click="ctrl.toggleNotifications()">
-                        Logout
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-    </div>
-</md-toolbar>
+<jsp:include page="template/toolbar.jsp">
+    <jsp:param name="title" value="My orders"/>
+</jsp:include>
 
 <div ng-controller="CardController as controller">
     <div layout="row" flex layout-wrap class='md-padding'>
@@ -94,48 +48,18 @@
                         <md-icon md-svg-icon="refresh"></md-icon>
                     </md-button>
                 </md-card-actions>
-
-                <%--<md-card-actions layout="row" layout-align="end center" ng-if="order.is_done == true">
-                    <md-button class="md-icon-button" aria-label="Done">
-                        <md-icon md-svg-icon="archive"></md-icon>
-                    </md-button>
-                </md-card-actions>--%>
             </md-card>
         </md-content>
     </div>
 </div>
+
 <script type="text/javascript">
-    var app = angular.module('MyApp',
-            ['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
-
-    app.config(function ($mdIconProvider, $mdThemingProvider) {
-        $mdIconProvider.defaultIconSet('/resources/mdi.svg');
-
-        $mdThemingProvider.theme('default')
-                .primaryPalette('blue')
-                .accentPalette('orange');
-
-        $mdThemingProvider.enableBrowserColor({
-            palette: 'accent', // Default is 'primary', any basic material palette and extended palettes are available
-            hue: '200' // Default is '800'
-        });
-    });
-
     app.controller('CardController', ['$scope', '$window', function ($scope, $window) {
         $scope.orders = ${orders};
 
         this.redirectToGroupList = function (instituteId) {
             $window.location.href = '/structure/institutes/' + instituteId + '/groups';
         }
-    }]);
-
-    app.controller('ToolbarController', ['$scope', '$window', function ($scope, $window) {
-        var originatorEv;
-
-        this.openMenu = function ($mdOpenMenu, ev) {
-            originatorEv = ev;
-            $mdOpenMenu(ev);
-        };
     }]);
 </script>
 

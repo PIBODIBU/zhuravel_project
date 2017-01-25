@@ -1,6 +1,5 @@
 package main.dao.impl;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.UserDAO;
 import main.hibernate.HibernateUtil;
@@ -14,7 +13,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
     @Override
