@@ -1,6 +1,13 @@
 <md-dialog style="overflow: hidden; margin-top:36px; margin-bottom:36px;" flex="auto">
-    <md-toolbar md-scroll-shrink>
-        <div class="md-toolbar-tools">{{order.buyer.name}} {{order.buyer.surname}}</div>
+    <md-toolbar md-scroll-shrink md-whiteframe="4">
+        <div class="md-toolbar-tools">
+            {{order.buyer.name}} {{order.buyer.surname}}
+            <span flex></span>
+            <md-button class="md-icon-button"
+                       ng-click="cancel()">
+                <md-icon md-svg-icon="close"></md-icon>
+            </md-button>
+        </div>
     </md-toolbar>
 
     <md-content style="padding-top: 0; margin-top:0;">

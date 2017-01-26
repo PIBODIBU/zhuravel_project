@@ -71,9 +71,12 @@ public class OrderDAOImpl extends BasicDAOImpl<Order> implements OrderDAO {
     public List<Order> getDoneOrdersAsBuyer(User user) {
         List<Order> orders = user.getOrdersAsBuyer();
         Iterator<Order> iterator = orders.iterator();
+        Order order;
 
         while (iterator.hasNext()) {
-            if (!this.isDone(iterator.next())) {
+            order = iterator.next();
+
+            if (!order.getDone()) {
                 iterator.remove();
             }
         }

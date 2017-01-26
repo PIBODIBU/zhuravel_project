@@ -52,6 +52,9 @@
                         </md-card-title-text>
                     </md-card-title>
 
+                    <md-divider></md-divider>
+
+                    <%--Active order--%>
                     <md-card-actions layout="row"
                                      layout-align="end center"
                                      ng-if="!order.is_done && !order.is_canceled && !order.is_archived">
@@ -60,15 +63,42 @@
                                    ng-click="ctrl.showOrderInfoCard($event, $index)">
                             <md-icon md-svg-icon="information-outline"></md-icon>
                         </md-button>
-                        <md-button class="md-icon-button" aria-label="Done">
+
+                        <md-button class="md-icon-button"
+                                   aria-label="Done">
                             <md-icon md-svg-icon="check"></md-icon>
                         </md-button>
                     </md-card-actions>
 
+                    <%--Done order--%>
                     <md-card-actions layout="row" layout-align="end center" ng-if="order.is_done && !order.is_archived">
+                        <md-button class="md-icon-button"
+                                   aria-label="Settings"
+                                   ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-icon md-svg-icon="information-outline"></md-icon>
+                        </md-button>
+
                         <md-button class="md-icon-button" aria-label="Done"
                                    ng-click="ctrl.archiveOrder($index)">
                             <md-icon md-svg-icon="archive"></md-icon>
+                        </md-button>
+                    </md-card-actions>
+
+                    <%--Canceled order--%>
+                    <md-card-actions layout="row" layout-align="end center" ng-if="order.is_canceled">
+                        <md-button class="md-icon-button"
+                                   aria-label="Settings"
+                                   ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-icon md-svg-icon="information-outline"></md-icon>
+                        </md-button>
+                    </md-card-actions>
+
+                    <%--Archived order--%>
+                    <md-card-actions layout="row" layout-align="end center" ng-if="order.is_archived">
+                        <md-button class="md-icon-button"
+                                   aria-label="Settings"
+                                   ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-icon md-svg-icon="information-outline"></md-icon>
                         </md-button>
                     </md-card-actions>
                 </md-card>
@@ -82,10 +112,6 @@
     app.controller('CardController', ['$scope', '$window', '$http', '$mdDialog', '$mdToast', function ($scope, $window, $http, $mdDialog, $mdToast) {
         $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
         $scope.orders = ${orders};
-
-        this.redirectToGroupList = function (instituteId) {
-            $window.location.href = '/structure/institutes/' + instituteId + '/groups';
-        };
 
         this.archiveOrder = function (index) {
             $http({
@@ -104,6 +130,32 @@
                                 .hideDelay(3000));
                     },
                     function (response) {
+                        console.log(response);
+//                        deferred.resolve(err);
+
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Error occurred. Try again later')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    }
+            );
+        };
+
+        this.doneOrder = function (index) {
+            $http({
+                method: 'POST',
+                url: '/api/order/done',
+                data: $.param({'order_id': $scope.orders[index]['id']}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(function (response) {
+                        console.log(response.data);
+                        $scope.orders.splice(index, 1);
+
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Archived successfully')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    }, function (response) {
                         console.log(response);
 //                        deferred.resolve(err);
 

@@ -16,3 +16,4 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
 
 <script src="${pageContext.request.contextPath}/resources/js/app.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">

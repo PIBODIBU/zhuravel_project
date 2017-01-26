@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<md-toolbar ng-controller="ToolbarController as ctrl">
+<md-toolbar ng-controller="ToolbarController as ctrl" md-whiteframe="4">
     <div class="md-toolbar-tools">
         <h3>
             <span>${user.name} ${user.surname}</span>
