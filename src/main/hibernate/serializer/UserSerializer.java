@@ -10,15 +10,21 @@ import java.lang.reflect.Type;
 
 public class UserSerializer implements JsonSerializer<User> {
     @Override
-    public JsonElement serialize(User src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(User user, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty("id", src.getId());
-        object.addProperty("name", src.getName());
-        object.addProperty("surname", src.getSurname());
-        object.addProperty("middleName", src.getMiddleName());
-        object.addProperty("email", src.getEmail());
-        object.addProperty("username", src.getUsername());
-        object.addProperty("password", src.getPassword());
+        UserDataSerializer userDataSerializer = new UserDataSerializer();
+
+        object.addProperty("id", user.getId());
+        object.addProperty("name", user.getName());
+        object.addProperty("surname", user.getSurname());
+        object.addProperty("middleName", user.getMiddleName());
+        object.addProperty("email", user.getEmail());
+        object.addProperty("username", user.getUsername());
+        object.addProperty("password", user.getPassword());
+
+        if (user.getUserData() != null)
+            object.add("userData", userDataSerializer.serialize(user.getUserData(), typeOfSrc, context));
+
         return object;
     }
 }

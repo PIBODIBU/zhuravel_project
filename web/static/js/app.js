@@ -28,3 +28,9 @@ app.controller('ToolbarController', ['$scope', '$window', function ($scope, $win
         window.location.href = url;
     };
 }]);
+
+app.filter('firstLetter', function () {
+    return function (input) {
+        return (input.charAt(0));
+    }
+});

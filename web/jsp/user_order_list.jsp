@@ -7,12 +7,12 @@
 <head>
     <title>Order List</title>
 
-    <jsp:include page="template/angular_common.jsp"/>
+    <jsp:include page="include/angular_common.jsp"/>
 </head>
 
 <body ng-app="BaseApp" ng-cloak>
 
-<jsp:include page="template/toolbar.jsp">
+<jsp:include page="include/toolbar.jsp">
     <jsp:param name="title" value="My orders"/>
 </jsp:include>
 

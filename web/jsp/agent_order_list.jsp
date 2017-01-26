@@ -7,12 +7,12 @@
 <head>
     <title>Order List</title>
 
-    <jsp:include page="template/angular_common.jsp"/>
+    <jsp:include page="include/angular_common.jsp"/>
 </head>
 
 <body ng-app="BaseApp" ng-cloak>
 
-<jsp:include page="template/toolbar.jsp">
+<jsp:include page="include/toolbar.jsp">
     <jsp:param name="title" value="My orders"/>
 </jsp:include>
 
@@ -25,7 +25,20 @@
                         flex-xl="25"
                         layout="column"
                         ng-repeat="order in orders">
+
                 <md-card flex md-whiteframe="4">
+                    <md-card-header ng-click="ctrl.showUserInfoCard($event, $index)">
+                        <md-card-avatar>
+                            <md-icon md-svg-icon="account"></md-icon>
+                        </md-card-avatar>
+                        <md-card-header-text>
+                            <span class="md-title">{{order.buyer.name}} {{order.buyer.surname}}</span>
+                            <span class="md-subhead">{{order.buyer.email}}</span>
+                        </md-card-header-text>
+                    </md-card-header>
+
+                    <md-divider></md-divider>
+
                     <md-card-title>
                         <md-card-title-text>
                             <span class="md-headline">{{order.buying_item_name}}
@@ -60,13 +73,14 @@
                         </md-button>
                     </md-card-actions>
                 </md-card>
+
             </md-content>
         </div>
     </div>
 </md-content>
 
 <script type="text/javascript">
-    app.controller('CardController', ['$scope', '$window', '$http', function ($scope, $window, $http) {
+    app.controller('CardController', ['$scope', '$window', '$http', '$mdDialog', function ($scope, $window, $http, $mdDialog) {
         $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
         $scope.orders = ${orders};
 
@@ -75,15 +89,6 @@
         };
 
         this.archiveOrder = function (index) {
-            /*$http.post('/api/order/archive', {"order_id": $scope.orders[index]['id']})
-             .success(function (response) {
-             console.log(response);
-             $scope.orders.splice(index, 1);
-             })
-             .error(function (response) {
-             console.log(response);
-             });*/
-
             $http({
                 method: 'POST',
                 url: '/api/order/archive',
@@ -101,19 +106,41 @@
             );
         };
 
-        /*$http({
-         method: 'POST',
-         url: '/api/order/archive',
-         params: {"order_id": $scope.orders[index]['id']},
-         headers: {
-         'Content-Type': 'x-www-form-urlencoded'
-         },
-         }).then(function successCallback(response) {
-         console.log(response);
-         $scope.orders.splice(index, 1);
-         }, function errorCallback(response) {
-         console.log(response);
-         });*/
+        this.showUserInfoCard = function (ev, index) {
+            $mdDialog.show({
+                controller: DialogController,
+                templateUrl: '/jsp/template/dialog1.tmpl.jsp',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+                resolve: {
+                    order: function () {
+                        return $scope.orders[index];
+                    }
+                }
+            }).then(function (answer) {
+                $scope.status = 'You said the information was "' + answer + '".';
+            }, function () {
+                $scope.status = 'You cancelled the dialog.';
+            });
+        };
+
+        function DialogController($scope, $mdDialog, order) {
+            $scope.order = order;
+
+            $scope.hide = function () {
+                $mdDialog.hide();
+            };
+
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+
+            $scope.answer = function (answer) {
+                $mdDialog.hide(answer);
+            };
+        }
     }]);
 </script>
 
