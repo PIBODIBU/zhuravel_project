@@ -6,6 +6,8 @@ import main.model.User;
 import java.util.List;
 
 public interface OrderDAO extends BasicDAO<Order> {
+    List<Order> getUndefinedOrders(User user);
+
     List<Order> getActiveOrdersAsAgent(User user);
 
     List<Order> getActiveOrdersAsBuyer(User user);

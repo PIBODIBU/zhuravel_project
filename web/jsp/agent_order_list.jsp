@@ -54,51 +54,70 @@
 
                     <md-divider></md-divider>
 
-                    <%--Active order--%>
-                    <md-card-actions layout="row"
-                                     layout-align="end center"
-                                     ng-if="!order.is_done && !order.is_canceled && !order.is_archived">
+                    <%--Undefined order--%>
+                    <md-card-actions layout="row" layout-align="end center"
+                                     ng-if="!order.agent">
                         <md-button class="md-icon-button"
                                    aria-label="Settings"
                                    ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-tooltip md-direction="bottom" md-direction="left">Become agent</md-tooltip>
+                            <md-icon md-svg-icon="face"></md-icon>
+                        </md-button>
+                    </md-card-actions>
+
+                    <%--Active order--%>
+                    <md-card-actions layout="row" layout-align="end center"
+                                     ng-if="order.agent && !order.is_done && !order.is_canceled && !order.is_archived">
+                        <md-button class="md-icon-button"
+                                   aria-label="Settings"
+                                   ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                             <md-icon md-svg-icon="information-outline"></md-icon>
                         </md-button>
 
                         <md-button class="md-icon-button"
                                    ng-click="ctrl.completeOrder($event, $index)"
                                    aria-label="Done">
+                            <md-tooltip md-direction="bottom" md-direction="left">Complete order</md-tooltip>
                             <md-icon md-svg-icon="check"></md-icon>
                         </md-button>
                     </md-card-actions>
 
                     <%--Done order--%>
-                    <md-card-actions layout="row" layout-align="end center" ng-if="order.is_done && !order.is_archived">
+                    <md-card-actions layout="row" layout-align="end center"
+                                     ng-if="order.agent && order.is_done && !order.is_archived">
                         <md-button class="md-icon-button"
                                    aria-label="Settings"
                                    ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                             <md-icon md-svg-icon="information-outline"></md-icon>
                         </md-button>
 
                         <md-button class="md-icon-button" aria-label="Done"
                                    ng-click="ctrl.archiveOrder($index)">
+                            <md-tooltip md-direction="bottom" md-direction="left">Archive order</md-tooltip>
                             <md-icon md-svg-icon="archive"></md-icon>
                         </md-button>
                     </md-card-actions>
 
                     <%--Canceled order--%>
-                    <md-card-actions layout="row" layout-align="end center" ng-if="order.is_canceled">
+                    <md-card-actions layout="row" layout-align="end center"
+                                     ng-if="order.agent && order.is_canceled">
                         <md-button class="md-icon-button"
                                    aria-label="Settings"
                                    ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                             <md-icon md-svg-icon="information-outline"></md-icon>
                         </md-button>
                     </md-card-actions>
 
                     <%--Archived order--%>
-                    <md-card-actions layout="row" layout-align="end center" ng-if="order.is_archived">
+                    <md-card-actions layout="row" layout-align="end center"
+                                     ng-if="order.agent && order.is_archived">
                         <md-button class="md-icon-button"
                                    aria-label="Settings"
                                    ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                             <md-icon md-svg-icon="information-outline"></md-icon>
                         </md-button>
                     </md-card-actions>

@@ -50,6 +50,12 @@ public class OrderAPIController {
             return gson.toJson(errorStatus);
         }
 
+        if (order.isUndefined()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order's agent is undefined");
+            return gson.toJson(errorStatus);
+        }
+
         if (!SecurityFilter.Orders.ownsAsAgent(order, securityFilter.getUser())) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("This is not your order");
@@ -98,6 +104,12 @@ public class OrderAPIController {
         if (order == null) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("Order cannot be found");
+            return gson.toJson(errorStatus);
+        }
+
+        if (order.isUndefined()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order's agent is undefined");
             return gson.toJson(errorStatus);
         }
 

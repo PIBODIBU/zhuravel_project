@@ -1,9 +1,10 @@
 package main.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface BasicDAO<T> {
-    ArrayList<T> getAll();
+    List<T> getAll();
 
     String toJson(ArrayList<T> models);
 

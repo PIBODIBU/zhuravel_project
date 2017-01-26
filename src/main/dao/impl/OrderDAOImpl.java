@@ -24,6 +24,38 @@ public class OrderDAOImpl extends BasicDAOImpl<Order> implements OrderDAO {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public List<Order> getAll() {
+        Session session = HibernateUtil.getSession();
+
+        session.beginTransaction();
+
+        List<Order> orders = session.createCriteria(Order.class).list();
+        orders.forEach(session::refresh);
+
+        session.getTransaction().commit();
+
+        return orders;
+    }
+
+    @Override
+    public List<Order> getUndefinedOrders(User user) {
+        List<Order> orders = this.getAll();
+        Iterator<Order> iterator = orders.iterator();
+        Order order;
+
+        while (iterator.hasNext()) {
+            order = iterator.next();
+
+            if (order.getAgent() != null) {
+                iterator.remove();
+            }
+        }
+
+        return orders;
+    }
+
+    @Override
     public List<Order> getActiveOrdersAsAgent(User user) {
         List<Order> orders = user.getOrdersAsAgent();
 

@@ -44,6 +44,15 @@
                     <md-menu-divider></md-menu-divider>
                 </c:if>
 
+                <c:if test="${sessionScope.user.hasRole('ROLE_AGENT')}">
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.redirect('/order/undefined')">
+                            <md-icon md-svg-icon="playlist-minus" md-menu-align-target></md-icon>
+                            Undefined orders
+                        </md-button>
+                    </md-menu-item>
+                </c:if>
+
                 <md-menu-item>
                     <md-button ng-click="ctrl.redirect('/order/active')">
                         <md-icon md-svg-icon="playlist-play" md-menu-align-target></md-icon>

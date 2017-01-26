@@ -42,6 +42,7 @@
                                  layout-align="end center"
                                  ng-if="!order.is_done && !order.is_canceled && !order.is_archived">
                     <md-button class="md-icon-button" aria-label="Done">
+                        <md-tooltip md-direction="bottom" md-direction="left">Refresh order status</md-tooltip>
                         <md-icon md-svg-icon="refresh"></md-icon>
                     </md-button>
                 </md-card-actions>
@@ -51,12 +52,8 @@
                     <md-button class="md-icon-button"
                                aria-label="Settings"
                                ng-click="ctrl.showOrderInfoCard($event, $index)">
+                        <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                         <md-icon md-svg-icon="information-outline"></md-icon>
-                    </md-button>
-
-                    <md-button class="md-icon-button" aria-label="Done"
-                               ng-click="ctrl.archiveOrder($index)">
-                        <md-icon md-svg-icon="archive"></md-icon>
                     </md-button>
                 </md-card-actions>
 
@@ -65,15 +62,7 @@
                     <md-button class="md-icon-button"
                                aria-label="Settings"
                                ng-click="ctrl.showOrderInfoCard($event, $index)">
-                        <md-icon md-svg-icon="information-outline"></md-icon>
-                    </md-button>
-                </md-card-actions>
-
-                <%--Archived order--%>
-                <md-card-actions layout="row" layout-align="end center" ng-if="order.is_archived">
-                    <md-button class="md-icon-button"
-                               aria-label="Settings"
-                               ng-click="ctrl.showOrderInfoCard($event, $index)">
+                        <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                         <md-icon md-svg-icon="information-outline"></md-icon>
                     </md-button>
                 </md-card-actions>

@@ -111,4 +111,9 @@ public class Order {
     public void setCanceled(Boolean closed) {
         this.canceled = closed;
     }
+
+    @Transient
+    public Boolean isUndefined() {
+        return this.getAgent() == null;
+    }
 }

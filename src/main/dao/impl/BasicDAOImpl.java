@@ -5,10 +5,11 @@ import main.hibernate.HibernateUtil;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
     @Override
-    public ArrayList<T> getAll() {
+    public List<T> getAll() {
         return null;
     }
 

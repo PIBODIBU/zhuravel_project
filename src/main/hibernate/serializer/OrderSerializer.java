@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import main.model.Order;
+import main.model.User;
 
 import java.lang.reflect.Type;
 

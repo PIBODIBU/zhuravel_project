@@ -23,6 +23,47 @@ import java.io.IOException;
 @Scope("session")
 @RequestMapping("/order")
 public class OrderController {
+    @RequestMapping(value = "/undefined", method = RequestMethod.GET)
+    public ModelAndView undefinedOrders(HttpSession session,
+                                        HttpServletResponse servletResponse) throws IOException {
+        SecurityFilter securityFilter = new SecurityFilter(session);
+        ModelAndView modelAndView = new ModelAndView();
+        UserDAO userDAO = new UserDAOImpl();
+        OrderDAO orderDAO = new OrderDAOImpl();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Order.class, new OrderSerializer())
+                .create();
+
+        if (!securityFilter.isUserLogged()) {
+            servletResponse.sendRedirect("/login");
+            return null;
+        }
+
+        if (!securityFilter.hasOneOf(
+                SecurityFilter.ROLE_AGENT,
+                SecurityFilter.ROLE_ADMIN)) {
+            servletResponse.sendRedirect("/login");
+            return null;
+        }
+
+        if (securityFilter.has(SecurityFilter.ROLE_ADMIN)) {
+
+        } else if (securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+            modelAndView.addObject("orders",
+                    gson.toJson(orderDAO.getUndefinedOrders(
+                            userDAO.get(securityFilter
+                                    .getUser()
+                                    .getId()))));
+
+            modelAndView.setViewName("agent_order_list.jsp");
+        } else {
+            servletResponse.sendRedirect("/logout");
+            return null;
+        }
+
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/active", method = RequestMethod.GET)
     public ModelAndView activeOrders(HttpSession session,
                                      HttpServletResponse servletResponse) throws IOException {
