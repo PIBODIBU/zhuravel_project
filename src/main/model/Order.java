@@ -1,6 +1,7 @@
 package main.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "orders")
@@ -8,6 +9,7 @@ public class Order {
     private Integer id;
     private User agent;
     private User buyer;
+    private Date date;
     private String buyingItemName;
     private String buyingComment;
     private String soldComment;
@@ -44,6 +46,16 @@ public class Order {
 
     public void setBuyer(User buyer) {
         this.buyer = buyer;
+    }
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date")
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Column(name = "buying_item_name", length = 100, nullable = false)

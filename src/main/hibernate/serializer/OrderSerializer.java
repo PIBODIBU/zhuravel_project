@@ -17,6 +17,7 @@ public class OrderSerializer implements JsonSerializer<Order> {
         object.addProperty("id", order.getId());
         object.add("agent", userSerializer.serialize(order.getAgent(), typeOfSrc, context));
         object.add("buyer", userSerializer.serialize(order.getBuyer(), typeOfSrc, context));
+        object.addProperty("date", order.getDate().toString());
         object.addProperty("buying_item_name", order.getBuyingItemName());
         object.addProperty("buying_comment", order.getBuyingComment());
         object.addProperty("sold_comment", order.getSoldComment());

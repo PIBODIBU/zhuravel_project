@@ -56,10 +56,6 @@
 <script type="text/javascript">
     app.controller('CardController', ['$scope', '$window', function ($scope, $window) {
         $scope.orders = ${orders};
-
-        this.redirectToGroupList = function (instituteId) {
-            $window.location.href = '/structure/institutes/' + instituteId + '/groups';
-        }
     }]);
 </script>
 

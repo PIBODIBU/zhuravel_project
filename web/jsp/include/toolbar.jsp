@@ -1,10 +1,9 @@
-<%@ page import="main.model.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <md-toolbar ng-controller="ToolbarController as ctrl">
     <div class="md-toolbar-tools">
         <h3>
-            <span>My orders</span>
+            <span>${user.name} ${user.surname}</span>
         </h3>
 
         <span flex></span>
