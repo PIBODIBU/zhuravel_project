@@ -1,5 +1,6 @@
 package main.model;
 
+import main.security.SecurityFilter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -141,6 +142,25 @@ public class User {
             if (userRole.getRole().equals(role)) {
                 passed = true;
             }
+        }
+
+        return passed;
+    }
+
+    public Boolean isRole(String role) {
+        Boolean passed = true;
+        LinkedList<String> userRoles = this
+                .getUserRoles()
+                .stream()
+                .map(UserRole::getRole)
+                .collect(Collectors.toCollection(LinkedList::new));
+
+        if (userRoles.size() > 1) {
+            passed = false;
+        }
+
+        if (!userRoles.contains(role)) {
+            passed = false;
         }
 
         return passed;

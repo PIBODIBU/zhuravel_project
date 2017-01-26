@@ -67,8 +67,9 @@
                         </md-button>
                     </md-card-actions>
 
-                    <md-card-actions layout="row" layout-align="end center" ng-if="order.is_done == true">
-                        <md-button class="md-icon-button" aria-label="Done" ng-click="ctrl.archiveOrder($index)">
+                    <md-card-actions layout="row" layout-align="end center" ng-if="order.is_done && !order.is_archived">
+                        <md-button class="md-icon-button" aria-label="Done"
+                                   ng-click="ctrl.archiveOrder($index)">
                             <md-icon md-svg-icon="archive"></md-icon>
                         </md-button>
                     </md-card-actions>
@@ -109,7 +110,7 @@
         this.showUserInfoCard = function (ev, index) {
             $mdDialog.show({
                 controller: DialogController,
-                templateUrl: '/jsp/template/dialog1.tmpl.jsp',
+                templateUrl: '/jsp/template/user_info.tmpl.jsp',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,

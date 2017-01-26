@@ -22,6 +22,8 @@ public class UserDataSerializer implements JsonSerializer<UserData> {
         object.addProperty("passportRegistration", userData.getPassportRegistration());
         object.addProperty("phone", userData.getPhone());
         object.addProperty("passportUrl", userData.getPassportUrl());
+        object.addProperty("companyName", userData.getCompanyName());
+        object.addProperty("bonusCardNumber", userData.getBonusCardNumber());
 
         return object;
     }

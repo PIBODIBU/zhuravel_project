@@ -13,6 +13,8 @@ public class UserData {
     private String passportRegistration;
     private String phone;
     private String passportUrl;
+    private String companyName;
+    private String bonusCardNumber;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,5 +89,23 @@ public class UserData {
 
     public void setPassportUrl(String passportUrl) {
         this.passportUrl = passportUrl;
+    }
+
+    @Column(name = "company", length = 100)
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String company) {
+        this.companyName = company;
+    }
+
+    @Column(name = "bonus_card_number", length = 100)
+    public String getBonusCardNumber() {
+        return bonusCardNumber;
+    }
+
+    public void setBonusCardNumber(String bonusCardNumber) {
+        this.bonusCardNumber = bonusCardNumber;
     }
 }

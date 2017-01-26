@@ -17,11 +17,33 @@
 
             <md-menu-content width="4">
                 <md-menu-item>
-                    <md-button ng-click="ctrl.checkVoicemail()">
-                        <md-icon md-svg-icon="playlist-plus"></md-icon>
-                        New order
+                    <md-button ng-click="ctrl.toggleNotifications()">
+                        <md-icon md-svg-icon="account"></md-icon>
+                        My profile
                     </md-button>
                 </md-menu-item>
+
+                <c:if test="${sessionScope.user.hasRole('ROLE_AGENT')}">
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.toggleNotifications()">
+                            <md-icon md-svg-icon="account-multiple"></md-icon>
+                            Users
+                        </md-button>
+                    </md-menu-item>
+                </c:if>
+
+                <md-menu-divider></md-menu-divider>
+
+                <c:if test="${sessionScope.user.isRole('ROLE_USER')}">
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.checkVoicemail()">
+                            <md-icon md-svg-icon="playlist-plus"></md-icon>
+                            New order
+                        </md-button>
+                    </md-menu-item>
+
+                    <md-menu-divider></md-menu-divider>
+                </c:if>
 
                 <md-menu-item>
                     <md-button ng-click="ctrl.redirect('/order/active')">
@@ -52,15 +74,6 @@
                         </md-button>
                     </md-menu-item>
                 </c:if>
-
-                <md-menu-divider></md-menu-divider>
-
-                <md-menu-item>
-                    <md-button ng-click="ctrl.toggleNotifications()">
-                        <md-icon md-svg-icon="account"></md-icon>
-                        My profile
-                    </md-button>
-                </md-menu-item>
 
                 <md-menu-divider></md-menu-divider>
 

@@ -1,4 +1,4 @@
-<md-dialog style="overflow: hidden">
+<md-dialog style="overflow: hidden; margin-top:36px; margin-bottom:36px;" flex="auto">
     <md-toolbar md-scroll-shrink>
         <div class="md-toolbar-tools">{{order.buyer.name}} {{order.buyer.surname}}</div>
     </md-toolbar>
@@ -109,6 +109,30 @@
                         <p ng-if="order.buyer.userData.phone">
                             {{order.buyer.userData.phone}}</p>
                         <p ng-if="!order.buyer.userData.phone">null</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </section>
+
+        <section>
+            <md-list flex>
+                <md-subheader class="md-primary">Bonus card</md-subheader>
+
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3>Company name</h3>
+                        <p ng-if="order.buyer.userData.companyName">
+                            {{order.buyer.userData.companyName}}</p>
+                        <p ng-if="!order.buyer.userData.companyName">null</p>
+                    </div>
+                </md-list-item>
+
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3>Card number</h3>
+                        <p ng-if="order.buyer.userData.bonusCardNumber">
+                            {{order.buyer.userData.bonusCardNumber}}</p>
+                        <p ng-if="!order.buyer.userData.bonusCardNumber">null</p>
                     </div>
                 </md-list-item>
             </md-list>
