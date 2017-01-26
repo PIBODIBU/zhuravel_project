@@ -35,7 +35,7 @@
 
                 <c:if test="${sessionScope.user.isRole('ROLE_USER')}">
                     <md-menu-item>
-                        <md-button ng-click="ctrl.checkVoicemail()">
+                        <md-button ng-click="ctrl.newOrder($event)">
                             <md-icon md-svg-icon="playlist-plus"></md-icon>
                             New order
                         </md-button>
@@ -54,7 +54,7 @@
                 <md-menu-item>
                     <md-button ng-click="ctrl.redirect('/order/done')">
                         <md-icon md-svg-icon="playlist-check" md-menu-align-target></md-icon>
-                        Done orders
+                        Completed orders
                     </md-button>
                 </md-menu-item>
 

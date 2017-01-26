@@ -65,6 +65,7 @@
                         </md-button>
 
                         <md-button class="md-icon-button"
+                                   ng-click="ctrl.completeOrder($event, $index)"
                                    aria-label="Done">
                             <md-icon md-svg-icon="check"></md-icon>
                         </md-button>
@@ -141,30 +142,40 @@
             );
         };
 
-        this.doneOrder = function (index) {
-            $http({
-                method: 'POST',
-                url: '/api/order/done',
-                data: $.param({'order_id': $scope.orders[index]['id']}),
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            }).then(function (response) {
-                        console.log(response.data);
-                        $scope.orders.splice(index, 1);
-
-                        $mdToast.show($mdToast.simple()
-                                .textContent('Archived successfully')
-                                .position('bottom')
-                                .hideDelay(3000));
-                    }, function (response) {
-                        console.log(response);
-//                        deferred.resolve(err);
-
-                        $mdToast.show($mdToast.simple()
-                                .textContent('Error occurred. Try again later')
-                                .position('bottom')
-                                .hideDelay(3000));
+        this.completeOrder = function (ev, index) {
+            $mdDialog.show({
+                controller: DialogCompleteController,
+                templateUrl: '/jsp/template/order_complete_dialog.tmpl.jsp',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+                resolve: {
+                    order: function () {
+                        return $scope.orders[index];
                     }
-            );
+                }
+            }).then(function (order) {
+                $http({
+                    method: 'POST',
+                    url: '/api/order/complete',
+                    data: $.param({'order_id': order.id, 'comment': order.sold_comment}),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).then(function (response) {
+                    $scope.orders.splice(index, 1);
+
+                    $mdToast.show($mdToast.simple()
+                            .textContent('Completed successfully')
+                            .position('bottom')
+                            .hideDelay(3000));
+                }, function (response) {
+                    $mdToast.show($mdToast.simple()
+                            .textContent('Error occurred. Try again later')
+                            .position('bottom')
+                            .hideDelay(3000));
+                })
+            }, function () {
+            });
         };
 
         this.showUserInfoCard = function (ev, index) {
@@ -181,9 +192,7 @@
                     }
                 }
             }).then(function (answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
             }, function () {
-                $scope.status = 'You cancelled the dialog.';
             });
         };
 
@@ -210,16 +219,20 @@
         function DialogController($scope, $mdDialog, order) {
             $scope.order = order;
 
-            $scope.hide = function () {
-                $mdDialog.hide();
+            $scope.cancel = function () {
+                $mdDialog.cancel();
             };
+        }
+
+        function DialogCompleteController($scope, $mdDialog, order) {
+            $scope.order = order;
 
             $scope.cancel = function () {
                 $mdDialog.cancel();
             };
 
-            $scope.answer = function (answer) {
-                $mdDialog.hide(answer);
+            $scope.done = function () {
+                $mdDialog.hide(order);
             };
         }
     }]);

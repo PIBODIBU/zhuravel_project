@@ -16,7 +16,7 @@ app.config(function ($mdIconProvider, $mdThemingProvider) {
     });
 });
 
-app.controller('ToolbarController', ['$scope', '$window', function ($scope, $window) {
+app.controller('ToolbarController', ['$rootScope', '$scope', '$window', function ($rootScope, $scope, $window) {
     var originatorEv;
 
     this.openMenu = function ($mdOpenMenu, ev) {
@@ -26,6 +26,10 @@ app.controller('ToolbarController', ['$scope', '$window', function ($scope, $win
 
     this.redirect = function (url) {
         window.location.href = url;
+    };
+
+    this.newOrder = function (ev) {
+        $rootScope.newOrder(ev);
     };
 }]);
 

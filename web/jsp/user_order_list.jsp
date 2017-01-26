@@ -83,7 +83,7 @@
 </div>
 
 <script type="text/javascript">
-    app.controller('CardController', ['$scope', '$window', '$mdDialog', '$mdToast', function ($scope, $window, $mdDialog, $mdToast) {
+    app.controller('CardController', ['$rootScope', '$scope', '$window', '$mdDialog', '$mdToast', '$http', function ($rootScope, $scope, $window, $mdDialog, $mdToast, $http) {
         $scope.orders = ${orders};
 
         this.showUserInfoCard = function (ev, index) {
@@ -126,19 +126,59 @@
             });
         };
 
+        $rootScope.newOrder = function (ev) {
+            $mdDialog.show({
+                controller: DialogNewOrderController,
+                templateUrl: '/jsp/template/order_new_dialog.tmpl.jsp',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+                resolve: {
+                    order: function () {
+                        return {};
+                    }
+                }
+            }).then(function (order) {
+                $http({
+                    method: 'POST',
+                    url: '/api/order/new',
+                    data: $.param({'comment': order.buying_comment}),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).then(function (response) {
+                    $scope.orders.push(response);
+
+                    $mdToast.show($mdToast.simple()
+                            .textContent('Order created successfully')
+                            .position('bottom')
+                            .hideDelay(3000));
+                }, function (response) {
+                    $mdToast.show($mdToast.simple()
+                            .textContent('Error occurred. Try again later')
+                            .position('bottom')
+                            .hideDelay(3000));
+                })
+            }, function () {
+            });
+        };
+
         function DialogController($scope, $mdDialog, order) {
             $scope.order = order;
 
-            $scope.hide = function () {
-                $mdDialog.hide();
+            $scope.cancel = function () {
+                $mdDialog.cancel();
             };
+        }
+
+        function DialogNewOrderController($scope, $mdDialog, order) {
+            $scope.order = order;
 
             $scope.cancel = function () {
                 $mdDialog.cancel();
             };
 
-            $scope.answer = function (answer) {
-                $mdDialog.hide(answer);
+            $scope.done = function () {
+                $mdDialog.hide(order);
             };
         }
     }]);

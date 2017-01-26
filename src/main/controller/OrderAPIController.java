@@ -64,4 +64,56 @@ public class OrderAPIController {
 
         return gson.toJson(errorStatus);
     }
+
+    @RequestMapping(value = "/complete", method = RequestMethod.POST)
+    @ResponseBody
+    public String completeOrder(HttpSession session,
+                                @RequestParam(value = "order_id") Integer orderId,
+                                @RequestParam(value = "comment") String comment) {
+        SecurityFilter securityFilter = new SecurityFilter(session);
+        ErrorStatus errorStatus = new ErrorStatus(false);
+        OrderDAO orderDAO = new OrderDAOImpl();
+        Order order;
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
+                .create();
+
+        if (!securityFilter.isUserLogged()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You are not logged in");
+            return gson.toJson(errorStatus);
+        }
+
+        if (!securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You don't have permissions to complete this order");
+            return gson.toJson(errorStatus);
+        }
+
+        order = orderDAO.get(orderId);
+
+        if (order == null) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order cannot be found");
+            return gson.toJson(errorStatus);
+        }
+
+        if (!SecurityFilter.Orders.ownsAsAgent(order, securityFilter.getUser())) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("This is not your order");
+            return gson.toJson(errorStatus);
+        }
+
+        if (order.getDone()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order is already completed");
+            return gson.toJson(errorStatus);
+        }
+
+        order.setDone(true);
+        order.setSoldComment(comment);
+        orderDAO.insertOrUpdate(order);
+
+        return gson.toJson(errorStatus);
+    }
 }
