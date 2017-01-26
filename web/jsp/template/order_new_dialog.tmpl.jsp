@@ -4,8 +4,13 @@
             <h3>Make new order</h3>
 
             <md-input-container class="md-block">
+                <label>Item name</label>
+                <input ng-model="order.buying_item_name" md-autofocus>
+            </md-input-container>
+
+            <md-input-container class="md-block">
                 <label>Comment</label>
-                <textarea ng-model="order.buying_comment" md-maxlength="500" rows="5" md-autofocus></textarea>
+                <textarea ng-model="order.buying_comment" md-maxlength="500" rows="5"></textarea>
             </md-input-container>
         </div>
     </md-dialog-content>

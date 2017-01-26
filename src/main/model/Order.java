@@ -29,7 +29,7 @@ public class Order {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "agent_id", nullable = false)
+    @JoinColumn(name = "agent_id")
     public User getAgent() {
         return agent;
     }
@@ -48,8 +48,8 @@ public class Order {
         this.buyer = buyer;
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date", columnDefinition = "CURRENT_TIMESTAMP", insertable = false, updatable = false)
     public Date getDate() {
         return date;
     }

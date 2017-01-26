@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Order List</title>
+    <title>Orders</title>
 
     <jsp:include page="include/angular_common.jsp"/>
 </head>
@@ -132,7 +132,7 @@
                 templateUrl: '/jsp/template/order_new_dialog.tmpl.jsp',
                 parent: angular.element(document.body),
                 targetEvent: ev,
-                clickOutsideToClose: true,
+                clickOutsideToClose: false,
                 fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
                 resolve: {
                     order: function () {
@@ -143,10 +143,10 @@
                 $http({
                     method: 'POST',
                     url: '/api/order/new',
-                    data: $.param({'comment': order.buying_comment}),
+                    data: $.param({'comment': order.buying_comment, 'name': order.buying_item_name}),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).then(function (response) {
-                    $scope.orders.push(response);
+                    $scope.orders.push(response.data);
 
                     $mdToast.show($mdToast.simple()
                             .textContent('Order created successfully')

@@ -3,8 +3,11 @@ package main.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.OrderDAO;
+import main.dao.UserDAO;
 import main.dao.impl.OrderDAOImpl;
+import main.dao.impl.UserDAOImpl;
 import main.hibernate.serializer.ErrorStatusSerializer;
+import main.hibernate.serializer.OrderSerializer;
 import main.model.ErrorStatus;
 import main.model.Order;
 import main.security.SecurityFilter;
@@ -115,5 +118,51 @@ public class OrderAPIController {
         orderDAO.insertOrUpdate(order);
 
         return gson.toJson(errorStatus);
+    }
+
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    @ResponseBody
+    public String newOrder(HttpSession session,
+                           @RequestParam(value = "name") String name,
+                           @RequestParam(value = "comment") String comment) {
+        SecurityFilter securityFilter = new SecurityFilter(session);
+        ErrorStatus errorStatus = new ErrorStatus(false);
+        OrderDAO orderDAO = new OrderDAOImpl();
+        UserDAO userDAO = new UserDAOImpl();
+        Order order = new Order();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Order.class, new OrderSerializer())
+                .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
+                .create();
+
+        if (!securityFilter.isUserLogged()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You are not logged in");
+            return gson.toJson(errorStatus);
+        }
+
+        if (!securityFilter.has(SecurityFilter.ROLE_USER)) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You don't have permissions to create new order");
+            return gson.toJson(errorStatus);
+        }
+
+        order.setBuyer(userDAO.get(securityFilter.getUser().getId()));
+        order.setBuyingItemName(name);
+        order.setBuyingComment(comment);
+        order.setDone(false);
+        order.setCanceled(false);
+        order.setArchived(false);
+
+        Integer insertedId = orderDAO.insert(order);
+        order = orderDAO.get(insertedId);
+
+        if (order == null) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Server error occurred");
+            return gson.toJson(errorStatus);
+        }
+
+        return gson.toJson(order);
     }
 }

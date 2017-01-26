@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Order List</title>
+    <title>Orders</title>
 
     <jsp:include page="include/angular_common.jsp"/>
 </head>
@@ -202,7 +202,7 @@
                 templateUrl: '/jsp/template/order_info.tmpl.jsp',
                 parent: angular.element(document.body),
                 targetEvent: ev,
-                clickOutsideToClose: true,
+                clickOutsideToClose: false,
                 fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
                 resolve: {
                     order: function () {
