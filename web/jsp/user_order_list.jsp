@@ -41,6 +41,13 @@
                 <md-card-actions layout="row"
                                  layout-align="end center"
                                  ng-if="!order.is_done && !order.is_canceled && !order.is_archived">
+                    <md-button class="md-icon-button"
+                               aria-label="Settings"
+                               ng-click="controller.showOrderInfoCard($event, $index)">
+                        <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
+                        <md-icon md-svg-icon="information-outline"></md-icon>
+                    </md-button>
+
                     <md-button class="md-icon-button" aria-label="Done">
                         <md-tooltip md-direction="bottom" md-direction="left">Refresh order status</md-tooltip>
                         <md-icon md-svg-icon="refresh"></md-icon>
@@ -48,10 +55,10 @@
                 </md-card-actions>
 
                 <%--Done order--%>
-                <md-card-actions layout="row" layout-align="end center" ng-if="order.is_done && !order.is_archived">
+                <md-card-actions layout="row" layout-align="end center" ng-if="order.is_done">
                     <md-button class="md-icon-button"
                                aria-label="Settings"
-                               ng-click="ctrl.showOrderInfoCard($event, $index)">
+                               ng-click="controller.showOrderInfoCard($event, $index)">
                         <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                         <md-icon md-svg-icon="information-outline"></md-icon>
                     </md-button>
@@ -61,7 +68,7 @@
                 <md-card-actions layout="row" layout-align="end center" ng-if="order.is_canceled">
                     <md-button class="md-icon-button"
                                aria-label="Settings"
-                               ng-click="ctrl.showOrderInfoCard($event, $index)">
+                               ng-click="controller.showOrderInfoCard($event, $index)">
                         <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                         <md-icon md-svg-icon="information-outline"></md-icon>
                     </md-button>
@@ -135,7 +142,8 @@
                     data: $.param({'comment': order.buying_comment, 'name': order.buying_item_name}),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).then(function (response) {
-                    $scope.orders.push(response.data);
+                    if (!$scope.orders[0].is_done && !$scope.orders[0].is_canceled && !$scope.orders[0].is_archived)
+                        $scope.orders.push(response.data);
 
                     $mdToast.show($mdToast.simple()
                             .textContent('Order created successfully')
