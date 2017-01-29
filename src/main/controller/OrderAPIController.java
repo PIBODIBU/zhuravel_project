@@ -157,7 +157,7 @@ public class OrderAPIController {
         }
 
         order = orderDAO.get(orderId);
-
+        
         if (order == null) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("Order cannot be found");

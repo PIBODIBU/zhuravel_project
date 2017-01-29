@@ -18,6 +18,15 @@
 
 <md-content>
     <div ng-controller="CardController as ctrl">
+        <md-content ng-if="orders.length == 0"
+                    layout="row"
+                    layout-align="center center">
+            <p class="md-display-2"
+               style="color: #BDBDBD; !important;"
+               layout="column"
+               layout-align="center">You have no orders</p>
+        </md-content>
+
         <div layout="row" flex layout-wrap class='md-padding'>
             <md-content flex-gt-md="33"
                         flex-xs="100"
