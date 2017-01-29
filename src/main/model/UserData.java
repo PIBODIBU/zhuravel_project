@@ -17,7 +17,7 @@ public class UserData {
     private String bonusCardNumber;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public Integer getId() {
         return id;

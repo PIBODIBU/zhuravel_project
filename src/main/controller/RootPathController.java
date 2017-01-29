@@ -1,6 +1,6 @@
 package main.controller;
 
-import main.security.SecurityFilter;
+import main.security.SecurityManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,9 +16,9 @@ public class RootPathController {
     @RequestMapping(method = RequestMethod.GET)
     public void dispatchRequest(HttpSession session,
                                 HttpServletResponse servletResponse) throws IOException {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
         } else {
             servletResponse.sendRedirect("/order/active");

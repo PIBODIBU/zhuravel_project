@@ -2,7 +2,6 @@ package main.controller;
 
 import main.dao.UserDAO;
 import main.dao.impl.UserDAOImpl;
-import main.model.Order;
 import main.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +28,7 @@ public class LoginController {
 
         ModelAndView model = new ModelAndView();
 
+        model.addObject("user", new User());
         model.setViewName("login.jsp");
 
         return model;

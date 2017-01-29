@@ -85,7 +85,7 @@
         this.showUserInfoCard = function (ev, index) {
             $mdDialog.show({
                 controller: DialogController,
-                templateUrl: '/jsp/template/user_info.tmpl.jsp',
+                templateUrl: '/jsp/template/order_user_info.tmpl.jsp',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,

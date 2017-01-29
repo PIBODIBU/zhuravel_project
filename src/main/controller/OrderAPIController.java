@@ -10,7 +10,7 @@ import main.hibernate.serializer.ErrorStatusSerializer;
 import main.hibernate.serializer.OrderSerializer;
 import main.model.ErrorStatus;
 import main.model.Order;
-import main.security.SecurityFilter;
+import main.security.SecurityManager;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -22,7 +22,7 @@ public class OrderAPIController {
     @ResponseBody
     public String archiveOrder(HttpSession session,
                                @RequestParam(value = "order_id") Integer orderId) {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
         OrderDAO orderDAO = new OrderDAOImpl();
         Order order;
@@ -30,13 +30,13 @@ public class OrderAPIController {
                 .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
                 .create();
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("You are not logged in");
             return gson.toJson(errorStatus);
         }
 
-        if (!securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+        if (!securityManager.has(SecurityManager.ROLE_AGENT)) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("You don't have permissions to archive this order");
             return gson.toJson(errorStatus);
@@ -56,7 +56,7 @@ public class OrderAPIController {
             return gson.toJson(errorStatus);
         }
 
-        if (!SecurityFilter.Orders.ownsAsAgent(order, securityFilter.getUser())) {
+        if (!SecurityManager.Orders.ownsAsAgent(order, securityManager.getUser())) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("This is not your order");
             return gson.toJson(errorStatus);
@@ -79,7 +79,7 @@ public class OrderAPIController {
     public String completeOrder(HttpSession session,
                                 @RequestParam(value = "order_id") Integer orderId,
                                 @RequestParam(value = "comment") String comment) {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
         OrderDAO orderDAO = new OrderDAOImpl();
         Order order;
@@ -87,13 +87,13 @@ public class OrderAPIController {
                 .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
                 .create();
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("You are not logged in");
             return gson.toJson(errorStatus);
         }
 
-        if (!securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+        if (!securityManager.has(SecurityManager.ROLE_AGENT)) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("You don't have permissions to complete this order");
             return gson.toJson(errorStatus);
@@ -113,7 +113,7 @@ public class OrderAPIController {
             return gson.toJson(errorStatus);
         }
 
-        if (!SecurityFilter.Orders.ownsAsAgent(order, securityFilter.getUser())) {
+        if (!SecurityManager.Orders.ownsAsAgent(order, securityManager.getUser())) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("This is not your order");
             return gson.toJson(errorStatus);
@@ -137,7 +137,7 @@ public class OrderAPIController {
     public String newOrder(HttpSession session,
                            @RequestParam(value = "name") String name,
                            @RequestParam(value = "comment") String comment) {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
         OrderDAO orderDAO = new OrderDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
@@ -147,19 +147,19 @@ public class OrderAPIController {
                 .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
                 .create();
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("You are not logged in");
             return gson.toJson(errorStatus);
         }
 
-        if (!securityFilter.has(SecurityFilter.ROLE_USER)) {
+        if (!securityManager.has(SecurityManager.ROLE_USER)) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("You don't have permissions to create new order");
             return gson.toJson(errorStatus);
         }
 
-        order.setBuyer(userDAO.get(securityFilter.getUser().getId()));
+        order.setBuyer(userDAO.get(securityManager.getUser().getId()));
         order.setBuyingItemName(name);
         order.setBuyingComment(comment);
         order.setDone(false);

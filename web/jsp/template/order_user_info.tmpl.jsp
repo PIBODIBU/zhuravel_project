@@ -1,7 +1,7 @@
 <md-dialog style="overflow: hidden; margin-top:36px; margin-bottom:36px;" flex="auto">
     <md-toolbar md-scroll-shrink md-whiteframe="4">
         <div class="md-toolbar-tools">
-            {{user.name}} {{user.surname}}
+            {{order.buyer.name}} {{order.buyer.surname}}
             <span flex></span>
             <md-button class="md-icon-button"
                        ng-click="cancel()">
@@ -18,36 +18,36 @@
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Name</h3>
-                        <p ng-if="user.name">
-                            {{user.name}}</p>
-                        <p ng-if="!user.name">null</p>
+                        <p ng-if="order.buyer.name">
+                            {{order.buyer.name}}</p>
+                        <p ng-if="!order.buyer.name">null</p>
                     </div>
                 </md-list-item>
 
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Surname</h3>
-                        <p ng-if="user.surname">
-                            {{user.surname}}</p>
-                        <p ng-if="!user.surname">null</p>
+                        <p ng-if="order.buyer.surname">
+                            {{order.buyer.surname}}</p>
+                        <p ng-if="!order.buyer.surname">null</p>
                     </div>
                 </md-list-item>
 
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Middle name</h3>
-                        <p ng-if="user.middleName">
-                            {{user.middleName}}</p>
-                        <p ng-if="!user.middleName">null</p>
+                        <p ng-if="order.buyer.middleName">
+                            {{order.buyer.middleName}}</p>
+                        <p ng-if="!order.buyer.middleName">null</p>
                     </div>
                 </md-list-item>
 
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Email</h3>
-                        <p ng-if="user.email">
-                            {{user.email}}</p>
-                        <p ng-if="!user.email">null</p>
+                        <p ng-if="order.buyer.email">
+                            {{order.buyer.email}}</p>
+                        <p ng-if="!order.buyer.email">null</p>
                     </div>
                 </md-list-item>
             </md-list>
@@ -60,47 +60,47 @@
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Passport series</h3>
-                        <p ng-if="user.userData.passportSeries">
-                            {{user.userData.passportSeries}}</p>
-                        <p ng-if="!user.userData.passportSeries">null</p>
+                        <p ng-if="order.buyer.userData.passportSeries">
+                            {{order.buyer.userData.passportSeries}}</p>
+                        <p ng-if="!order.buyer.userData.passportSeries">null</p>
                     </div>
                 </md-list-item>
 
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Passport number</h3>
-                        <p ng-if="user.userData.passportNumber">
-                            {{user.userData.passportNumber}}</p>
-                        <p ng-if="!user.userData.passportNumber">null</p>
+                        <p ng-if="order.buyer.userData.passportNumber">
+                            {{order.buyer.userData.passportNumber}}</p>
+                        <p ng-if="!order.buyer.userData.passportNumber">null</p>
                     </div>
                 </md-list-item>
 
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Passport validity</h3>
-                        <p ng-if="user.userData.passportValidity">
-                            {{user.userData.passportValidity}}</p>
-                        <p ng-if="!user.userData.passportValidity">null</p>
+                        <p ng-if="order.buyer.userData.passportValidity">
+                            {{order.buyer.userData.passportValidity}}</p>
+                        <p ng-if="!order.buyer.userData.passportValidity">null</p>
                     </div>
                 </md-list-item>
 
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Passport registration</h3>
-                        <p ng-if="user.userData.passportRegistration">
-                            {{user.userData.passportRegistration}}</p>
-                        <p ng-if="!user.userData.passportRegistration">null</p>
+                        <p ng-if="order.buyer.userData.passportRegistration">
+                            {{order.buyer.userData.passportRegistration}}</p>
+                        <p ng-if="!order.buyer.userData.passportRegistration">null</p>
                     </div>
                 </md-list-item>
 
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Passport scan</h3>
-                        <a ng-if="user.userData.passportUrl"
-                           ng-href="/passport/scan/{{user.userData.passportUrl}}" target="_blank">
+                        <a ng-if="order.buyer.userData.passportUrl"
+                           ng-href="/passport/scan/{{order.buyer.userData.passportUrl}}" target="_blank">
                             Open
                         </a>
-                        <p ng-if="!user.userData.passportUrl">null</p>
+                        <p ng-if="!order.buyer.userData.passportUrl">null</p>
                     </div>
                 </md-list-item>
             </md-list>
@@ -113,9 +113,9 @@
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Phone</h3>
-                        <p ng-if="user.userData.phone">
-                            {{user.userData.phone}}</p>
-                        <p ng-if="!user.userData.phone">null</p>
+                        <p ng-if="order.buyer.userData.phone">
+                            {{order.buyer.userData.phone}}</p>
+                        <p ng-if="!order.buyer.userData.phone">null</p>
                     </div>
                 </md-list-item>
             </md-list>
@@ -128,21 +128,28 @@
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Company name</h3>
-                        <p ng-if="user.userData.companyName">
-                            {{user.userData.companyName}}</p>
-                        <p ng-if="!user.userData.companyName">null</p>
+                        <p ng-if="order.buyer.userData.companyName">
+                            {{order.buyer.userData.companyName}}</p>
+                        <p ng-if="!order.buyer.userData.companyName">null</p>
                     </div>
                 </md-list-item>
 
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>Card number</h3>
-                        <p ng-if="user.userData.bonusCardNumber">
-                            {{user.userData.bonusCardNumber}}</p>
-                        <p ng-if="!user.userData.bonusCardNumber">null</p>
+                        <p ng-if="order.buyer.userData.bonusCardNumber">
+                            {{order.buyer.userData.bonusCardNumber}}</p>
+                        <p ng-if="!order.buyer.userData.bonusCardNumber">null</p>
                     </div>
                 </md-list-item>
             </md-list>
         </section>
     </md-content>
+
+    <%--<md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button ng-click="cancel()">
+            OK
+        </md-button>
+    </md-dialog-actions>--%>
 </md-dialog>

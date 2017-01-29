@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SecurityFilter {
+public class SecurityManager {
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_AGENT = "ROLE_AGENT";
     public static final String ROLE_USER = "ROLE_USER";
@@ -20,11 +20,11 @@ public class SecurityFilter {
     private User user;
     private LinkedList<String> authorizedRoles;
 
-    public SecurityFilter() {
+    public SecurityManager() {
         this.authorizedRoles = new LinkedList<>();
     }
 
-    public SecurityFilter(HttpSession httpSession) {
+    public SecurityManager(HttpSession httpSession) {
         this.httpSession = httpSession;
         this.user = ((User) this.httpSession.getAttribute(LoginController.ATTRIBUTE_USER));
         this.authorizedRoles = new LinkedList<>();

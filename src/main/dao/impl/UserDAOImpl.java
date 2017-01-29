@@ -5,6 +5,7 @@ import main.dao.UserDAO;
 import main.hibernate.HibernateUtil;
 import main.hibernate.serializer.UserSerializer;
 import main.model.User;
+import main.security.SecurityManager;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -13,6 +14,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
     @Override
@@ -89,6 +92,70 @@ public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
         session.getTransaction().commit();
 
         return user;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> getBuyers() {
+        Session session = HibernateUtil.getSession();
+        SecurityManager securityManager = new SecurityManager();
+        Iterator<User> iterator;
+        List<User> buyers = new ArrayList<>();
+        User user;
+
+        session.beginTransaction();
+
+        iterator = session
+                .createCriteria(User.class)
+                .addOrder(Order.asc("name"))
+                .list()
+                .iterator();
+
+        while (iterator.hasNext()) {
+            user = iterator.next();
+            securityManager.setUser(user);
+
+            if (securityManager.is(SecurityManager.ROLE_USER)) {
+                session.refresh(user);
+                buyers.add(user);
+            }
+        }
+
+        session.getTransaction().commit();
+
+        return buyers;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> getAgents() {
+        Session session = HibernateUtil.getSession();
+        SecurityManager securityManager = new SecurityManager();
+        Iterator<User> iterator;
+        List<User> agents = new ArrayList<>();
+        User user;
+
+        session.beginTransaction();
+
+        iterator = session
+                .createCriteria(User.class)
+                .addOrder(Order.asc("name"))
+                .list()
+                .iterator();
+
+        while (iterator.hasNext()) {
+            user = iterator.next();
+            securityManager.setUser(user);
+
+            if (securityManager.is(SecurityManager.ROLE_AGENT)) {
+                session.refresh(user);
+                agents.add(user);
+            }
+        }
+
+        session.getTransaction().commit();
+
+        return agents;
     }
 
     @Override

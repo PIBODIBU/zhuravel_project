@@ -1,6 +1,5 @@
 package main.model;
 
-import main.security.SecurityFilter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -26,7 +25,7 @@ public class User {
     private UserData userData;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public Integer getId() {
         return id;
@@ -135,6 +134,7 @@ public class User {
         this.userData = userData;
     }
 
+    @Transient
     public Boolean hasRole(String role) {
         Boolean passed = false;
 
@@ -147,6 +147,7 @@ public class User {
         return passed;
     }
 
+    @Transient
     public Boolean isRole(String role) {
         Boolean passed = true;
         LinkedList<String> userRoles = this
@@ -164,5 +165,31 @@ public class User {
         }
 
         return passed;
+    }
+
+    @Override
+    public String toString() {
+        String string = "User -> " +
+                "[Name: " + name + "] " +
+                "[Surname: " + surname + "] " +
+                "[Middle name: " + middleName + "] " +
+                "[Email: " + email + "] " +
+                "[Username: " + username + "] " +
+                "[Password: " + password + "] ";
+
+        if (userData != null)
+            string += "\nUserData -> " +
+                    "[Series: " + userData.getPassportSeries() + "] " +
+                    "[Number: " + userData.getPassportNumber() + "] " +
+                    "[Validity: " + userData.getPassportValidity() + "] " +
+                    "[Registration: " + userData.getPassportRegistration() + "] " +
+                    "[Phone: " + userData.getPhone() + "] " +
+                    "[URL: " + userData.getPassportUrl() + "] " +
+                    "[Company: " + userData.getCompanyName() + "] " +
+                    "[Bonus card: " + userData.getBonusCardNumber() + "] ";
+        else
+            System.out.println("UserData is null");
+
+        return string;
     }
 }

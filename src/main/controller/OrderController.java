@@ -8,7 +8,7 @@ import main.dao.impl.OrderDAOImpl;
 import main.dao.impl.UserDAOImpl;
 import main.hibernate.serializer.OrderSerializer;
 import main.model.Order;
-import main.security.SecurityFilter;
+import main.security.SecurityManager;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +26,7 @@ public class OrderController {
     @RequestMapping(value = "/undefined", method = RequestMethod.GET)
     public ModelAndView undefinedOrders(HttpSession session,
                                         HttpServletResponse servletResponse) throws IOException {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
         UserDAO userDAO = new UserDAOImpl();
         OrderDAO orderDAO = new OrderDAOImpl();
@@ -34,24 +34,24 @@ public class OrderController {
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (!securityFilter.hasOneOf(
-                SecurityFilter.ROLE_AGENT,
-                SecurityFilter.ROLE_ADMIN)) {
+        if (!securityManager.hasOneOf(
+                SecurityManager.ROLE_AGENT,
+                SecurityManager.ROLE_ADMIN)) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (securityFilter.has(SecurityFilter.ROLE_ADMIN)) {
+        if (securityManager.has(SecurityManager.ROLE_ADMIN)) {
 
-        } else if (securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+        } else if (securityManager.has(SecurityManager.ROLE_AGENT)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getUndefinedOrders(
-                            userDAO.get(securityFilter
+                            userDAO.get(securityManager
                                     .getUser()
                                     .getId()))));
 
@@ -67,7 +67,7 @@ public class OrderController {
     @RequestMapping(value = "/active", method = RequestMethod.GET)
     public ModelAndView activeOrders(HttpSession session,
                                      HttpServletResponse servletResponse) throws IOException {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
         UserDAO userDAO = new UserDAOImpl();
         OrderDAO orderDAO = new OrderDAOImpl();
@@ -75,33 +75,33 @@ public class OrderController {
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (!securityFilter.hasOneOf(
-                SecurityFilter.ROLE_AGENT,
-                SecurityFilter.ROLE_ADMIN,
-                SecurityFilter.ROLE_USER)) {
+        if (!securityManager.hasOneOf(
+                SecurityManager.ROLE_AGENT,
+                SecurityManager.ROLE_ADMIN,
+                SecurityManager.ROLE_USER)) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (securityFilter.has(SecurityFilter.ROLE_ADMIN)) {
+        if (securityManager.has(SecurityManager.ROLE_ADMIN)) {
 
-        } else if (securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+        } else if (securityManager.has(SecurityManager.ROLE_AGENT)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getActiveOrdersAsAgent(
-                            userDAO.get(securityFilter
+                            userDAO.get(securityManager
                                     .getUser()
                                     .getId()))));
 
             modelAndView.setViewName("agent_order_list.jsp");
-        } else if (securityFilter.has(SecurityFilter.ROLE_USER)) {
+        } else if (securityManager.has(SecurityManager.ROLE_USER)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getActiveOrdersAsBuyer(
-                            userDAO.get(securityFilter
+                            userDAO.get(securityManager
                                     .getUser()
                                     .getId()))));
 
@@ -117,7 +117,7 @@ public class OrderController {
     @RequestMapping(value = "/done", method = RequestMethod.GET)
     public ModelAndView doneOrders(HttpSession session,
                                    HttpServletResponse servletResponse) throws IOException {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
         UserDAO userDAO = new UserDAOImpl();
         OrderDAO orderDAO = new OrderDAOImpl();
@@ -125,33 +125,33 @@ public class OrderController {
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (!securityFilter.hasOneOf(
-                SecurityFilter.ROLE_AGENT,
-                SecurityFilter.ROLE_ADMIN,
-                SecurityFilter.ROLE_USER)) {
+        if (!securityManager.hasOneOf(
+                SecurityManager.ROLE_AGENT,
+                SecurityManager.ROLE_ADMIN,
+                SecurityManager.ROLE_USER)) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (securityFilter.has(SecurityFilter.ROLE_ADMIN)) {
+        if (securityManager.has(SecurityManager.ROLE_ADMIN)) {
 
-        } else if (securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+        } else if (securityManager.has(SecurityManager.ROLE_AGENT)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getDoneOrdersAsAgent(
-                            userDAO.get(securityFilter
+                            userDAO.get(securityManager
                                     .getUser()
                                     .getId()))));
 
             modelAndView.setViewName("agent_order_list.jsp");
-        } else if (securityFilter.has(SecurityFilter.ROLE_USER)) {
+        } else if (securityManager.has(SecurityManager.ROLE_USER)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getDoneOrdersAsBuyer(
-                            userDAO.get(securityFilter
+                            userDAO.get(securityManager
                                     .getUser()
                                     .getId()))));
 
@@ -167,7 +167,7 @@ public class OrderController {
     @RequestMapping(value = "/canceled", method = RequestMethod.GET)
     public ModelAndView closedOrders(HttpSession session,
                                      HttpServletResponse servletResponse) throws IOException {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
         UserDAO userDAO = new UserDAOImpl();
         OrderDAO orderDAO = new OrderDAOImpl();
@@ -175,33 +175,33 @@ public class OrderController {
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (!securityFilter.hasOneOf(
-                SecurityFilter.ROLE_AGENT,
-                SecurityFilter.ROLE_ADMIN,
-                SecurityFilter.ROLE_USER)) {
+        if (!securityManager.hasOneOf(
+                SecurityManager.ROLE_AGENT,
+                SecurityManager.ROLE_ADMIN,
+                SecurityManager.ROLE_USER)) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (securityFilter.has(SecurityFilter.ROLE_ADMIN)) {
+        if (securityManager.has(SecurityManager.ROLE_ADMIN)) {
 
-        } else if (securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+        } else if (securityManager.has(SecurityManager.ROLE_AGENT)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getCanceledOrdersAsAgent(
-                            userDAO.get(securityFilter
+                            userDAO.get(securityManager
                                     .getUser()
                                     .getId()))));
 
             modelAndView.setViewName("agent_order_list.jsp");
-        } else if (securityFilter.has(SecurityFilter.ROLE_USER)) {
+        } else if (securityManager.has(SecurityManager.ROLE_USER)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getCanceledOrdersAsBuyer(
-                            userDAO.get(securityFilter
+                            userDAO.get(securityManager
                                     .getUser()
                                     .getId()))));
 
@@ -217,7 +217,7 @@ public class OrderController {
     @RequestMapping(value = "/archived", method = RequestMethod.GET)
     public ModelAndView archivedOrders(HttpSession session,
                                        HttpServletResponse servletResponse) throws IOException {
-        SecurityFilter securityFilter = new SecurityFilter(session);
+        SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
         UserDAO userDAO = new UserDAOImpl();
         OrderDAO orderDAO = new OrderDAOImpl();
@@ -225,30 +225,30 @@ public class OrderController {
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
-        if (!securityFilter.isUserLogged()) {
+        if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (!securityFilter.hasOneOf(
-                SecurityFilter.ROLE_AGENT,
-                SecurityFilter.ROLE_ADMIN,
-                SecurityFilter.ROLE_USER)) {
+        if (!securityManager.hasOneOf(
+                SecurityManager.ROLE_AGENT,
+                SecurityManager.ROLE_ADMIN,
+                SecurityManager.ROLE_USER)) {
             servletResponse.sendRedirect("/login");
             return null;
         }
 
-        if (securityFilter.has(SecurityFilter.ROLE_ADMIN)) {
+        if (securityManager.has(SecurityManager.ROLE_ADMIN)) {
 
-        } else if (securityFilter.has(SecurityFilter.ROLE_AGENT)) {
+        } else if (securityManager.has(SecurityManager.ROLE_AGENT)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getArchivedOrdersAsAgent(
-                            userDAO.get(securityFilter
+                            userDAO.get(securityManager
                                     .getUser()
                                     .getId()))));
 
             modelAndView.setViewName("agent_order_list.jsp");
-        } else if (securityFilter.has(SecurityFilter.ROLE_USER)) {
+        } else if (securityManager.has(SecurityManager.ROLE_USER)) {
             servletResponse.sendRedirect("/order/active");
         } else {
             servletResponse.sendRedirect("/logout");

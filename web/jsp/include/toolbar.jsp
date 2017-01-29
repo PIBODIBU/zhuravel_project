@@ -24,7 +24,7 @@
 
                 <c:if test="${sessionScope.user.hasRole('ROLE_AGENT')}">
                     <md-menu-item>
-                        <md-button ng-click="ctrl.toggleNotifications()">
+                        <md-button ng-click="ctrl.redirect('/users/')">
                             <md-icon md-svg-icon="account-multiple"></md-icon>
                             Users
                         </md-button>
