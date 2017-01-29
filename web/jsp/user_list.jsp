@@ -12,9 +12,7 @@
 
 <body ng-app="BaseApp" ng-cloak>
 
-<jsp:include page="include/toolbar.jsp">
-    <jsp:param name="user" value="${sessionScope.user}"/>
-</jsp:include>
+<jsp:include page="include/toolbar.jsp"/>
 
 <md-content ng-controller="CardController as ctrl">
     <section>
@@ -58,43 +56,46 @@
         $scope.agents = ${agents};
 
         this.showUserInfoCard = function (ev, index) {
-            $mdDialog.show({
-                controller: DialogController,
-                templateUrl: '/jsp/template/user_info.tmpl.jsp',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-                resolve: {
-                    user: function () {
-                        return $scope.users[index];
-                    }
-                }
-            }).then(function (answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
-            }, function () {
-                $scope.status = 'You cancelled the dialog.';
-            });
+            window.location.href = "/user/" + $scope.users[index].id;
+            /*$mdDialog.show({
+             controller: DialogController,
+             templateUrl: '/jsp/template/user_info.tmpl.jsp',
+             parent: angular.element(document.body),
+             targetEvent: ev,
+             clickOutsideToClose: true,
+             fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+             resolve: {
+             user: function () {
+             return $scope.users[index];
+             }
+             }
+             }).then(function (answer) {
+             $scope.status = 'You said the information was "' + answer + '".';
+             }, function () {
+             $scope.status = 'You cancelled the dialog.';
+             });*/
         };
 
         this.showAgentInfoCard = function (ev, index) {
-            $mdDialog.show({
-                controller: DialogController,
-                templateUrl: '/jsp/template/user_info.tmpl.jsp',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-                resolve: {
-                    user: function () {
-                        return $scope.agents[index];
-                    }
-                }
-            }).then(function (answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
-            }, function () {
-                $scope.status = 'You cancelled the dialog.';
-            });
+            window.location.href = "/user/" + $scope.users[index].id;
+
+            /*$mdDialog.show({
+             controller: DialogController,
+             templateUrl: '/jsp/template/user_info.tmpl.jsp',
+             parent: angular.element(document.body),
+             targetEvent: ev,
+             clickOutsideToClose: true,
+             fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+             resolve: {
+             user: function () {
+             return $scope.agents[index];
+             }
+             }
+             }).then(function (answer) {
+             $scope.status = 'You said the information was "' + answer + '".';
+             }, function () {
+             $scope.status = 'You cancelled the dialog.';
+             });*/
         };
 
         function DialogController($scope, $mdDialog, user) {
