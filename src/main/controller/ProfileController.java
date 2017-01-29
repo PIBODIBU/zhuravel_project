@@ -18,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Objects;
 
 @Controller
 @Scope("session")
@@ -29,8 +28,11 @@ public class ProfileController {
                                   HttpServletResponse servletResponse) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         SecurityManager securityManager = new SecurityManager(httpSession);
+        UserDAO userDAO = new UserDAOImpl();
+        User user;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(User.class, new UserSerializer())
+                .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
         if (!securityManager.isUserLogged()) {
@@ -38,7 +40,10 @@ public class ProfileController {
             return null;
         }
 
-        modelAndView.addObject("user", gson.toJson(securityManager.getUser()));
+        user = userDAO.get(securityManager.getUser().getId());
+
+        modelAndView.addObject("userModel", user);
+        modelAndView.addObject("user", gson.toJson(user));
 
         if (securityManager.has(SecurityManager.ROLE_ADMIN)) {
         }
@@ -47,7 +52,8 @@ public class ProfileController {
             modelAndView.setViewName("profile_agent.jsp");
         }
 
-        if (securityManager.has(SecurityManager.ROLE_USER)) {
+        if (securityManager.is(SecurityManager.ROLE_USER)) {
+            modelAndView.addObject("orders", gson.toJson(user.getOrdersAsBuyer()));
             modelAndView.setViewName("profile_user.jsp");
         }
 

@@ -10,11 +10,13 @@
     <jsp:include page="include/angular_common.jsp"/>
 </head>
 
-<body ng-app="BaseApp" ng-cloak>
+<body ng-app="BaseApp" ng-cloak style="overflow: hidden;">
 
 <jsp:include page="include/toolbar.jsp"/>
 
-<md-content ng-controller="CardController as ctrl">
+<md-content ng-controller="CardController as ctrl"
+            layout="column"
+            layout-fill>
     <section>
         <md-list>
             <md-subheader class="md-primary">Users</md-subheader>
@@ -35,7 +37,8 @@
         <md-list>
             <md-subheader class="md-primary">Agents</md-subheader>
 
-            <md-list-item class="md-3-line" ng-repeat="agent in agents"
+            <md-list-item class="md-3-line"
+                          ng-repeat="agent in agents"
                           ng-click="ctrl.showAgentInfoCard($event, $index)">
                 <md-icon md-svg-icon="account" class="md-avatar"></md-icon>
 

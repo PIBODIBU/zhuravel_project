@@ -10,14 +10,18 @@
     <jsp:include page="include/angular_common.jsp"/>
 </head>
 
-<body ng-app="BaseApp" ng-cloak>
+<body ng-app="BaseApp" ng-cloak style="overflow: hidden">
 
 <jsp:include page="include/toolbar.jsp">
     <jsp:param name="name" value="${userModel.name}"/>
     <jsp:param name="surname" value="${userModel.surname}"/>
 </jsp:include>
 
-<div ng-controller="PageController" layout="column" flex layout-fill ng-cloak>
+<div ng-controller="PageController as ctrl"
+     layout="column"
+     layout-fill
+     ng-cloak
+     style="padding-bottom: 60px; !important;">
     <md-content>
         <section>
             <md-list flex>
@@ -157,10 +161,13 @@
             <md-list flex>
                 <md-subheader class="md-primary">Orders</md-subheader>
 
-                <md-list-item class="md-2-line" ng-repeat="order in orders">
+                <md-list-item class="md-3-line md-long-text"
+                              ng-click="ctrl.showOrderInfoCard($event, $index)"
+                              ng-repeat="order in orders">
                     <div class="md-list-item-text">
                         <h3>{{order.buying_item_name}}</h3>
-                        <p>{{order.date}}</p>
+                        <h4>{{order.date}}</h4>
+                        <p>{{order.buying_comment}}</p>
                     </div>
                 </md-list-item>
             </md-list>
@@ -174,6 +181,32 @@
             $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
             $scope.user = ${user};
             $scope.orders = ${orders};
+
+            this.showOrderInfoCard = function (ev, index) {
+                $mdDialog.show({
+                    controller: DialogController,
+                    templateUrl: '/jsp/template/order_info.tmpl.jsp',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+                    resolve: {
+                        order: function () {
+                            return $scope.orders[index];
+                        }
+                    }
+                }).then(function (answer) {
+                }, function () {
+                });
+            };
+
+            function DialogController($scope, $mdDialog, order) {
+                $scope.order = order;
+
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+            }
         }]);
 </script>
 </body>
