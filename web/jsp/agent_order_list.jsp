@@ -60,6 +60,13 @@
                         <md-button class="md-icon-button"
                                    aria-label="Settings"
                                    ng-click="ctrl.showOrderInfoCard($event, $index)">
+                            <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
+                            <md-icon md-svg-icon="information-outline"></md-icon>
+                        </md-button>
+
+                        <md-button class="md-icon-button"
+                                   aria-label="Settings"
+                                   ng-click="ctrl.becomeAgentOfOrder($index)">
                             <md-tooltip md-direction="bottom" md-direction="left">Become agent</md-tooltip>
                             <md-icon md-svg-icon="face"></md-icon>
                         </md-button>
@@ -73,6 +80,13 @@
                                    ng-click="ctrl.showOrderInfoCard($event, $index)">
                             <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
                             <md-icon md-svg-icon="information-outline"></md-icon>
+                        </md-button>
+
+                        <md-button class="md-icon-button"
+                                   aria-label="Settings"
+                                   ng-click="ctrl.cancelOrder($index)">
+                            <md-tooltip md-direction="bottom" md-direction="left">Cancel order</md-tooltip>
+                            <md-icon md-svg-icon="close"></md-icon>
                         </md-button>
 
                         <md-button class="md-icon-button"
@@ -153,6 +167,58 @@
                         console.log(response);
 //                        deferred.resolve(err);
 
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Error occurred. Try again later')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    }
+            );
+        };
+
+        this.becomeAgentOfOrder = function (index) {
+            $http({
+                method: 'POST',
+                url: '/api/order/become',
+                data: $.param({'order_id': $scope.orders[index]['id']}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(
+                    function (response) {
+                        console.log(response.data);
+                        $scope.orders.splice(index, 1);
+
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Success! Now you are agent of this order')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    },
+                    function (response) {
+                        console.log(response);
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Error occurred. Try again later')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    }
+            );
+        };
+
+        this.cancelOrder = function (index) {
+            $http({
+                method: 'POST',
+                url: '/api/order/cancel',
+                data: $.param({'order_id': $scope.orders[index]['id']}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(
+                    function (response) {
+                        console.log(response.data);
+                        $scope.orders.splice(index, 1);
+
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Order is canceled')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    },
+                    function (response) {
+                        console.log(response);
                         $mdToast.show($mdToast.simple()
                                 .textContent('Error occurred. Try again later')
                                 .position('bottom')

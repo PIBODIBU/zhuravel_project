@@ -132,6 +132,62 @@ public class OrderAPIController {
         return gson.toJson(errorStatus);
     }
 
+    @RequestMapping(value = "/cancel", method = RequestMethod.POST)
+    @ResponseBody
+    public String cancelOrder(HttpSession session,
+                              @RequestParam(value = "order_id") Integer orderId) {
+        SecurityManager securityManager = new SecurityManager(session);
+        ErrorStatus errorStatus = new ErrorStatus(false);
+        OrderDAO orderDAO = new OrderDAOImpl();
+        Order order;
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
+                .create();
+
+        if (!securityManager.isUserLogged()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You are not logged in");
+            return gson.toJson(errorStatus);
+        }
+
+        if (!securityManager.has(SecurityManager.ROLE_AGENT)) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You don't have permissions to cancel this order");
+            return gson.toJson(errorStatus);
+        }
+
+        order = orderDAO.get(orderId);
+
+        if (order == null) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order cannot be found");
+            return gson.toJson(errorStatus);
+        }
+
+        if (order.isUndefined()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order's agent is undefined");
+            return gson.toJson(errorStatus);
+        }
+
+        if (!SecurityManager.Orders.ownsAsAgent(order, securityManager.getUser())) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("This is not your order");
+            return gson.toJson(errorStatus);
+        }
+
+        if (order.getCanceled()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order is already canceled");
+            return gson.toJson(errorStatus);
+        }
+
+        order.setCanceled(true);
+        orderDAO.insertOrUpdate(order);
+
+        return gson.toJson(errorStatus);
+    }
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     @ResponseBody
     public String newOrder(HttpSession session,
@@ -176,5 +232,50 @@ public class OrderAPIController {
         }
 
         return gson.toJson(order);
+    }
+
+    @RequestMapping(value = "/become", method = RequestMethod.POST)
+    @ResponseBody
+    public String becomeAgentOfOrder(HttpSession session,
+                                     @RequestParam(value = "order_id") Integer orderId) {
+        SecurityManager securityManager = new SecurityManager(session);
+        ErrorStatus errorStatus = new ErrorStatus(false);
+        OrderDAO orderDAO = new OrderDAOImpl();
+        UserDAO userDAO = new UserDAOImpl();
+        Order order;
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
+                .create();
+
+        if (!securityManager.isUserLogged()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You are not logged in");
+            return gson.toJson(errorStatus);
+        }
+
+        if (!securityManager.has(SecurityManager.ROLE_AGENT)) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You don't have permissions to get this order");
+            return gson.toJson(errorStatus);
+        }
+
+        order = orderDAO.get(orderId);
+
+        if (order == null) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order cannot be found");
+            return gson.toJson(errorStatus);
+        }
+
+        if (!order.isUndefined()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("Order's agent is already defined");
+            return gson.toJson(errorStatus);
+        }
+
+        order.setAgent(userDAO.get(securityManager.getUser().getId()));
+        orderDAO.insertOrUpdate(order);
+
+        return gson.toJson(errorStatus);
     }
 }
