@@ -97,7 +97,7 @@
                     <div class="md-list-item-text">
                         <h3>Passport scan</h3>
                         <a ng-if="user.userData.passportUrl"
-                           ng-href="/passport/scan/{{user.userData.passportUrl}}" target="_blank">
+                           ng-href="/uploads/scan/{{user.userData.passportUrl}}" target="_blank">
                             Open
                         </a>
                         <p ng-if="!user.userData.passportUrl">null</p>

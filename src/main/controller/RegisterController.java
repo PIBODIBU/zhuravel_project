@@ -53,18 +53,18 @@ public class RegisterController {
 
         if (passportPhotoFile != null && !passportPhotoFile.isEmpty()) {
             // Upload photo
-            String uploadsDir = "/uploads/";
+            String uploadsDir = "/uploads/scan/";
             String realPathToUploads = request.getServletContext().getRealPath(uploadsDir);
             if (!new File(realPathToUploads).exists()) {
                 new File(realPathToUploads).mkdir();
             }
-            System.out.println("Real path: " + realPathToUploads);
-            String filePath = realPathToUploads + "passport_" + user.getId();
-            File dest = new File(filePath);
-            passportPhotoFile.transferTo(dest);
+
+            String filePath = realPathToUploads + passportPhotoFile.getOriginalFilename();
+            File destFile = new File(filePath);
+            passportPhotoFile.transferTo(destFile);
 
             // Bind photo name to user's data
-            userData.setPassportUrl("passport_" + user.getId());
+            userData.setPassportUrl(passportPhotoFile.getOriginalFilename());
         }
 
         // Insert user data model
