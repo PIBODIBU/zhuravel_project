@@ -8,9 +8,11 @@ import main.dao.impl.OrderDAOImpl;
 import main.dao.impl.UserDAOImpl;
 import main.hibernate.serializer.ErrorStatusSerializer;
 import main.hibernate.serializer.OrderSerializer;
+import main.mail.MailManager;
 import main.model.ErrorStatus;
 import main.model.Order;
 import main.security.SecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -18,6 +20,13 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/api/order")
 public class OrderAPIController {
+    private MailManager mailManager;
+
+    @Autowired
+    public void setMailManager(MailManager mailManager) {
+        this.mailManager = mailManager;
+    }
+
     @RequestMapping(value = "/archive", method = RequestMethod.POST)
     @ResponseBody
     public String archiveOrder(HttpSession session,
@@ -128,6 +137,8 @@ public class OrderAPIController {
         order.setDone(true);
         order.setSoldComment(comment);
         orderDAO.insertOrUpdate(order);
+
+        mailManager.notifyUserAboutCompletedOrder(order.getBuyer(), order);
 
         return gson.toJson(errorStatus);
     }

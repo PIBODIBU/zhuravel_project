@@ -6,11 +6,29 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <mvc:annotation-driven/>
-    <context:component-scan base-package="main.controller, main.controller.api"/>
 
+    <context:component-scan base-package="main.controller"/>
+    <context:component-scan base-package="main.controller.api"/>
+    <context:component-scan base-package="main.mail"/>
+
+    <mvc:resources mapping="/resources/**" location="/static/"/>
+
+    <!-- BEANS -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/jsp/"/>
     </bean>
 
-    <mvc:resources mapping="/resources/**" location="/static/"/>
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="587"/>
+        <property name="username" value="noreply.bot.369@gmail.com"/>
+        <property name="password" value="nexusone982118"/>
+
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
 </beans>
