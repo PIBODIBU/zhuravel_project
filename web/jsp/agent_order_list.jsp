@@ -36,7 +36,12 @@
                         ng-repeat="order in orders">
 
                 <md-card flex md-whiteframe="4">
-                    <md-card-header ng-click="ctrl.showUserInfoCard($event, $index)">
+                    <md-card-header class="md-card-header"
+                                    ng-click="ctrl.showUserInfoCard($event, $index)"
+                                    md-whiteframe="{{height}}"
+                                    ng-init="height = 1"
+                                    ng-mouseenter="height = 6"
+                                    ng-mouseleave="height = 1">
                         <md-card-avatar>
                             <md-icon md-svg-icon="account"></md-icon>
                         </md-card-avatar>

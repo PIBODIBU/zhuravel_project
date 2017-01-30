@@ -14,9 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 
 @Controller
@@ -24,7 +28,9 @@ import java.io.IOException;
 public class RegisterController {
     @RequestMapping("/")
     public void registerNewBuyer(HttpSession session,
+                                 HttpServletRequest request,
                                  HttpServletResponse servletResponse,
+                                 @RequestParam("passportPhoto") MultipartFile passportPhotoFile,
                                  @ModelAttribute User user, BindingResult resultUser) throws IOException {
         if (resultUser.hasErrors()) {
             servletResponse.sendRedirect("/login");
@@ -44,6 +50,22 @@ public class RegisterController {
 
         // Bind user model to it's userdata model
         userData.setUser(user);
+
+        if (passportPhotoFile != null && !passportPhotoFile.isEmpty()) {
+            // Upload photo
+            String uploadsDir = "/uploads/";
+            String realPathToUploads = request.getServletContext().getRealPath(uploadsDir);
+            if (!new File(realPathToUploads).exists()) {
+                new File(realPathToUploads).mkdir();
+            }
+            System.out.println("Real path: " + realPathToUploads);
+            String filePath = realPathToUploads + "passport_" + user.getId();
+            File dest = new File(filePath);
+            passportPhotoFile.transferTo(dest);
+
+            // Bind photo name to user's data
+            userData.setPassportUrl("passport_" + user.getId());
+        }
 
         // Insert user data model
         userDataDAO.insert(userData);

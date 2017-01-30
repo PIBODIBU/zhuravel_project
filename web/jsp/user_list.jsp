@@ -18,7 +18,10 @@
 
 <md-content ng-controller="CardController as ctrl"
             layout="column"
-            layout-fill>
+            layout-fill
+            ng-cloak
+            style="padding-bottom: 60px; !important;">
+
     <section>
         <md-list>
             <md-subheader class="md-primary">Users</md-subheader>

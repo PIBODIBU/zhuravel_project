@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <title>Welcome</title>
 
@@ -92,6 +92,7 @@
                     <form:form name="registerForm"
                                action="/register/"
                                modelAttribute="user"
+                               enctype="multipart/form-data"
                                method="post">
                         <input type="hidden" id="registerData" name="data">
                         <md-content class="md-padding" md-theme="docs-dark" layout="row">
@@ -219,16 +220,25 @@
                                 </div>
                             </md-input-container>
 
-                            <md-input-container flex="100">
-                                <label>Passport photo</label>
-                                <form:input name="passportPhoto"
-                                            disabled="disabled"
-                                            path="userData.passportUrl"
-                                            ng-model="register.passportPhoto"/>
-                                <div ng-messages="registerForm.passportUrl.$error">
-                                    <div ng-message="required">This is required.</div>
+                            <choose-file flex="100"
+                                         layout="row">
+                                <input id="fileInput"
+                                       type="file"
+                                       name="passportPhoto"
+                                       class="ng-hide">
+                                <md-input-container flex class="md-block">
+                                    <input type="text"
+                                           ng-model="fileName"
+                                           disabled>
+                                    <div class="hint">Select your passport photo</div>
+                                </md-input-container>
+                                <div>
+                                    <md-button id="uploadButton"
+                                               class="md-fab md-mini">
+                                        <md-icon class="material-icons">attach_file</md-icon>
+                                    </md-button>
                                 </div>
-                            </md-input-container>
+                            </choose-file>
                         </md-content>
 
                         <md-subheader class="md-primary">Additional info</md-subheader>

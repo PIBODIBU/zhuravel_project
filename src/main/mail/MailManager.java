@@ -26,7 +26,6 @@ public class MailManager {
         try {
             messageHelper = new MimeMessageHelper(mimeMessage, true);
 
-
             messageHelper.setTo(user.getEmail());
             messageHelper.setSubject("Your order is completed!");
             messageHelper.setText("<html>\n" +
