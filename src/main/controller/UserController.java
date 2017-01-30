@@ -29,6 +29,8 @@ public class UserController {
                 .registerTypeAdapter(User.class, new UserSerializer())
                 .create();
 
+        modelAndView.addObject("title", "Users");
+
         if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;

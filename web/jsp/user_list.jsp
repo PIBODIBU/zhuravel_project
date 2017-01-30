@@ -5,14 +5,16 @@
 
 <html>
 <head>
-    <title>Users</title>
+    <title>${title}</title>
 
     <jsp:include page="include/angular_common.jsp"/>
 </head>
 
 <body ng-app="BaseApp" ng-cloak style="overflow: hidden;">
 
-<jsp:include page="include/toolbar.jsp"/>
+<jsp:include page="include/toolbar.jsp">
+    <jsp:param name="title" value="${title}"/>
+</jsp:include>
 
 <md-content ng-controller="CardController as ctrl"
             layout="column"

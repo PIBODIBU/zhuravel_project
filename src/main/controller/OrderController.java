@@ -34,6 +34,8 @@ public class OrderController {
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
+        modelAndView.addObject("title", "Undefined orders");
+
         if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;
@@ -74,6 +76,8 @@ public class OrderController {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
+
+        modelAndView.addObject("title", "Active orders");
 
         if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
@@ -125,6 +129,8 @@ public class OrderController {
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
+        modelAndView.addObject("title", "Completed orders");
+
         if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;
@@ -175,6 +181,8 @@ public class OrderController {
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
 
+        modelAndView.addObject("title", "Canceled orders");
+
         if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");
             return null;
@@ -224,6 +232,8 @@ public class OrderController {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
+
+        modelAndView.addObject("title", "Archived orders");
 
         if (!securityManager.isUserLogged()) {
             servletResponse.sendRedirect("/login");

@@ -13,8 +13,7 @@
 <body ng-app="BaseApp" ng-cloak>
 
 <jsp:include page="include/toolbar.jsp">
-    <jsp:param name="name" value="${userModel.name}"/>
-    <jsp:param name="surname" value="${userModel.surname}"/>
+    <jsp:param name="title" value="${userModel.name.concat(' ').concat(userModel.surname)}"/>
 </jsp:include>
 
 <md-content ng-controller="PageController as ctrl">

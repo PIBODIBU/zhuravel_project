@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Orders</title>
+    <title>${title}</title>
 
     <jsp:include page="include/angular_common.jsp"/>
 </head>
@@ -13,10 +13,19 @@
 <body ng-app="BaseApp" ng-cloak>
 
 <jsp:include page="include/toolbar.jsp">
-    <jsp:param name="user" value="${sessionScope.user}"/>
+    <jsp:param name="title" value="${title}"/>
 </jsp:include>
 
 <div ng-controller="CardController as controller">
+    <md-content ng-if="orders.length == 0"
+                layout="row"
+                layout-align="center center">
+        <p class="md-display-2"
+           style="color: #BDBDBD; !important;"
+           layout="column"
+           layout-align="center">You have no orders</p>
+    </md-content>
+
     <div layout="row" flex layout-wrap class='md-padding'>
         <md-content flex-gt-md="33"
                     flex-xs="100"
@@ -36,6 +45,8 @@
                         <span class="md-subhead" style="overflow: auto">{{order.buying_comment}}</span>
                     </md-card-title-text>
                 </md-card-title>
+
+                <md-divider></md-divider>
 
                 <%--Active order--%>
                 <md-card-actions layout="row"
@@ -142,8 +153,9 @@
                     data: $.param({'comment': order.buying_comment, 'name': order.buying_item_name}),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).then(function (response) {
-                    if (!$scope.orders[0].is_done && !$scope.orders[0].is_canceled && !$scope.orders[0].is_archived)
-                        $scope.orders.push(response.data);
+                    if ($scope.orders[0] != undefined)
+                        if (!$scope.orders[0].is_done && !$scope.orders[0].is_canceled && !$scope.orders[0].is_archived)
+                            $scope.orders.push(response.data);
 
                     $mdToast.show($mdToast.simple()
                             .textContent('Order created successfully')

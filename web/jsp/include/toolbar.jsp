@@ -3,13 +3,7 @@
 <md-toolbar ng-controller="ToolbarController as ctrl" md-whiteframe="4">
     <div class="md-toolbar-tools">
         <h3>
-            <c:if test="${param.name != null && param.surname != null}">
-                <span>${param.name} ${param.surname}</span>
-            </c:if>
-
-            <c:if test="${param.name == null && param.surname == null}">
-                <span>${sessionScope.user.name} ${sessionScope.user.surname}</span>
-            </c:if>
+            <span>${param.title}</span>
         </h3>
 
         <span flex></span>

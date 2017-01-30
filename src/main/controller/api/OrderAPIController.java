@@ -1,4 +1,4 @@
-package main.controller;
+package main.controller.api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -157,7 +157,7 @@ public class OrderAPIController {
         }
 
         order = orderDAO.get(orderId);
-        
+
         if (order == null) {
             errorStatus.setError(true);
             errorStatus.setErrorMessage("Order cannot be found");

@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Orders</title>
+    <title>${title}</title>
 
     <jsp:include page="include/angular_common.jsp"/>
 </head>
@@ -13,7 +13,7 @@
 <body ng-app="BaseApp" ng-cloak>
 
 <jsp:include page="include/toolbar.jsp">
-    <jsp:param name="user" value="${sessionScope.user}"/>
+    <jsp:param name="title" value="${title}"/>
 </jsp:include>
 
 <md-content>
