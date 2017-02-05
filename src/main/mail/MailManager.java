@@ -3,14 +3,16 @@ package main.mail;
 import main.model.Order;
 import main.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-@Service("mailManager")
+//@Service("mailManagerApp")
 public class MailManager {
     private JavaMailSenderImpl mailSender;
 

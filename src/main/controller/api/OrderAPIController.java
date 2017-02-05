@@ -13,20 +13,24 @@ import main.model.ErrorStatus;
 import main.model.Order;
 import main.security.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/order")
+@Component
 public class OrderAPIController {
-    private MailManager mailManager;
+    /*private MailManager mailManager;
 
     @Autowired
-    public void setMailManager(MailManager mailManager) {
+    public void setMailManager(@Qualifier("mailManagerApp") MailManager mailManager) {
         this.mailManager = mailManager;
     }
-
+*/
     @RequestMapping(value = "/archive", method = RequestMethod.POST)
     @ResponseBody
     public String archiveOrder(HttpSession session,
@@ -138,7 +142,7 @@ public class OrderAPIController {
         order.setSoldComment(comment);
         orderDAO.insertOrUpdate(order);
 
-        mailManager.notifyUserAboutCompletedOrder(order.getBuyer(), order);
+        new MailManager().notifyUserAboutCompletedOrder(order.getBuyer(), order);
 
         return gson.toJson(errorStatus);
     }

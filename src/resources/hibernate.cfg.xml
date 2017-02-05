@@ -15,7 +15,7 @@
         <property name="hibernate.connection.useUnicode">true</property>
         <property name="hibernate.connection.characterEncoding">UTF-8</property>
         <property name="hibernate.connection.charSet">UTF-8</property>
-
+        
         <mapping class="main.model.User"/>
         <mapping class="main.model.UserRole"/>
         <mapping class="main.model.UserData"/>
