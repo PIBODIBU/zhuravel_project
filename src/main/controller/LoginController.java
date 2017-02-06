@@ -19,9 +19,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/app")
-@EnableAutoConfiguration
-@Component
+//@RequestMapping("/app")
+//@EnableAutoConfiguration
+//@Component
 public class LoginController {
     public static final String ATTRIBUTE_USER = "user";
 
