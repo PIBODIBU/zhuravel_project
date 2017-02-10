@@ -57,7 +57,7 @@ public class OrderController {
                                     .getUser()
                                     .getId()))));
 
-            modelAndView.setViewName("agent_order_list.jsp");
+            modelAndView.setViewName("order_list-agent.jsp");
         } else {
             servletResponse.sendRedirect("/logout");
             return null;
@@ -101,7 +101,7 @@ public class OrderController {
                                     .getUser()
                                     .getId()))));
 
-            modelAndView.setViewName("agent_order_list.jsp");
+            modelAndView.setViewName("order_list-agent.jsp");
         } else if (securityManager.has(SecurityManager.ROLE_USER)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getActiveOrdersAsBuyer(
@@ -109,7 +109,7 @@ public class OrderController {
                                     .getUser()
                                     .getId()))));
 
-            modelAndView.setViewName("user_order_list.jsp");
+            modelAndView.setViewName("order_list-user.jsp");
         } else {
             servletResponse.sendRedirect("/logout");
             return null;
@@ -153,7 +153,7 @@ public class OrderController {
                                     .getUser()
                                     .getId()))));
 
-            modelAndView.setViewName("agent_order_list.jsp");
+            modelAndView.setViewName("order_list-agent.jsp");
         } else if (securityManager.has(SecurityManager.ROLE_USER)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getDoneOrdersAsBuyer(
@@ -161,7 +161,7 @@ public class OrderController {
                                     .getUser()
                                     .getId()))));
 
-            modelAndView.setViewName("user_order_list.jsp");
+            modelAndView.setViewName("order_list-user.jsp");
         } else {
             servletResponse.sendRedirect("/logout");
             return null;
@@ -205,7 +205,7 @@ public class OrderController {
                                     .getUser()
                                     .getId()))));
 
-            modelAndView.setViewName("agent_order_list.jsp");
+            modelAndView.setViewName("order_list-agent.jsp");
         } else if (securityManager.has(SecurityManager.ROLE_USER)) {
             modelAndView.addObject("orders",
                     gson.toJson(orderDAO.getCanceledOrdersAsBuyer(
@@ -213,7 +213,7 @@ public class OrderController {
                                     .getUser()
                                     .getId()))));
 
-            modelAndView.setViewName("user_order_list.jsp");
+            modelAndView.setViewName("order_list-user.jsp");
         } else {
             servletResponse.sendRedirect("/logout");
             return null;
@@ -257,7 +257,7 @@ public class OrderController {
                                     .getUser()
                                     .getId()))));
 
-            modelAndView.setViewName("agent_order_list.jsp");
+            modelAndView.setViewName("order_list-agent.jsp");
         } else if (securityManager.has(SecurityManager.ROLE_USER)) {
             servletResponse.sendRedirect("/order/active");
         } else {

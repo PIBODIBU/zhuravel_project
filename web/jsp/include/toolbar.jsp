@@ -35,7 +35,7 @@
 
                 <c:if test="${sessionScope.user.isRole('ROLE_USER')}">
                     <md-menu-item>
-                        <md-button ng-click="ctrl.newOrder($event)">
+                        <md-button ng-click="ctrl.openNewOrderDialog($event)">
                             <md-icon md-svg-icon="playlist-plus"></md-icon>
                             New order
                         </md-button>

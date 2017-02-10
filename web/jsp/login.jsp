@@ -15,7 +15,7 @@
 <body ng-app="BaseApp" ng-cloak>
 
 <md-content ng-controller="LoginFormController"
-            class="md-padding"
+            class="md-padding grey-bg"
             layout="row"
             layout-align="center center">
     <md-card md-whiteframe="8"

@@ -17,16 +17,19 @@
 </jsp:include>
 
 <div ng-controller="CardController as controller">
-    <md-content ng-if="orders.length == 0"
-                layout="row"
-                layout-align="center center">
+    <div ng-if="orders.length == 0"
+         layout="row"
+         class="grey-bg"
+         layout-align="center center">
         <p class="md-display-2"
-           style="color: #BDBDBD; !important;"
            layout="column"
            layout-align="center">You have no orders</p>
-    </md-content>
+    </div>
 
-    <div layout="row" flex layout-wrap class='md-padding'>
+    <div layout="row"
+         flex
+         layout-wrap
+         class="md-padding grey-bg">
         <md-content flex-gt-md="33"
                     flex-xs="100"
                     flex-gt-xs="50"
@@ -133,42 +136,14 @@
             });
         };
 
-        $rootScope.newOrder = function (ev) {
-            $mdDialog.show({
-                controller: DialogNewOrderController,
-                templateUrl: '/jsp/template/order_new_dialog.tmpl.jsp',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: false,
-                fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-                resolve: {
-                    order: function () {
-                        return {};
-                    }
-                }
-            }).then(function (order) {
-                $http({
-                    method: 'POST',
-                    url: '/api/order/new',
-                    data: $.param({'comment': order.buying_comment, 'name': order.buying_item_name}),
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).then(function (response) {
-                    if ($scope.orders[0] != undefined)
-                        if (!$scope.orders[0].is_done && !$scope.orders[0].is_canceled && !$scope.orders[0].is_archived)
-                            $scope.orders.push(response.data);
+        $rootScope.onOrderAddingSuccess = function (response) {
+            if ($scope.orders[0] == undefined)
+                $scope.orders = [];
 
-                    $mdToast.show($mdToast.simple()
-                            .textContent('Order created successfully')
-                            .position('bottom')
-                            .hideDelay(3000));
-                }, function (response) {
-                    $mdToast.show($mdToast.simple()
-                            .textContent('Error occurred. Try again later')
-                            .position('bottom')
-                            .hideDelay(3000));
-                })
-            }, function () {
-            });
+            $scope.orders.push(response.data);
+        };
+        $rootScope.onOrderAddingFailure = function () {
+
         };
 
         function DialogController($scope, $mdDialog, order) {
@@ -176,18 +151,6 @@
 
             $scope.cancel = function () {
                 $mdDialog.cancel();
-            };
-        }
-
-        function DialogNewOrderController($scope, $mdDialog, order) {
-            $scope.order = order;
-
-            $scope.cancel = function () {
-                $mdDialog.cancel();
-            };
-
-            $scope.done = function () {
-                $mdDialog.hide(order);
             };
         }
     }]);

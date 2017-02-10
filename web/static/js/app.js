@@ -11,27 +11,77 @@ app.config(function ($mdIconProvider, $mdThemingProvider) {
         .accentPalette('orange');
 
     $mdThemingProvider.enableBrowserColor({
-        palette: 'accent', // Default is 'primary', any basic material palette and extended palettes are available
-        hue: '200' // Default is '800'
+        palette: 'primary', // Default is 'primary', any basic material palette and extended palettes are available
+        hue: '800' // Default is '800'
     });
 });
 
-app.controller('ToolbarController', ['$rootScope', '$scope', '$window', function ($rootScope, $scope, $window) {
-    var originatorEv;
+app.controller('ToolbarController', ['$rootScope', '$scope', '$window', '$mdDialog', '$mdToast', '$http',
+    function ($rootScope, $scope, $window, $mdDialog, $mdToast, $http) {
+        var originatorEv;
 
-    this.openMenu = function ($mdOpenMenu, ev) {
-        originatorEv = ev;
-        $mdOpenMenu(ev);
-    };
+        this.openMenu = function ($mdOpenMenu, ev) {
+            originatorEv = ev;
+            $mdOpenMenu(ev);
+        };
 
-    this.redirect = function (url) {
-        window.location.href = url;
-    };
+        this.redirect = function (url) {
+            window.location.href = url;
+        };
 
-    this.newOrder = function (ev) {
-        $rootScope.newOrder(ev);
-    };
-}]);
+        this.openNewOrderDialog = function (ev) {
+            $mdDialog.show({
+                controller: DialogNewOrderController,
+                templateUrl: '/jsp/template/order_new_dialog.tmpl.jsp',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: false,
+                fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+                resolve: {
+                    order: function () {
+                        return {};
+                    }
+                }
+            }).then(function (order) {
+                $http({
+                    method: 'POST',
+                    url: '/api/order/new',
+                    data: $.param({'comment': order.buying_comment, 'name': order.buying_item_name}),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).then(function (response) {
+                    if ($rootScope.onOrderAddingSuccess != undefined)
+                        $rootScope.onOrderAddingSuccess(response);
+
+                    $mdToast.show($mdToast.simple()
+                        .textContent('Order created successfully')
+                        .position('bottom')
+                        .hideDelay(3000));
+                }, function (response) {
+                    $mdToast.show($mdToast.simple()
+                        .textContent('Error occurred. Try again later')
+                        .position('bottom')
+                        .hideDelay(3000));
+                });
+            }, function () {
+                if ($rootScope.onOrderAddingFailure != undefined)
+                    $rootScope.onOrderAddingFailure();
+            });
+        };
+
+        function DialogNewOrderController($scope, $mdDialog, order) {
+            $scope.order = order;
+
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+
+            $scope.done = function () {
+                $mdDialog.hide(order);
+            };
+        }
+    }
+])
+;
 
 app.directive('chooseFile', function () {
     return {

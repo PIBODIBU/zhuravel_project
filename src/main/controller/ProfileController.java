@@ -44,6 +44,7 @@ public class ProfileController {
 
         modelAndView.addObject("userModel", user);
         modelAndView.addObject("user", gson.toJson(user));
+        modelAndView.addObject("isMyPage", true);
 
         if (securityManager.has(SecurityManager.ROLE_ADMIN)) {
         }
@@ -88,6 +89,7 @@ public class ProfileController {
 
         modelAndView.addObject("user", gson.toJson(requestedUser));
         modelAndView.addObject("userModel", requestedUser);
+        modelAndView.addObject("isMyPage", false);
 
         // Switch pages
         if (requestedUser.isRole(SecurityManager.ROLE_USER)) {

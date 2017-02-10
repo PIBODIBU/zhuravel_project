@@ -16,140 +16,144 @@
     <jsp:param name="title" value="${userModel.name.concat(' ').concat(userModel.surname)}"/>
 </jsp:include>
 
-<md-content ng-controller="PageController as ctrl">
-    <section>
-        <md-list flex>
-            <md-subheader class="md-primary">Main info</md-subheader>
+<md-content ng-controller="PageController as ctrl"
+            layout-padding
+            layout="column"
+            style="background: #e8e8e8">
+    <div layout="row"
+         layout-wrap
+         layout-align="center">
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Name</h3>
-                    <p ng-if="user.name">
-                        {{user.name}}</p>
-                    <p ng-if="!user.name">null</p>
-                </div>
-            </md-list-item>
+        <div flex="70"
+             layout-padding
+             style="height: 200px"
+             layout="row"
+             layout-align="start end"
+             md-colors="{backgroundColor: 'default-primary-500'}">
+            <h1 ng-if="isMyPage">{{user.name}} {{user.surname}} (me)</h1>
+            <h1 ng-if="!isMyPage">{{user.name}} {{user.surname}}</h1>
+        </div>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Surname</h3>
-                    <p ng-if="user.surname">
-                        {{user.surname}}</p>
-                    <p ng-if="!user.surname">null</p>
-                </div>
-            </md-list-item>
+        <div md-whiteframe="16"
+             flex="70">
+            <section class="list-holder">
+                <md-list>
+                    <md-subheader class="md-primary">Main info</md-subheader>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Middle name</h3>
-                    <p ng-if="user.middleName">
-                        {{user.middleName}}</p>
-                    <p ng-if="!user.middleName">null</p>
-                </div>
-            </md-list-item>
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="account-card-details"></md-icon>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Email</h3>
-                    <p ng-if="user.email">
-                        {{user.email}}</p>
-                    <p ng-if="!user.email">null</p>
-                </div>
-            </md-list-item>
-        </md-list>
-    </section>
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.name">
+                                {{user.name}} {{user.surname}} {{user.middleName}}
+                            </h3>
+                            <h3 ng-if="!user.name">- Not specified -</h3>
 
-    <section>
-        <md-list flex>
-            <md-subheader class="md-primary">Passport info</md-subheader>
+                            <p>Name</p>
+                        </div>
+                    </md-list-item>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Passport series</h3>
-                    <p ng-if="user.userData.passportSeries">
-                        {{user.userData.passportSeries}}</p>
-                    <p ng-if="!user.userData.passportSeries">null</p>
-                </div>
-            </md-list-item>
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="email"></md-icon>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Passport number</h3>
-                    <p ng-if="user.userData.passportNumber">
-                        {{user.userData.passportNumber}}</p>
-                    <p ng-if="!user.userData.passportNumber">null</p>
-                </div>
-            </md-list-item>
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.email">
+                                {{user.email}}</h3>
+                            <h3 ng-if="!user.email">- Not specified -</h3>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Passport validity</h3>
-                    <p ng-if="user.userData.passportValidity">
-                        {{user.userData.passportValidity}}</p>
-                    <p ng-if="!user.userData.passportValidity">null</p>
-                </div>
-            </md-list-item>
+                            <p>Email</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </section>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Passport registration</h3>
-                    <p ng-if="user.userData.passportRegistration">
-                        {{user.userData.passportRegistration}}</p>
-                    <p ng-if="!user.userData.passportRegistration">null</p>
-                </div>
-            </md-list-item>
+            <section class="list-holder">
+                <md-list flex>
+                    <md-subheader class="md-primary">Passport info</md-subheader>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Passport scan</h3>
-                    <a ng-if="user.userData.passportUrl"
-                       ng-href="/passport/scan/{{user.userData.passportUrl}}" target="_blank">
-                        Open
-                    </a>
-                    <p ng-if="!user.userData.passportUrl">null</p>
-                </div>
-            </md-list-item>
-        </md-list>
-    </section>
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="human"></md-icon>
 
-    <section>
-        <md-list flex>
-            <md-subheader class="md-primary">Additional info</md-subheader>
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.userData.passportSeries">
+                                {{user.userData.passportSeries}}</h3>
+                            <h3 ng-if="!user.userData.passportSeries">- Not specified -</h3>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Phone</h3>
-                    <p ng-if="user.userData.phone">
-                        {{user.userData.phone}}</p>
-                    <p ng-if="!user.userData.phone">null</p>
-                </div>
-            </md-list-item>
-        </md-list>
-    </section>
+                            <p>Series</p>
+                        </div>
+                    </md-list-item>
 
-    <section>
-        <md-list flex>
-            <md-subheader class="md-primary">Bonus card</md-subheader>
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="human-handsup"></md-icon>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Company name</h3>
-                    <p ng-if="user.userData.companyName">
-                        {{user.userData.companyName}}</p>
-                    <p ng-if="!user.userData.companyName">null</p>
-                </div>
-            </md-list-item>
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.userData.passportNumber">
+                                {{user.userData.passportNumber}}</h3>
+                            <h3 ng-if="!user.userData.passportNumber">- Not specified -</h3>
 
-            <md-list-item class="md-2-line">
-                <div class="md-list-item-text">
-                    <h3>Card number</h3>
-                    <p ng-if="user.userData.bonusCardNumber">
-                        {{user.userData.bonusCardNumber}}</p>
-                    <p ng-if="!user.userData.bonusCardNumber">null</p>
-                </div>
-            </md-list-item>
-        </md-list>
-    </section>
+                            <p>Number</p>
+                        </div>
+                    </md-list-item>
+
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="human-male"></md-icon>
+
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.userData.passportValidity">
+                                {{user.userData.passportValidity}}</h3>
+                            <h3 ng-if="!user.userData.passportValidity">- Not specified -</h3>
+
+                            <p>Validity</p>
+                        </div>
+                    </md-list-item>
+
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="human-handsdown"></md-icon>
+
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.userData.passportRegistration">
+                                {{user.userData.passportRegistration}}</h3>
+                            <h3 ng-if="!user.userData.passportRegistration">- Not specified -</h3>
+
+                            <p>Registration</p>
+                        </div>
+                    </md-list-item>
+
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="image-filter-center-focus-weak"></md-icon>
+
+                        <div class="md-list-item-text">
+                            <a ng-if="user.userData.passportUrl"
+                               ng-href="/uploads/scan/{{user.userData.passportUrl}}" target="_blank">
+                                Open
+                            </a>
+                            <h3 ng-if="!user.userData.passportUrl">- Not specified -</h3>
+
+                            <p>Scan</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </section>
+
+            <section class="list-holder">
+                <md-list flex>
+                    <md-subheader class="md-primary">Additional info</md-subheader>
+
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="phone"></md-icon>
+
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.userData.phone">
+                                {{user.userData.phone}}</h3>
+                            <h3 ng-if="!user.userData.phone">- Not specified -</h3>
+
+                            <p>Phone</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </section>
+        </div>
+    </div>
 </md-content>
 
 <script type="text/javascript">
@@ -157,7 +161,7 @@
         function ($scope, $window, $http, $mdDialog, $mdToast) {
             $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
             $scope.user = ${user};
-
+            $scope.isMyPage = ${isMyPage};
         }]);
 </script>
 </body>

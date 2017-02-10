@@ -10,110 +10,177 @@
     <jsp:include page="include/angular_common.jsp"/>
 </head>
 
-<body ng-app="BaseApp" ng-cloak style="overflow: hidden;">
+<body ng-app="BaseApp" ng-cloak>
 
 <jsp:include page="include/toolbar.jsp">
     <jsp:param name="title" value="${title}"/>
 </jsp:include>
 
 <md-content ng-controller="CardController as ctrl"
+            layout-padding
             layout="column"
-            layout-fill
-            ng-cloak
-            style="padding-bottom: 60px; !important;">
+            class="grey-bg">
 
-    <section>
-        <md-list>
+    <div layout="row"
+         layout-align="center">
+        <md-list flex="70"
+                 style="background: #ffffff"
+                 md-whiteframe="16">
             <md-subheader class="md-primary">Users</md-subheader>
 
-            <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="ctrl.showUserInfoCard($event, $index)">
-                <md-icon md-svg-icon="account" class="md-avatar"></md-icon>
+            <div ng-repeat="user in users">
+                <md-list-item class="md-2-line"
+                              ng-mouseenter="showControls=true"
+                              ng-mouseleave="showControls=false"
+                              ng-click="ctrl.goToUserProfile($event, $index)">
+                    <md-icon md-svg-icon="account" class="md-avatar"></md-icon>
 
-                <div class="md-list-item-text" layout="column">
-                    <h3>{{user.name}} {{user.surname}}</h3>
-                    <h4>{{user.middleName}}</h4>
-                    <p>{{user.email}}</p>
-                </div>
-            </md-list-item>
+                    <div class="md-list-item-text"
+                         layout="column">
+                        <h3>{{user.name}} {{user.surname}} {{user.middleName}}</h3>
+                        <p>{{user.email}}</p>
+                    </div>
+
+                    <md-button class="md-secondary md-icon-button"
+                               ng-show="showControls"
+                               ng-click="ctrl.deleteUser(ev, $index)"
+                               aria-label="Done">
+                        <md-tooltip md-direction="bottom" md-direction="left">Delete user</md-tooltip>
+                        <md-icon md-svg-icon="delete"></md-icon>
+                    </md-button>
+
+                    <md-button class="md-secondary md-icon-button"
+                               ng-show="showControls"
+                               ng-click="ctrl.goToUserProfile($event, $index)"
+                               aria-label="Done">
+                        <md-tooltip md-direction="bottom" md-direction="left">Profile</md-tooltip>
+                        <md-icon md-svg-icon="information-outline"></md-icon>
+                    </md-button>
+                </md-list-item>
+            </div>
         </md-list>
-    </section>
+    </div>
 
-    <section>
-        <md-list>
+    <div layout="row"
+         layout-align="center">
+        <md-list flex="70"
+                 style="background: #ffffff"
+                 md-whiteframe="16">
             <md-subheader class="md-primary">Agents</md-subheader>
 
-            <md-list-item class="md-3-line"
+            <md-list-item class="md-2-line"
                           ng-repeat="agent in agents"
-                          ng-click="ctrl.showAgentInfoCard($event, $index)">
+                          ng-mouseenter="showControls=true"
+                          ng-mouseleave="showControls=false"
+                          ng-click="ctrl.goToAgentProfile($event, $index)">
                 <md-icon md-svg-icon="account" class="md-avatar"></md-icon>
 
                 <div class="md-list-item-text" layout="column">
-                    <h3>{{agent.name}} {{agent.surname}}</h3>
-                    <h4>{{agent.middleName}}</h4>
+                    <h3>{{agent.name}} {{agent.surname}} {{agent.middleName}}</h3>
                     <p>{{agent.email}}</p>
                 </div>
+
+                <md-button class="md-secondary md-icon-button"
+                           ng-show="showControls"
+                           ng-click="ctrl.deleteAgent(ev, $index)"
+                           aria-label="Done">
+                    <md-tooltip md-direction="bottom" md-direction="left">Delete agent</md-tooltip>
+                    <md-icon md-svg-icon="delete"></md-icon>
+                </md-button>
+
+                <md-button class="md-secondary md-icon-button"
+                           ng-show="showControls"
+                           ng-click="ctrl.goToAgentProfile($event, $index)"
+                           aria-label="Done">
+                    <md-tooltip md-direction="bottom" md-direction="left">Profile</md-tooltip>
+                    <md-icon md-svg-icon="information-outline"></md-icon>
+                </md-button>
             </md-list-item>
         </md-list>
-    </section>
+    </div>
+</md-content>
 </md-content>
 
 <script type="text/javascript">
-    app.controller('CardController', ['$scope', '$window', '$http', '$mdDialog', '$mdToast', function ($scope, $window, $http, $mdDialog, $mdToast) {
-        $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-        $scope.users = ${users};
-        $scope.agents = ${agents};
+    app.controller('CardController', ['$scope', '$window', '$http', '$mdDialog', '$mdToast',
+        function ($scope, $window, $http, $mdDialog, $mdToast) {
+            $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+            $scope.users = ${users};
+            $scope.agents = ${agents};
 
-        this.showUserInfoCard = function (ev, index) {
-            window.location.href = "/user/" + $scope.users[index].id;
-            /*$mdDialog.show({
-             controller: DialogController,
-             templateUrl: '/jsp/template/user_info.tmpl.jsp',
-             parent: angular.element(document.body),
-             targetEvent: ev,
-             clickOutsideToClose: true,
-             fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-             resolve: {
-             user: function () {
-             return $scope.users[index];
-             }
-             }
-             }).then(function (answer) {
-             $scope.status = 'You said the information was "' + answer + '".';
-             }, function () {
-             $scope.status = 'You cancelled the dialog.';
-             });*/
-        };
-
-        this.showAgentInfoCard = function (ev, index) {
-            window.location.href = "/user/" + $scope.users[index].id;
-
-            /*$mdDialog.show({
-             controller: DialogController,
-             templateUrl: '/jsp/template/user_info.tmpl.jsp',
-             parent: angular.element(document.body),
-             targetEvent: ev,
-             clickOutsideToClose: true,
-             fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-             resolve: {
-             user: function () {
-             return $scope.agents[index];
-             }
-             }
-             }).then(function (answer) {
-             $scope.status = 'You said the information was "' + answer + '".';
-             }, function () {
-             $scope.status = 'You cancelled the dialog.';
-             });*/
-        };
-
-        function DialogController($scope, $mdDialog, user) {
-            $scope.user = user;
-
-            $scope.cancel = function () {
-                $mdDialog.cancel();
+            this.goToUserProfile = function (ev, index) {
+                window.location.href = "/user/" + $scope.users[index].id;
             };
-        }
-    }]);
+
+            this.goToAgentProfile = function (ev, index) {
+                window.location.href = "/user/" + $scope.agents[index].id;
+            };
+
+            this.deleteUser = function (ev, index) {
+                $mdDialog.show($mdDialog.confirm()
+                        .clickOutsideToClose(true)
+                        .title('Attention')
+                        .textContent('This action cannot be undone. Delete user?')
+                        .ariaLabel('delete_dialog')
+                        .ok('Yes')
+                        .cancel('No')
+                        .targetEvent(ev)
+                ).then(function () {
+                    $http({
+                        method: 'DELETE',
+                        url: '/api/users/' + $scope.users[index].id
+                    }).then(function (response) {
+                        $scope.users.splice(index, 1);
+
+                        $mdToast.show($mdToast.simple()
+                                .textContent('User deleted')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    }, function (response) {
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Error occurred. Try again later')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    })
+                }, function () {
+
+                });
+            };
+
+            this.deleteAgent = function (ev, index) {
+                $mdDialog.show($mdDialog.confirm()
+                        .clickOutsideToClose(true)
+                        .title('Attention')
+                        .textContent('This action cannot be undone. Delete agent?')
+                        .ariaLabel('delete_dialog')
+                        .ok('Yes')
+                        .cancel('No')
+                        .targetEvent(ev)
+                ).then(function () {
+                    $http({
+                        method: 'DELETE',
+                        url: '/api/users/',
+                        data: $.param({'user_id': $scope.agents[index].id}),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).then(function (response) {
+                        $scope.agents.splice(index, 1);
+
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Agent deleted')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    }, function (response) {
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Error occurred. Try again later')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    })
+                }, function () {
+
+                });
+            };
+
+        }]);
 </script>
 </body>
 </html>

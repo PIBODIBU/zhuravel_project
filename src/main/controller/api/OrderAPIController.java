@@ -19,18 +19,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.GET;
 
 @RestController
 @RequestMapping("/api/order")
-@Component
 public class OrderAPIController {
-    /*private MailManager mailManager;
+    /*
+        private MailManager mailManager;
 
-    @Autowired
-    public void setMailManager(@Qualifier("mailManagerApp") MailManager mailManager) {
-        this.mailManager = mailManager;
-    }
-*/
+        @Autowired
+        public void setMailManager(@Qualifier("mailManagerApp") MailManager mailManager) {
+            this.mailManager = mailManager;
+        }
+    */
     @RequestMapping(value = "/archive", method = RequestMethod.POST)
     @ResponseBody
     public String archiveOrder(HttpSession session,
