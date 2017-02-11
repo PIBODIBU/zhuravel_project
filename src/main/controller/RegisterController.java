@@ -9,6 +9,7 @@ import main.dao.impl.UserDAOImpl;
 import main.dao.impl.UserDataDAOImpl;
 import main.dao.impl.UserRoleDAOImpl;
 import main.helper.Const;
+import main.helper.FileUploader;
 import main.model.PassportFile;
 import main.model.User;
 import main.model.UserData;
@@ -75,29 +76,7 @@ public class RegisterController {
         user = userDAO.get(userId);
 
         // Upload passport photos
-        if (multipartFiles != null && !multipartFiles.isEmpty()) {
-            for (MultipartFile file : multipartFiles) {
-                if (file == null || file.isEmpty())
-                    continue;
-
-                // Prepare db model
-                PassportFile passportFile = new PassportFile();
-                passportFile.setUserData(user.getUserData());
-                passportFile.setFileName(file.getOriginalFilename());
-
-                // Upload photo file to the server
-                String realPathToUploads = request.getServletContext().getRealPath(Const.PASSPORT_SCAN_UPLOAD_PATH);
-                if (!new File(realPathToUploads).exists()) {
-                    new File(realPathToUploads).mkdir();
-                }
-                String filePath = realPathToUploads + file.getOriginalFilename();
-                File destFile = new File(filePath);
-                file.transferTo(destFile);
-
-                // Save meta info to db
-                passportFileDAO.insert(passportFile);
-            }
-        }
+        FileUploader.uploadFromMultipart(request.getServletContext(), user, multipartFiles);
 
         // Save user data to the session
         session.setAttribute(LoginController.ATTRIBUTE_USER, user);

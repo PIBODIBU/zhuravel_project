@@ -122,14 +122,13 @@
                         </div>
                     </md-list-item>
 
-                    <md-list-item class="md-2-line md-padding">
-                        <%--<md-icon md-svg-icon="image-filter-center-focus-weak"></md-icon>--%>
-
+                    <md-list-item class="md-2-line md-padding"
+                                  ng-if="user.userData.passportPhotos.length > 0">
                         <div class="md-list-item-text">
                             <div layout="row"
                                  flex
                                  layout-wrap>
-                                <md-content flex-gt-md="20"
+                                <md-content flex-gt-md="33"
                                             flex-xs="100"
                                             flex-gt-xs="33"
                                             flex-xl="20"
@@ -165,8 +164,6 @@
                                     </md-card>
                                 </md-content>
                             </div>
-
-                            <h3 ng-if="user.userData.passportPhotos == 0">- Not specified -</h3>
                         </div>
                     </md-list-item>
                 </md-list>

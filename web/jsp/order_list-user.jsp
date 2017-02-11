@@ -33,10 +33,12 @@
         <md-content flex-gt-md="33"
                     flex-xs="100"
                     flex-gt-xs="50"
+                    class="grey-bg"
                     flex-xl="25"
                     layout="column"
                     ng-repeat="order in orders">
-            <md-card flex md-whiteframe="4">
+            <md-card flex
+                     md-whiteframe="4">
                 <md-card-title>
                     <md-card-title-text>
                             <span class="md-headline">{{order.buying_item_name}}

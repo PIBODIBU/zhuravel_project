@@ -2,13 +2,17 @@ package main.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import main.dao.PassportFileDAO;
 import main.dao.UserDAO;
+import main.dao.impl.PassportFileDAOImpl;
 import main.dao.impl.UserDAOImpl;
 import main.helper.Const;
+import main.helper.FileUploader;
 import main.hibernate.HibernateUtil;
 import main.hibernate.serializer.OrderSerializer;
 import main.hibernate.serializer.UserSerializer;
 import main.model.Order;
+import main.model.PassportFile;
 import main.model.User;
 import main.security.SecurityManager;
 import org.springframework.context.annotation.Scope;
@@ -89,6 +93,7 @@ public class ProfileController {
 
         modelAndView.setViewName("profile_edit.jsp");
         modelAndView.addObject("user", user);
+        modelAndView.addObject("userJson", gson.toJson(user));
 
         return modelAndView;
     }
@@ -97,10 +102,9 @@ public class ProfileController {
     public void editProfile(ServletRequest request,
                             HttpSession httpSession,
                             HttpServletResponse servletResponse,
-                            @RequestParam("passportPhoto") List<MultipartFile> passportPhotos,
+                            @RequestParam("passportPhoto") List<MultipartFile> multipartFiles,
                             @ModelAttribute User user,
                             BindingResult bindingResult) throws IOException {
-        ModelAndView modelAndView = new ModelAndView();
         SecurityManager securityManager = new SecurityManager(httpSession);
         UserDAO userDAO = new UserDAOImpl();
         Gson gson = new GsonBuilder()
@@ -119,20 +123,8 @@ public class ProfileController {
             return;
         }
 
-        for (MultipartFile photo : passportPhotos) {
-            if (photo != null && !photo.isEmpty()) {
-                // Upload photo
-                String realPathToUploads = request.getServletContext().getRealPath(Const.PASSPORT_SCAN_UPLOAD_PATH);
-                if (!new File(realPathToUploads).exists()) {
-                    new File(realPathToUploads).mkdir();
-                }
-
-                String filePath = realPathToUploads + photo.getOriginalFilename();
-                File destFile = new File(filePath);
-                photo.transferTo(destFile);
-
-            }
-        }
+        // Upload passport photos
+        FileUploader.uploadFromMultipart(request.getServletContext(), user, multipartFiles);
 
         userDAO.insertOrUpdate(user);
 

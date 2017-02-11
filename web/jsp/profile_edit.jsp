@@ -2,6 +2,8 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
 <head>
@@ -30,224 +32,228 @@
              layout="row"
              layout-align="start end"
              md-colors="{backgroundColor: 'default-primary-500'}">
-            <h1 ng-if="isMyPage">{{user.name}} {{user.surname}} (me)</h1>
-            <h1 ng-if="!isMyPage">{{user.name}} {{user.surname}}</h1>
+            <h1>${user.name} ${user.surname}</h1>
         </div>
 
         <div md-whiteframe="16"
              flex="70">
-            <section class="list-holder">
-                <md-list>
-                    <md-subheader class="md-primary">Main info</md-subheader>
+            <md-content>
+                <form:form name="editForm"
+                           action="/user/me/edit/"
+                           enctype="multipart/form-data"
+                           modelAttribute="user"
+                           method="post">
+                    <md-content class="md-padding"
+                                md-theme="docs-dark"
+                                layout="row">
+                        <md-input-container flex="50">
+                            <label>First name</label>
+                            <form:input required="required"
+                                        name="name"
+                                        disabled="true"
+                                        ng-model="user.name"
+                                        path="name"/>
 
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="account-card-details"></md-icon>
+                            <div ng-messages="editForm.name.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
 
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.name">
-                                {{user.name}} {{user.surname}} {{user.middleName}}
-                            </h3>
-                            <h3 ng-if="!user.name">- Not specified -</h3>
-
-                            <p>Name</p>
-                        </div>
-                    </md-list-item>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="email"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.email">
-                                {{user.email}}</h3>
-                            <h3 ng-if="!user.email">- Not specified -</h3>
-
-                            <p>Email</p>
-                        </div>
-                    </md-list-item>
-                </md-list>
-            </section>
-
-            <section class="list-holder">
-                <md-list flex>
-                    <md-subheader class="md-primary">Passport info</md-subheader>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="human"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.userData.passportSeries">
-                                {{user.userData.passportSeries}}</h3>
-                            <h3 ng-if="!user.userData.passportSeries">- Not specified -</h3>
-
-                            <p>Series</p>
-                        </div>
-                    </md-list-item>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="human-handsup"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.userData.passportNumber">
-                                {{user.userData.passportNumber}}</h3>
-                            <h3 ng-if="!user.userData.passportNumber">- Not specified -</h3>
-
-                            <p>Number</p>
-                        </div>
-                    </md-list-item>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="human-male"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.userData.passportValidity">
-                                {{user.userData.passportValidity}}</h3>
-                            <h3 ng-if="!user.userData.passportValidity">- Not specified -</h3>
-
-                            <p>Validity</p>
-                        </div>
-                    </md-list-item>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="human-handsdown"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.userData.passportRegistration">
-                                {{user.userData.passportRegistration}}</h3>
-                            <h3 ng-if="!user.userData.passportRegistration">- Not specified -</h3>
-
-                            <p>Registration</p>
-                        </div>
-                    </md-list-item>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="image-filter-center-focus-weak"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <a ng-if="user.userData.passportUrl"
-                               ng-href="/uploads/scan/{{user.userData.passportUrl}}" target="_blank">
-                                Open
-                            </a>
-                            <h3 ng-if="!user.userData.passportUrl">- Not specified -</h3>
-
-                            <p>Scan</p>
-                        </div>
-                    </md-list-item>
-                </md-list>
-            </section>
-
-            <section class="list-holder">
-                <md-list flex>
-                    <md-subheader class="md-primary">Additional info</md-subheader>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="phone"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.userData.phone">
-                                {{user.userData.phone}}</h3>
-                            <h3 ng-if="!user.userData.phone">- Not specified -</h3>
-
-                            <p>Phone</p>
-                        </div>
-                    </md-list-item>
-                </md-list>
-            </section>
-
-            <section class="list-holder">
-                <md-list flex>
-                    <md-subheader class="md-primary">Bonus card</md-subheader>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="domain"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.userData.companyName">
-                                {{user.userData.companyName}}</h3>
-                            <h3 ng-if="!user.userData.companyName">- Not specified -</h3>
-
-                            <p>Company name</p>
-                        </div>
-                    </md-list-item>
-
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="cards"></md-icon>
-
-                        <div class="md-list-item-text">
-                            <h3 ng-if="user.userData.bonusCardNumber">
-                                {{user.userData.bonusCardNumber}}</h3>
-                            <h3 ng-if="!user.userData.bonusCardNumber">- Not specified -</h3>
-
-                            <p>Card number</p>
-                        </div>
-                    </md-list-item>
-                </md-list>
-            </section>
-
-            <section class="list-holder">
-                <md-subheader class="md-primary">Orders</md-subheader>
-
-                <div layout="row"
-                     flex
-                     layout-wrap
-                     class="md-padding">
-                    <md-content flex-gt-md="33"
-                                flex-xs="100"
-                                flex-gt-xs="50"
-                                flex-xl="25"
-                                layout="column"
-                                ng-repeat="order in orders">
-                        <md-card
-                                md-whiteframe="{{height}}"
-                                ng-init="height = 2; showControls = false"
-                                ng-mouseenter="height = 6; showControls = true"
-                                ng-mouseleave="height = 2; showControls = false">
-                            <md-card-header class="md-card-header"
-                                            ng-click="ctrl.showUserInfoCard($event, $index)"
-                                            md-whiteframe="2">
-                                <md-card-header-text>
-                                    <span class="md-title">{{order.buying_item_name}}</span>
-                                    <span class="md-subhead">{{order.date}}</span>
-                                </md-card-header-text>
-                            </md-card-header>
-
-                            <md-card-content>
-                                <p style="max-height: 200px; overflow: auto">{{order.buying_comment}}</p>
-                            </md-card-content>
-
-                            <md-card-actions layout="row"
-                                             layout-align="end end">
-                                <md-button class="md-icon-button">
-                                </md-button>
-
-                                <md-button class="md-icon-button"
-                                           aria-label="Settings"
-                                           ng-show="showControls"
-                                           ng-click="ctrl.showOrderInfoCard($event, $index)">
-                                    <md-tooltip md-direction="bottom" md-direction="left">Send email with details
-                                    </md-tooltip>
-                                    <md-icon md-svg-icon="email"></md-icon>
-                                </md-button>
-
-                                <md-button class="md-icon-button"
-                                           aria-label="Settings"
-                                           ng-show="showControls"
-                                           ng-click="ctrl.showOrderInfoCard($event, $index)">
-                                    <md-tooltip md-direction="bottom" md-direction="left">Buyer info</md-tooltip>
-                                    <md-icon md-svg-icon="account"></md-icon>
-                                </md-button>
-
-                                <md-button class="md-icon-button"
-                                           aria-label="Settings"
-                                           ng-show="showControls"
-                                           ng-click="ctrl.showOrderInfoCard($event, $index)">
-                                    <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
-                                    <md-icon md-svg-icon="information-outline"></md-icon>
-                                </md-button>
-                            </md-card-actions>
-                        </md-card>
+                        <md-input-container flex="50">
+                            <label>Last name</label>
+                            <form:input required="required"
+                                        path="surname"
+                                        disabled="true"
+                                        ng-model="user.surname"/>
+                            <div ng-messages="editForm.surname.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
                     </md-content>
-                </div>
-            </section>
+
+                    <md-subheader class="md-primary">Main info</md-subheader>
+                    <md-content class="md-padding" layout="row" layout-wrap>
+                        <md-input-container flex="50">
+                            <label>Middle name</label>
+                            <form:input path="middleName"
+                                        ng-model="user.middleName"/>
+                            <div ng-messages="editForm.middleName.$error">
+                                <div ng-message="md-maxlength">Username must be less than 30 characters long.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex="50">
+                            <label>Email</label>
+                            <form:input name="email"
+                                        type="email"
+                                        path="email"
+                                        disabled="true"
+                                        required="required"
+                                        ng-model="user.email"/>
+                            <div ng-messages="editForm.email.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex="50">
+                            <label>Username</label>
+                            <form:input required="required"
+                                        md-maxlength="30"
+                                        name="username"
+                                        disabled="true"
+                                        path="username"
+                                        ng-model="user.username"/>
+                            <div ng-messages="editForm.username.$error">
+                                <div ng-message="required">This is required.</div>
+                                <div ng-message="md-maxlength">Username must be less than 30 characters long.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex="50">
+                            <label>Password</label>
+                            <form:input required="required"
+                                        md-maxlength="30"
+                                        type="password"
+                                        name="password"
+                                        disabled="true"
+                                        path="password"
+                                        ng-model="user.password"/>
+                            <div ng-messages="editForm.password.$error">
+                                <div ng-message="required">This is required.</div>
+                                <div ng-message="md-maxlength">Password must be less than 30 characters long.</div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+
+                    <md-subheader class="md-primary">Passport info</md-subheader>
+                    <md-content class="md-padding" layout="row" layout-wrap>
+                        <md-input-container flex="50">
+                            <label>Passport series</label>
+                            <form:input name="passportSeries"
+                                        disabled="true"
+                                        path="userData.passportSeries"
+                                        required="required"
+                                        ng-model="user.userData.passportSeries"/>
+                            <div ng-messages="editForm.passportSeries.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex="50">
+                            <label>Passport number</label>
+                            <form:input name="passportNumber"
+                                        disabled="true"
+                                        required="required"
+                                        path="userData.passportNumber"
+                                        ng-model="user.userData.passportNumber"/>
+                            <div ng-messages="editForm.passportNumber.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex="50">
+                            <label>Passport validity</label>
+                            <form:input name="passportValidity"
+                                        required="required"
+                                        disabled="true"
+                                        path="userData.passportValidity"
+                                        ng-pattern="/^[0-9]{2}\.[0-9]{2}\.[0-9]{4}$/"
+                                        ng-model="user.userData.passportValidity"/>
+
+                            <div class="hint">##.##.####</div>
+
+                            <div ng-messages="editForm.passportValidity.$error">
+                                <div ng-message="required">This is required.</div>
+                                <div ng-message="pattern">##.##.#### - Please enter a valid date.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex="50">
+                            <label>Passport registration</label>
+                            <form:input name="passportRegistration"
+                                        md-maxlength="100"
+                                        path="userData.passportRegistration"
+                                        ng-model="user.userData.passportRegistration"/>
+                            <div ng-messages="editForm.passportRegistration.$error">
+                                <div ng-message="md-maxlength">Passport registration must be less than 30 characters
+                                    long.
+                                </div>
+                            </div>
+                        </md-input-container>
+
+                        <choose-file flex="100"
+                                     layout="row">
+                            <input id="fileInput"
+                                   class="ng-hide"
+                                   name="passportPhoto"
+                                   type="file"
+                                   ngf-select="onFilesChanged($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                                   ng-model="files"
+                                   multiple="multiple">
+
+                            <md-input-container flex
+                                                class="md-block">
+                                <input type="text"
+                                       ng-model="fileName"
+                                       disabled>
+                                <div class="hint">Select your passport photo</div>
+                            </md-input-container>
+                            <div>
+                                <md-button id="uploadButton"
+                                           class="md-fab md-mini">
+                                    <md-icon class="material-icons">attach_file</md-icon>
+                                </md-button>
+                            </div>
+                        </choose-file>
+                    </md-content>
+
+                    <md-subheader class="md-primary">Additional info</md-subheader>
+                    <md-content class="md-padding" layout="row" layout-wrap>
+                        <md-input-container flex="50">
+                            <label>Phone</label>
+                            <form:input name="phone"
+                                        path="userData.phone"
+                                        md-maxlength="10"
+                                        ng-pattern="/^[0-9]{10}$/"
+                                        ng-model="user.userData.phone"/>
+                            <div ng-messages="editForm.phone.$error">
+                                <div ng-message="md-maxlength">Phone must be less than 30 characters
+                                    long.
+                                </div>
+                                <div ng-message="pattern">Please enter a valid phone number.</div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+
+                    <md-subheader class="md-primary">Bonus card</md-subheader>
+                    <md-content class="md-padding" layout="row" layout-wrap>
+                        <md-input-container flex="50">
+                            <label>Company name</label>
+                            <form:input name="companyName"
+                                        path="userData.companyName"
+                                        ng-model="user.userData.companyName"/>
+                        </md-input-container>
+
+                        <md-input-container flex="50">
+                            <label>Card number</label>
+                            <form:input name="cardNumber"
+                                        path="userData.bonusCardNumber"
+                                        ng-model="user.userData.cardNumber"/>
+                        </md-input-container>
+                    </md-content>
+
+                    <div layout="row"
+                         flex="100"
+                         class="md-padding"
+                         layout-align="center center">
+                        <md-button class="md-raised md-primary"
+                                   flex="33"
+                                   layout-align="center"
+                                   type="submit">Submit
+                        </md-button>
+                    </div>
+                </form:form>
+            </md-content>
         </div>
     </div>
 
@@ -263,40 +269,11 @@
 <script type="text/javascript">
     app.controller('PageController', ['$scope', '$window', '$http', '$mdDialog', '$mdToast',
         function ($scope, $window, $http, $mdDialog, $mdToast) {
-            $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-            $scope.user = ${user};
-            $scope.orders = ${orders};
-            $scope.isMyPage = ${isMyPage};
+            $scope.user = ${userJson};
 
             this.redirect = function (url) {
                 window.location.href = url;
             };
-
-            this.showOrderInfoCard = function (ev, index) {
-                $mdDialog.show({
-                    controller: DialogController,
-                    templateUrl: '/jsp/template/order_info.tmpl.jsp',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-                    resolve: {
-                        order: function () {
-                            return $scope.orders[index];
-                        }
-                    }
-                }).then(function (answer) {
-                }, function () {
-                });
-            };
-
-            function DialogController($scope, $mdDialog, order) {
-                $scope.order = order;
-
-                $scope.cancel = function () {
-                    $mdDialog.cancel();
-                };
-            }
         }]);
 </script>
 </body>
