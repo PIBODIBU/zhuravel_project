@@ -1,6 +1,12 @@
 package main.model;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "user_data")
@@ -12,9 +18,9 @@ public class UserData {
     private String passportValidity;
     private String passportRegistration;
     private String phone;
-    private String passportUrl;
     private String companyName;
     private String bonusCardNumber;
+    private List<PassportFile> passportFiles;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -82,15 +88,6 @@ public class UserData {
         this.phone = phone;
     }
 
-    @Column(name = "passport_url", length = 200)
-    public String getPassportUrl() {
-        return passportUrl;
-    }
-
-    public void setPassportUrl(String passportUrl) {
-        this.passportUrl = passportUrl;
-    }
-
     @Column(name = "company", length = 100)
     public String getCompanyName() {
         return companyName;
@@ -107,5 +104,17 @@ public class UserData {
 
     public void setBonusCardNumber(String bonusCardNumber) {
         this.bonusCardNumber = bonusCardNumber;
+    }
+
+    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true,
+            mappedBy = "userData", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    public List<PassportFile> getPassportFiles() {
+        return passportFiles;
+    }
+
+    public void setPassportFiles(List<PassportFile> passportFiles) {
+        this.passportFiles = passportFiles;
     }
 }

@@ -1,11 +1,15 @@
 package main.controller;
 
+import main.dao.PassportFileDAO;
 import main.dao.UserDAO;
 import main.dao.UserDataDAO;
 import main.dao.UserRoleDAO;
+import main.dao.impl.PassportFileDAOImpl;
 import main.dao.impl.UserDAOImpl;
 import main.dao.impl.UserDataDAOImpl;
 import main.dao.impl.UserRoleDAOImpl;
+import main.helper.Const;
+import main.model.PassportFile;
 import main.model.User;
 import main.model.UserData;
 import main.model.UserRole;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,15 +27,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public void registerNewBuyer(HttpSession session,
                                  HttpServletRequest request,
                                  HttpServletResponse servletResponse,
-                                 @RequestParam("passportPhoto") MultipartFile passportPhotoFile,
+                                 @RequestParam("passportPhoto") List<MultipartFile> multipartFiles,
                                  @ModelAttribute User user, BindingResult resultUser) throws IOException {
         if (resultUser.hasErrors()) {
             servletResponse.sendRedirect("/login");
@@ -40,6 +46,7 @@ public class RegisterController {
         UserDAO userDAO = new UserDAOImpl();
         UserDataDAO userDataDAO = new UserDataDAOImpl();
         UserRoleDAO userRoleDAO = new UserRoleDAOImpl();
+        PassportFileDAO passportFileDAO = new PassportFileDAOImpl();
         UserData userData = user.getUserData();
         Integer userId;
         UserRole userRole = new UserRole();
@@ -50,22 +57,6 @@ public class RegisterController {
 
         // Bind user model to it's userdata model
         userData.setUser(user);
-
-        if (passportPhotoFile != null && !passportPhotoFile.isEmpty()) {
-            // Upload photo
-            String uploadsDir = "/uploads/scan/";
-            String realPathToUploads = request.getServletContext().getRealPath(uploadsDir);
-            if (!new File(realPathToUploads).exists()) {
-                new File(realPathToUploads).mkdir();
-            }
-
-            String filePath = realPathToUploads + passportPhotoFile.getOriginalFilename();
-            File destFile = new File(filePath);
-            passportPhotoFile.transferTo(destFile);
-
-            // Bind photo name to user's data
-            userData.setPassportUrl(passportPhotoFile.getOriginalFilename());
-        }
 
         // Insert user data model
         userDataDAO.insert(userData);
@@ -82,6 +73,31 @@ public class RegisterController {
 
         // Refresh user model
         user = userDAO.get(userId);
+
+        // Upload passport photos
+        if (multipartFiles != null && !multipartFiles.isEmpty()) {
+            for (MultipartFile file : multipartFiles) {
+                if (file == null || file.isEmpty())
+                    continue;
+
+                // Prepare db model
+                PassportFile passportFile = new PassportFile();
+                passportFile.setUserData(user.getUserData());
+                passportFile.setFileName(file.getOriginalFilename());
+
+                // Upload photo file to the server
+                String realPathToUploads = request.getServletContext().getRealPath(Const.PASSPORT_SCAN_UPLOAD_PATH);
+                if (!new File(realPathToUploads).exists()) {
+                    new File(realPathToUploads).mkdir();
+                }
+                String filePath = realPathToUploads + file.getOriginalFilename();
+                File destFile = new File(filePath);
+                file.transferTo(destFile);
+
+                // Save meta info to db
+                passportFileDAO.insert(passportFile);
+            }
+        }
 
         // Save user data to the session
         session.setAttribute(LoginController.ATTRIBUTE_USER, user);

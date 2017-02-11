@@ -184,7 +184,6 @@ public class User {
                     "[Validity: " + userData.getPassportValidity() + "] " +
                     "[Registration: " + userData.getPassportRegistration() + "] " +
                     "[Phone: " + userData.getPhone() + "] " +
-                    "[URL: " + userData.getPassportUrl() + "] " +
                     "[Company: " + userData.getCompanyName() + "] " +
                     "[Bonus card: " + userData.getBonusCardNumber() + "] ";
         else

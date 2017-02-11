@@ -152,13 +152,109 @@
                     </md-list-item>
                 </md-list>
             </section>
+
+            <section class="list-holder">
+                <md-list flex>
+                    <md-subheader class="md-primary">Bonus card</md-subheader>
+
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="domain"></md-icon>
+
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.userData.companyName">
+                                {{user.userData.companyName}}</h3>
+                            <h3 ng-if="!user.userData.companyName">- Not specified -</h3>
+
+                            <p>Company name</p>
+                        </div>
+                    </md-list-item>
+
+                    <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="cards"></md-icon>
+
+                        <div class="md-list-item-text">
+                            <h3 ng-if="user.userData.bonusCardNumber">
+                                {{user.userData.bonusCardNumber}}</h3>
+                            <h3 ng-if="!user.userData.bonusCardNumber">- Not specified -</h3>
+
+                            <p>Card number</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </section>
+
+            <section class="list-holder">
+                <md-subheader class="md-primary">Orders</md-subheader>
+
+                <div layout="row"
+                     flex
+                     layout-wrap
+                     class="md-padding">
+                    <md-content flex-gt-md="33"
+                                flex-xs="100"
+                                flex-gt-xs="50"
+                                flex-xl="25"
+                                layout="column"
+                                ng-repeat="order in orders">
+                        <md-card
+                                md-whiteframe="{{height}}"
+                                ng-init="height = 2; showControls = false"
+                                ng-mouseenter="height = 6; showControls = true"
+                                ng-mouseleave="height = 2; showControls = false">
+                            <md-card-header class="md-card-header"
+                                            ng-click="ctrl.showUserInfoCard($event, $index)"
+                                            md-whiteframe="2">
+                                <md-card-header-text>
+                                    <span class="md-title">{{order.buying_item_name}}</span>
+                                    <span class="md-subhead">{{order.date}}</span>
+                                </md-card-header-text>
+                            </md-card-header>
+
+                            <md-card-content>
+                                <p style="max-height: 200px; overflow: auto">{{order.buying_comment}}</p>
+                            </md-card-content>
+
+                            <md-card-actions layout="row"
+                                             layout-align="end end">
+                                <md-button class="md-icon-button">
+                                </md-button>
+
+                                <md-button class="md-icon-button"
+                                           aria-label="Settings"
+                                           ng-show="showControls"
+                                           ng-click="ctrl.showOrderInfoCard($event, $index)">
+                                    <md-tooltip md-direction="bottom" md-direction="left">Send email with details
+                                    </md-tooltip>
+                                    <md-icon md-svg-icon="email"></md-icon>
+                                </md-button>
+
+                                <md-button class="md-icon-button"
+                                           aria-label="Settings"
+                                           ng-show="showControls"
+                                           ng-click="ctrl.showOrderInfoCard($event, $index)">
+                                    <md-tooltip md-direction="bottom" md-direction="left">Buyer info</md-tooltip>
+                                    <md-icon md-svg-icon="account"></md-icon>
+                                </md-button>
+
+                                <md-button class="md-icon-button"
+                                           aria-label="Settings"
+                                           ng-show="showControls"
+                                           ng-click="ctrl.showOrderInfoCard($event, $index)">
+                                    <md-tooltip md-direction="bottom" md-direction="left">Order info</md-tooltip>
+                                    <md-icon md-svg-icon="information-outline"></md-icon>
+                                </md-button>
+                            </md-card-actions>
+                        </md-card>
+                    </md-content>
+                </div>
+            </section>
         </div>
     </div>
 
     <md-button class="md-fab fab"
                aria-label="Edit profile"
                ng-if="isMyPage"
-               ng-click="ctrl.redirect('/user/me/edit/')">
+               ng-click="ctrl.redirect('/user/me/edit')">
         <md-tooltip md-direction="bottom" md-direction="left">Edit profile</md-tooltip>
         <md-icon md-svg-src="account-edit"></md-icon>
     </md-button>
@@ -169,11 +265,38 @@
         function ($scope, $window, $http, $mdDialog, $mdToast) {
             $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
             $scope.user = ${user};
+            $scope.orders = ${orders};
             $scope.isMyPage = ${isMyPage};
 
             this.redirect = function (url) {
                 window.location.href = url;
             };
+
+            this.showOrderInfoCard = function (ev, index) {
+                $mdDialog.show({
+                    controller: DialogController,
+                    templateUrl: '/jsp/template/order_info.tmpl.jsp',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+                    resolve: {
+                        order: function () {
+                            return $scope.orders[index];
+                        }
+                    }
+                }).then(function (answer) {
+                }, function () {
+                });
+            };
+
+            function DialogController($scope, $mdDialog, order) {
+                $scope.order = order;
+
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+            }
         }]);
 </script>
 </body>

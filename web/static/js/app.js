@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('BaseApp',
-    ['ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
+    ['ngMaterial', 'ngMessages', 'ngFileUpload', 'material.svgAssetsCache']);
 
 app.config(function ($mdIconProvider, $mdThemingProvider) {
     $mdIconProvider.defaultIconSet('/resources/mdi.svg');
@@ -80,8 +80,7 @@ app.controller('ToolbarController', ['$rootScope', '$scope', '$window', '$mdDial
             };
         }
     }
-])
-;
+]);
 
 app.directive('chooseFile', function () {
     return {
@@ -93,16 +92,13 @@ app.directive('chooseFile', function () {
                 input[0].click();
             });
 
-            input.bind('change', function (e) {
-                scope.$apply(function () {
-                    var files = e.target.files;
-                    if (files[0]) {
-                        scope.fileName = files[0].name;
-                    } else {
-                        scope.fileName = null;
-                    }
-                });
-            });
+            scope.onFilesChanged = function ($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event) {
+                scope.fileName = "";
+
+                for (var i = 0; i < scope.files.length; i++) {
+                    scope.fileName += scope.files[i].name + ", ";
+                }
+            };
         }
     };
 });

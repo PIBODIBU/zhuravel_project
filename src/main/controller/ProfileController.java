@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.UserDAO;
 import main.dao.impl.UserDAOImpl;
+import main.helper.Const;
 import main.hibernate.serializer.OrderSerializer;
 import main.hibernate.serializer.UserSerializer;
 import main.model.Order;
@@ -11,13 +12,18 @@ import main.model.User;
 import main.security.SecurityManager;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 @Scope("session")
@@ -61,8 +67,79 @@ public class ProfileController {
         return modelAndView;
     }
 
-    @RequestMapping("/{id}")
-    public ModelAndView getUserPage(@PathVariable("id") Integer id,
+    @RequestMapping(value = "/me/edit/", method = RequestMethod.GET)
+    public ModelAndView editProfile(HttpSession httpSession,
+                                    HttpServletResponse servletResponse) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        SecurityManager securityManager = new SecurityManager(httpSession);
+        UserDAO userDAO = new UserDAOImpl();
+        User user;
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(User.class, new UserSerializer())
+                .registerTypeAdapter(Order.class, new OrderSerializer())
+                .create();
+
+        if (!securityManager.isUserLogged()) {
+            servletResponse.sendRedirect("/login");
+            return null;
+        }
+
+        user = userDAO.get(securityManager.getUser().getId());
+
+        modelAndView.setViewName("profile_edit.jsp");
+        modelAndView.addObject("user", user);
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/me/edit/", method = RequestMethod.POST)
+    public void editProfile(ServletRequest request,
+                            HttpSession httpSession,
+                            HttpServletResponse servletResponse,
+                            @RequestParam("passportPhoto") List<MultipartFile> passportPhotos,
+                            @ModelAttribute User user,
+                            BindingResult bindingResult) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        SecurityManager securityManager = new SecurityManager(httpSession);
+        UserDAO userDAO = new UserDAOImpl();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(User.class, new UserSerializer())
+                .registerTypeAdapter(Order.class, new OrderSerializer())
+                .create();
+
+        if (!securityManager.isUserLogged()) {
+            servletResponse.sendRedirect("/login");
+            return;
+        }
+
+        // Check for errors
+        if (bindingResult.hasErrors()) {
+            servletResponse.sendRedirect("/user/me/edit/");
+            return;
+        }
+
+        for (MultipartFile photo : passportPhotos) {
+            if (photo != null && !photo.isEmpty()) {
+                // Upload photo
+                String realPathToUploads = request.getServletContext().getRealPath(Const.PASSPORT_SCAN_UPLOAD_PATH);
+                if (!new File(realPathToUploads).exists()) {
+                    new File(realPathToUploads).mkdir();
+                }
+
+                String filePath = realPathToUploads + photo.getOriginalFilename();
+                File destFile = new File(filePath);
+                photo.transferTo(destFile);
+
+            }
+        }
+
+        userDAO.insertOrUpdate(user);
+
+        servletResponse.sendRedirect("/user/me");
+    }
+
+    @RequestMapping("/{user_id}")
+    public ModelAndView getUserPage(@PathVariable("user_id") Integer id,
                                     HttpSession httpSession,
                                     HttpServletResponse servletResponse) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
@@ -90,6 +167,11 @@ public class ProfileController {
         modelAndView.addObject("user", gson.toJson(requestedUser));
         modelAndView.addObject("userModel", requestedUser);
         modelAndView.addObject("isMyPage", false);
+
+        // Check if user is trying to get his profile
+        if (Objects.equals(requestedUser.getId(), securityManager.getUser().getId())) {
+            modelAndView.addObject("isMyPage", true);
+        }
 
         // Switch pages
         if (requestedUser.isRole(SecurityManager.ROLE_USER)) {

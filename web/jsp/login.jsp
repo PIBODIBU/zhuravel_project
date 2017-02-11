@@ -10,6 +10,9 @@
     <title>Welcome</title>
 
     <jsp:include page="include/angular_common.jsp"/>
+
+    <script src="/resources/js/angular-file-uploader/ng-file-upload.min.js"></script>
+    <script src="/resources/js/angular-file-uploader/ng-file-upload-shim.min.js"></script>
 </head>
 
 <body ng-app="BaseApp" ng-cloak>
@@ -223,10 +226,15 @@
                             <choose-file flex="100"
                                          layout="row">
                                 <input id="fileInput"
-                                       type="file"
+                                       class="ng-hide"
                                        name="passportPhoto"
-                                       class="ng-hide">
-                                <md-input-container flex class="md-block">
+                                       type="file"
+                                       ngf-select="onFilesChanged($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                                       ng-model="files"
+                                       multiple="multiple">
+
+                                <md-input-container flex
+                                                    class="md-block">
                                     <input type="text"
                                            ng-model="fileName"
                                            disabled>
@@ -293,34 +301,20 @@
 </md-content>
 
 <script type="text/javascript">
-    app.controller('LoginFormController', ['$scope', '$window', '$http', '$mdDialog', '$mdToast',
-        function ($scope, $window, $http, $mdDialog, $mdToast) {
-//        $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+    app.controller('LoginFormController', ['$rootScope', '$scope', '$window', '$http', '$mdDialog', '$mdToast',
+        function ($rootScope, $scope, $window, $http, $mdDialog, $mdToast) {
+            /* $scope.onFilesChanged = function ($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event) {
+             for (var file in $files)
+             console.log(file);
+             }*/
+        }]);
 
-            this.register = function () {
-                alert("");
+    app.config(function ($mdThemingProvider) {
+        $mdThemingProvider.theme('docs-dark', 'default')
+                .primaryPalette('yellow')
+                .dark();
 
-                $http({
-                    method: 'POST',
-                    url: '/register/',
-                    data: $.param({'data': $scope.register}),
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).then(
-                        function (response) {
-                            console.log(response.data);
-                        },
-                        function (response) {
-                            console.log(response);
-                        }
-                );
-            };
-        }])
-            .config(function ($mdThemingProvider) {
-                $mdThemingProvider.theme('docs-dark', 'default')
-                        .primaryPalette('yellow')
-                        .dark();
-
-            });
+    });
 </script>
 
 </body>
