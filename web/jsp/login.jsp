@@ -10,9 +10,6 @@
     <title>Welcome</title>
 
     <jsp:include page="include/angular_common.jsp"/>
-
-    <script src="/resources/js/angular-file-uploader/ng-file-upload.min.js"></script>
-    <script src="/resources/js/angular-file-uploader/ng-file-upload-shim.min.js"></script>
 </head>
 
 <body ng-app="BaseApp" ng-cloak>

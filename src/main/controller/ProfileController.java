@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import main.dao.UserDAO;
 import main.dao.impl.UserDAOImpl;
 import main.helper.Const;
+import main.hibernate.HibernateUtil;
 import main.hibernate.serializer.OrderSerializer;
 import main.hibernate.serializer.UserSerializer;
 import main.model.Order;
@@ -145,7 +146,7 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView();
         SecurityManager securityManager = new SecurityManager(httpSession);
         UserDAO userDAO = new UserDAOImpl();
-        User requestedUser = userDAO.get(id);
+        User requestedUser;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(User.class, new UserSerializer())
                 .registerTypeAdapter(Order.class, new OrderSerializer())
@@ -163,6 +164,9 @@ public class ProfileController {
             servletResponse.sendRedirect("/user/me");
             return null;
         }
+
+        requestedUser = userDAO.get(id);
+        HibernateUtil.shutdown();
 
         modelAndView.addObject("user", gson.toJson(requestedUser));
         modelAndView.addObject("userModel", requestedUser);

@@ -24,6 +24,7 @@
     <div layout="row"
          layout-align="center">
         <md-list flex="70"
+                 flex-xs="100"
                  style="background: #ffffff"
                  md-whiteframe="16">
             <md-subheader class="md-primary">Users</md-subheader>
@@ -64,6 +65,7 @@
     <div layout="row"
          layout-align="center">
         <md-list flex="70"
+                 flex-xs="100"
                  style="background: #ffffff"
                  md-whiteframe="16">
             <md-subheader class="md-primary">Agents</md-subheader>

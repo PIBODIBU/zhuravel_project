@@ -15,5 +15,12 @@
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
 
+<%--Angular app--%>
 <script src="${pageContext.request.contextPath}/resources/js/app.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
+
+<%--Angular modules--%>
+
+<%--File uploader--%>
+<script src="/resources/js/angular-file-uploader/ng-file-upload.min.js"></script>
+<script src="/resources/js/angular-file-uploader/ng-file-upload-shim.min.js"></script>

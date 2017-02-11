@@ -2,6 +2,7 @@ package main.controller;
 
 import main.dao.UserDAO;
 import main.dao.impl.UserDAOImpl;
+import main.hibernate.HibernateUtil;
 import main.model.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -19,9 +20,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Controller
-//@RequestMapping("/app")
-//@EnableAutoConfiguration
-//@Component
 public class LoginController {
     public static final String ATTRIBUTE_USER = "user";
 
@@ -58,6 +56,7 @@ public class LoginController {
 
         // Get user
         user = userDAO.getByUsernameOrEmail(username, password);
+        HibernateUtil.shutdown();
 
         // Bad credentials
         if (user == null) {

@@ -1,3 +1,4 @@
+<%@ page import="main.helper.Const" %>
 <!DOCTYPE HTML>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -25,6 +26,7 @@
          layout-align="center">
 
         <div flex="70"
+             flex-xs="100"
              layout-padding
              style="height: 200px"
              layout="row"
@@ -35,7 +37,8 @@
         </div>
 
         <div md-whiteframe="16"
-             flex="70">
+             flex="70"
+             flex-xs="100">
             <section class="list-holder">
                 <md-list>
                     <md-subheader class="md-primary">Main info</md-subheader>
@@ -119,17 +122,51 @@
                         </div>
                     </md-list-item>
 
-                    <md-list-item class="md-2-line">
-                        <md-icon md-svg-icon="image-filter-center-focus-weak"></md-icon>
+                    <md-list-item class="md-2-line md-padding">
+                        <%--<md-icon md-svg-icon="image-filter-center-focus-weak"></md-icon>--%>
 
                         <div class="md-list-item-text">
-                            <a ng-if="user.userData.passportUrl"
-                               ng-href="/uploads/scan/{{user.userData.passportUrl}}" target="_blank">
-                                Open
-                            </a>
-                            <h3 ng-if="!user.userData.passportUrl">- Not specified -</h3>
+                            <div layout="row"
+                                 flex
+                                 layout-wrap>
+                                <md-content flex-gt-md="20"
+                                            flex-xs="100"
+                                            flex-gt-xs="33"
+                                            flex-xl="20"
+                                            layout="column"
+                                            ng-repeat="passportFile in user.userData.passportPhotos">
+                                    <md-card
+                                            md-whiteframe="{{height}}"
+                                            ng-init="height = 2; showControls = false"
+                                            ng-mouseenter="height = 6; showControls = true"
+                                            ng-mouseleave="height = 2; showControls = false">
+                                        <md-card-header class="md-card-header"
+                                                        ng-click="ctrl.showUserInfoCard($event, $index)"
+                                                        md-whiteframe="2">
+                                            <md-card-header-text>
+                                                <p>{{passportFile.fileName}}</p>
+                                            </md-card-header-text>
+                                        </md-card-header>
 
-                            <p>Scan</p>
+                                        <md-card-content>
+                                            <img src=<%=Const.PASSPORT_SCAN_UPLOAD_PATH%>{{passportFile.fileName}}
+                                                 style="max-width: 100%;"/>
+                                        </md-card-content>
+
+                                        <md-card-actions layout="row" layout-align="end center">
+                                            <md-button class="md-icon-button"
+                                                       aria-label="Done"
+                                                       ng-click="ctrl.openFullPhoto(passportFile.fileName)">
+                                                <md-tooltip md-direction="bottom" md-direction="left">Open
+                                                </md-tooltip>
+                                                <md-icon md-svg-icon="arrow-expand"></md-icon>
+                                            </md-button>
+                                        </md-card-actions>
+                                    </md-card>
+                                </md-content>
+                            </div>
+
+                            <h3 ng-if="user.userData.passportPhotos == 0">- Not specified -</h3>
                         </div>
                     </md-list-item>
                 </md-list>
@@ -270,6 +307,10 @@
 
             this.redirect = function (url) {
                 window.location.href = url;
+            };
+
+            this.openFullPhoto = function (fileName) {
+                window.open('<%=Const.PASSPORT_SCAN_UPLOAD_PATH%>' + fileName, '_blank');
             };
 
             this.showOrderInfoCard = function (ev, index) {
