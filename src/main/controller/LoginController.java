@@ -45,6 +45,8 @@ public class LoginController {
                       HttpServletResponse servletResponse,
                       @RequestParam(value = "username") String username,
                       @RequestParam(value = "password") String password) throws IOException {
+        System.out.println("/login CALLED");
+
         if (session.getAttribute(ATTRIBUTE_USER) != null) {
             // If user is logged in - send redirect to default page
             servletResponse.sendRedirect("/order/active");

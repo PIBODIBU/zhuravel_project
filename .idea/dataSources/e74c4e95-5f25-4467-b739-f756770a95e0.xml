@@ -4,230 +4,229 @@
     <schema id="1" name="zhuravel">
       <visible>1</visible>
     </schema>
-    <schema id="2" name="example"/>
-    <schema id="3" name="information_schema"/>
-    <schema id="4" name="mysql"/>
-    <schema id="5" name="nau_tests"/>
-    <schema id="6" name="performance_schema"/>
-    <schema id="7" name="phpmyadmin"/>
-    <table id="8" parent="1" name="user_roles"/>
-    <table id="9" parent="1" name="users"/>
-    <table id="10" parent="1" name="orders"/>
-    <table id="11" parent="1" name="user_data"/>
-    <table id="12" parent="1" name="passport_files"/>
-    <column id="13" parent="8" name="id">
+    <schema id="2" name="information_schema"/>
+    <schema id="3" name="mysql"/>
+    <schema id="4" name="performance_schema"/>
+    <schema id="5" name="phpmyadmin"/>
+    <schema id="6" name="sys"/>
+    <table id="7" parent="1" name="user_roles"/>
+    <table id="8" parent="1" name="users"/>
+    <table id="9" parent="1" name="orders"/>
+    <table id="10" parent="1" name="user_data"/>
+    <table id="11" parent="1" name="passport_files"/>
+    <column id="12" parent="7" name="id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
       <sequence-identity>1</sequence-identity>
     </column>
-    <column id="14" parent="8" name="user_id">
+    <column id="13" parent="7" name="user_id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
     </column>
-    <column id="15" parent="8" name="role">
+    <column id="14" parent="7" name="role">
       <mandatory>1</mandatory>
       <data-type>varchar(45)|0</data-type>
     </column>
-    <index id="16" parent="8" name="user_id">
+    <index id="15" parent="7" name="user_id">
       <columns>user_id</columns>
       <desc-columns></desc-columns>
     </index>
-    <key id="17" parent="8" name="PRIMARY">
+    <key id="16" parent="7" name="PRIMARY">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="18" parent="8" name="user_roles_ibfk_1">
+    <foreign-key id="17" parent="7" name="user_roles_ibfk_1">
       <columns>user_id</columns>
       <ref-key>~.users.PRIMARY</ref-key>
       <cascade-update-rule>restrict</cascade-update-rule>
       <cascade-delete-rule>restrict</cascade-delete-rule>
     </foreign-key>
-    <column id="19" parent="9" name="id">
+    <column id="18" parent="8" name="id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
       <sequence-identity>1</sequence-identity>
     </column>
-    <column id="20" parent="9" name="name">
+    <column id="19" parent="8" name="name">
       <mandatory>1</mandatory>
       <data-type>varchar(50)|0</data-type>
     </column>
-    <column id="21" parent="9" name="surname">
+    <column id="20" parent="8" name="surname">
       <mandatory>1</mandatory>
       <data-type>varchar(50)|0</data-type>
     </column>
-    <column id="22" parent="9" name="middle_name">
+    <column id="21" parent="8" name="middle_name">
       <data-type>varchar(50)|0</data-type>
     </column>
-    <column id="23" parent="9" name="email">
+    <column id="22" parent="8" name="email">
       <mandatory>1</mandatory>
       <data-type>varchar(50)|0</data-type>
     </column>
-    <column id="24" parent="9" name="username">
+    <column id="23" parent="8" name="username">
       <mandatory>1</mandatory>
       <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="25" parent="9" name="password">
+    <column id="24" parent="8" name="password">
       <mandatory>1</mandatory>
       <data-type>varchar(30)|0</data-type>
     </column>
-    <index id="26" parent="9" name="email">
+    <index id="25" parent="8" name="email">
       <columns>email</columns>
       <desc-columns></desc-columns>
       <unique>1</unique>
     </index>
-    <index id="27" parent="9" name="username">
+    <index id="26" parent="8" name="username">
       <columns>username</columns>
       <desc-columns></desc-columns>
       <unique>1</unique>
     </index>
-    <key id="28" parent="9" name="PRIMARY">
+    <key id="27" parent="8" name="PRIMARY">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <key id="29" parent="9" name="email">
+    <key id="28" parent="8" name="email">
       <columns>email</columns>
       <underlying-index>email</underlying-index>
     </key>
-    <key id="30" parent="9" name="username">
+    <key id="29" parent="8" name="username">
       <columns>username</columns>
       <underlying-index>username</underlying-index>
     </key>
-    <column id="31" parent="10" name="id">
+    <column id="30" parent="9" name="id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
       <sequence-identity>1</sequence-identity>
     </column>
-    <column id="32" parent="10" name="agent_id">
+    <column id="31" parent="9" name="agent_id">
       <data-type>int(11)|0</data-type>
     </column>
-    <column id="33" parent="10" name="buyer_id">
+    <column id="32" parent="9" name="buyer_id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
     </column>
-    <column id="34" parent="10" name="date">
+    <column id="33" parent="9" name="date">
       <mandatory>1</mandatory>
       <data-type>datetime|0</data-type>
       <default-expression>CURRENT_TIMESTAMP</default-expression>
     </column>
-    <column id="35" parent="10" name="buying_item_name">
+    <column id="34" parent="9" name="buying_item_name">
       <mandatory>1</mandatory>
       <data-type>varchar(100)|0</data-type>
     </column>
-    <column id="36" parent="10" name="buying_comment">
+    <column id="35" parent="9" name="buying_comment">
       <mandatory>1</mandatory>
       <data-type>varchar(500)|0</data-type>
     </column>
-    <column id="37" parent="10" name="sold_comment">
+    <column id="36" parent="9" name="sold_comment">
       <data-type>varchar(500)|0</data-type>
     </column>
-    <column id="38" parent="10" name="is_done">
+    <column id="37" parent="9" name="is_done">
       <mandatory>1</mandatory>
       <data-type>tinyint(4)|0</data-type>
       <default-expression>&apos;0&apos;</default-expression>
     </column>
-    <column id="39" parent="10" name="is_archived">
+    <column id="38" parent="9" name="is_archived">
       <mandatory>1</mandatory>
       <data-type>tinyint(4)|0</data-type>
       <default-expression>&apos;0&apos;</default-expression>
     </column>
-    <column id="40" parent="10" name="is_canceled">
+    <column id="39" parent="9" name="is_canceled">
       <mandatory>1</mandatory>
       <data-type>tinyint(4)|0</data-type>
       <default-expression>&apos;0&apos;</default-expression>
     </column>
-    <index id="41" parent="10" name="agent_id">
+    <index id="40" parent="9" name="agent_id">
       <columns>agent_id</columns>
       <desc-columns></desc-columns>
     </index>
-    <index id="42" parent="10" name="buyer_id">
+    <index id="41" parent="9" name="buyer_id">
       <columns>buyer_id</columns>
       <desc-columns></desc-columns>
     </index>
-    <key id="43" parent="10" name="PRIMARY">
+    <key id="42" parent="9" name="PRIMARY">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="44" parent="10" name="orders_ibfk_1">
+    <foreign-key id="43" parent="9" name="orders_ibfk_1">
       <columns>agent_id</columns>
       <ref-key>~.users.PRIMARY</ref-key>
       <cascade-update-rule>restrict</cascade-update-rule>
       <cascade-delete-rule>restrict</cascade-delete-rule>
     </foreign-key>
-    <foreign-key id="45" parent="10" name="orders_ibfk_2">
+    <foreign-key id="44" parent="9" name="orders_ibfk_2">
       <columns>buyer_id</columns>
       <ref-key>~.users.PRIMARY</ref-key>
       <cascade-update-rule>restrict</cascade-update-rule>
       <cascade-delete-rule>restrict</cascade-delete-rule>
     </foreign-key>
-    <column id="46" parent="11" name="id">
+    <column id="45" parent="10" name="id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
       <sequence-identity>1</sequence-identity>
     </column>
-    <column id="47" parent="11" name="user_id">
+    <column id="46" parent="10" name="user_id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
     </column>
-    <column id="48" parent="11" name="passport_series">
+    <column id="47" parent="10" name="passport_series">
       <mandatory>1</mandatory>
       <data-type>varchar(20)|0</data-type>
     </column>
-    <column id="49" parent="11" name="passport_number">
+    <column id="48" parent="10" name="passport_number">
       <mandatory>1</mandatory>
       <data-type>varchar(20)|0</data-type>
     </column>
-    <column id="50" parent="11" name="passport_validity">
+    <column id="49" parent="10" name="passport_validity">
       <mandatory>1</mandatory>
       <data-type>varchar(50)|0</data-type>
     </column>
-    <column id="51" parent="11" name="passport_registration">
+    <column id="50" parent="10" name="passport_registration">
       <data-type>varchar(100)|0</data-type>
     </column>
-    <column id="52" parent="11" name="phone">
+    <column id="51" parent="10" name="phone">
       <data-type>varchar(20)|0</data-type>
     </column>
-    <column id="53" parent="11" name="company">
+    <column id="52" parent="10" name="company">
       <data-type>varchar(100)|0</data-type>
     </column>
-    <column id="54" parent="11" name="bonus_card_number">
+    <column id="53" parent="10" name="bonus_card_number">
       <data-type>varchar(100)|0</data-type>
     </column>
-    <index id="55" parent="11" name="user_id">
+    <index id="54" parent="10" name="user_id">
       <columns>user_id</columns>
       <desc-columns></desc-columns>
     </index>
-    <key id="56" parent="11" name="PRIMARY">
+    <key id="55" parent="10" name="PRIMARY">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="57" parent="11" name="user_data_ibfk_1">
+    <foreign-key id="56" parent="10" name="user_data_ibfk_1">
       <columns>user_id</columns>
       <ref-key>~.users.PRIMARY</ref-key>
       <cascade-update-rule>restrict</cascade-update-rule>
       <cascade-delete-rule>restrict</cascade-delete-rule>
     </foreign-key>
-    <column id="58" parent="12" name="id">
+    <column id="57" parent="11" name="id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
       <sequence-identity>1</sequence-identity>
     </column>
-    <column id="59" parent="12" name="user_data_id">
+    <column id="58" parent="11" name="user_data_id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
     </column>
-    <column id="60" parent="12" name="file_name">
+    <column id="59" parent="11" name="file_name">
       <mandatory>1</mandatory>
       <data-type>varchar(100)|0</data-type>
     </column>
-    <index id="61" parent="12" name="user_data_id">
+    <index id="60" parent="11" name="user_data_id">
       <columns>user_data_id</columns>
       <desc-columns></desc-columns>
     </index>
-    <key id="62" parent="12" name="PRIMARY">
+    <key id="61" parent="11" name="PRIMARY">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="63" parent="12" name="passport_files_ibfk_1">
+    <foreign-key id="62" parent="11" name="passport_files_ibfk_1">
       <columns>user_data_id</columns>
       <ref-key>~.user_data.PRIMARY</ref-key>
       <cascade-update-rule>restrict</cascade-update-rule>

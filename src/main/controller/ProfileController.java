@@ -14,9 +14,11 @@ import main.hibernate.serializer.UserSerializer;
 import main.model.Order;
 import main.model.PassportFile;
 import main.model.User;
+import main.model.UserData;
 import main.security.SecurityManager;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,6 +95,7 @@ public class ProfileController {
 
         modelAndView.setViewName("profile_edit.jsp");
         modelAndView.addObject("user", user);
+        modelAndView.addObject("userData", user.getUserData());
         modelAndView.addObject("userJson", gson.toJson(user));
 
         return modelAndView;
@@ -103,8 +106,8 @@ public class ProfileController {
                             HttpSession httpSession,
                             HttpServletResponse servletResponse,
                             @RequestParam("passportPhoto") List<MultipartFile> multipartFiles,
-                            @ModelAttribute User user,
-                            BindingResult bindingResult) throws IOException {
+                            @ModelAttribute("user") User user, BindingResult bindingResultUser,
+                            @ModelAttribute("userData") UserData userData, BindingResult bindingResultData) throws IOException {
         SecurityManager securityManager = new SecurityManager(httpSession);
         UserDAO userDAO = new UserDAOImpl();
         Gson gson = new GsonBuilder()
@@ -118,10 +121,12 @@ public class ProfileController {
         }
 
         // Check for errors
-        if (bindingResult.hasErrors()) {
+        if (bindingResultUser.hasErrors() || bindingResultData.hasErrors()) {
             servletResponse.sendRedirect("/user/me/edit/");
             return;
         }
+
+        user.setUserData(userData);
 
         // Upload passport photos
         FileUploader.uploadFromMultipart(request.getServletContext(), user, multipartFiles);

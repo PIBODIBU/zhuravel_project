@@ -72,12 +72,14 @@ public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
         session.beginTransaction();
 
         // Try to get by username
+        System.out.println("Trying to get user by username");
         criteria = session.createCriteria(User.class)
                 .add(Expression.sql("BINARY username=?", usernameOrEmail, new StringType()))
                 .add(Expression.sql("BINARY password=?", password, new StringType()));
 
         if (criteria.list().size() == 0) {
             // Try to get by email
+            System.out.println("Username is not provided. Trying to get user by email");
             criteria = session.createCriteria(User.class)
                     .add(Expression.sql("BINARY email=?", usernameOrEmail, new StringType()))
                     .add(Expression.sql("BINARY password=?", password, new StringType()));
