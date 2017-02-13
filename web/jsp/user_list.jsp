@@ -26,7 +26,7 @@
         <md-list flex="70"
                  flex-xs="100"
                  style="background: #ffffff"
-                 md-whiteframe="16">
+                 md-whiteframe="8">
             <md-subheader class="md-primary">Users</md-subheader>
 
             <div ng-repeat="user in users">
@@ -67,7 +67,7 @@
         <md-list flex="70"
                  flex-xs="100"
                  style="background: #ffffff"
-                 md-whiteframe="16">
+                 md-whiteframe="8">
             <md-subheader class="md-primary">Agents</md-subheader>
 
             <md-list-item class="md-2-line"
@@ -100,7 +100,13 @@
             </md-list-item>
         </md-list>
     </div>
-</md-content>
+
+    <md-button class="md-fab fab"
+               aria-label="Add agent"
+               ng-click="ctrl.addAgent($event)">
+        <md-tooltip md-direction="left" md-direction="left">Add agent</md-tooltip>
+        <md-icon md-svg-src="plus"></md-icon>
+    </md-button>
 </md-content>
 
 <script type="text/javascript">
@@ -109,6 +115,10 @@
             $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
             $scope.users = ${users};
             $scope.agents = ${agents};
+
+            this.redirect = function (location) {
+                window.location.href = location;
+            };
 
             this.goToUserProfile = function (ev, index) {
                 window.location.href = "/user/" + $scope.users[index].id;
@@ -182,6 +192,58 @@
                 });
             };
 
+            this.addAgent = function (ev) {
+                $mdDialog.show({
+                    controller: DialogController,
+                    templateUrl: '/jsp/template/new_agent.tmpl.jsp',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+                    resolve: {
+                        agent: function () {
+                            return {};
+                        }
+                    }
+                }).then(function (agent) {
+                    $http({
+                        method: 'POST',
+                        url: '/api/users/agents/add',
+                        data: $.param({'data': JSON.stringify(agent)}),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).then(function (response) {
+                        var agent = response.data;
+
+                        if ($scope.agents[0] == undefined)
+                            $scope.agents = [];
+
+                        $scope.agents.push(agent);
+
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Agent added')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    }, function (response) {
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Error occurred. Try again later')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    });
+                }, function () {
+                });
+            };
+
+            function DialogController($scope, $mdDialog, agent) {
+                $scope.agent = agent;
+
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+
+                $scope.done = function () {
+                    $mdDialog.hide(agent);
+                };
+            }
         }]);
 </script>
 </body>

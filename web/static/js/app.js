@@ -7,13 +7,17 @@ app.config(function ($mdIconProvider, $mdThemingProvider) {
     $mdIconProvider.defaultIconSet('/resources/mdi.svg');
 
     $mdThemingProvider.theme('default')
-        .primaryPalette('blue')
+        .primaryPalette('green')
         .accentPalette('orange');
 
     $mdThemingProvider.enableBrowserColor({
         palette: 'primary', // Default is 'primary', any basic material palette and extended palettes are available
         hue: '800' // Default is '800'
     });
+
+    $mdThemingProvider.theme('docs-dark', 'default')
+        .primaryPalette('yellow')
+        .dark();
 });
 
 app.controller('ToolbarController', ['$rootScope', '$scope', '$window', '$mdDialog', '$mdToast', '$http',

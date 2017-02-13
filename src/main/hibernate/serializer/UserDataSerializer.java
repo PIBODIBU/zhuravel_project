@@ -22,8 +22,9 @@ public class UserDataSerializer implements JsonSerializer<UserData> {
         object.addProperty("bonusCardNumber", userData.getBonusCardNumber());
 
         JsonArray passportFilesArray = new JsonArray();
-        for (PassportFile passportFile : userData.getPassportFiles())
-            passportFilesArray.add(passportFileSerializer.serialize(passportFile, type, context));
+        if (userData.getPassportFiles() != null)
+            for (PassportFile passportFile : userData.getPassportFiles())
+                passportFilesArray.add(passportFileSerializer.serialize(passportFile, type, context));
         object.add("passportPhotos", passportFilesArray);
 
         return object;

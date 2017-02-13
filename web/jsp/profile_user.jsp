@@ -143,7 +143,7 @@
                                                         ng-click="ctrl.showUserInfoCard($event, $index)"
                                                         md-whiteframe="2">
                                             <md-card-header-text>
-                                                <p>{{passportFile.fileName}}</p>
+                                                <p style="word-break: break-all">{{passportFile.fileName}}</p>
                                             </md-card-header-text>
                                         </md-card-header>
 

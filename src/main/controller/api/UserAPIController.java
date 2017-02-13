@@ -3,10 +3,17 @@ package main.controller.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.UserDAO;
+import main.dao.UserDataDAO;
+import main.dao.UserRoleDAO;
 import main.dao.impl.UserDAOImpl;
+import main.dao.impl.UserDataDAOImpl;
+import main.dao.impl.UserRoleDAOImpl;
 import main.hibernate.serializer.ErrorStatusSerializer;
+import main.hibernate.serializer.UserSerializer;
 import main.model.ErrorStatus;
 import main.model.User;
+import main.model.UserData;
+import main.model.UserRole;
 import main.security.SecurityManager;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,5 +57,57 @@ public class UserAPIController {
         userDAO.delete(user);
 
         return gson.toJson(errorStatus);
+    }
+
+    @RequestMapping(value = "/agents/add", method = RequestMethod.POST)
+    @ResponseBody
+    public String addAgent(HttpSession session,
+                           @RequestParam("data") String jsonData) {
+        SecurityManager securityManager = new SecurityManager(session);
+        UserDAO userDAO = new UserDAOImpl();
+        UserRoleDAO userRoleDAO = new UserRoleDAOImpl();
+        UserDataDAO userDataDAO = new UserDataDAOImpl();
+        ErrorStatus errorStatus = new ErrorStatus(false);
+        User user;
+        UserData userData;
+        UserRole userRole = new UserRole();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(User.class, new UserSerializer())
+                .create();
+
+        if (!securityManager.isUserLogged()) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You are not logged in");
+            return gson.toJson(errorStatus);
+        }
+
+        if (!securityManager.is(SecurityManager.ROLE_AGENT)) {
+            errorStatus.setError(true);
+            errorStatus.setErrorMessage("You have no permissions to add agent");
+            return gson.toJson(errorStatus);
+        }
+
+        // Create Java model
+        user = gson.fromJson(jsonData, User.class);
+
+        // Get user's data. We can't insert it, cause user doesn't have id yet
+        userData = user.getUserData();
+
+        // Insert user model into db
+        Integer id = userDAO.insert(user);
+        user = userDAO.get(id);
+
+        // Use inserted model (id is not null anymore) and insert it
+        if (userData != null) {
+            userData.setUser(user);
+            userDataDAO.insert(userData);
+        }
+
+        // Create and insert role
+        userRole.setUser(user);
+        userRole.setRole(SecurityManager.ROLE_AGENT);
+        userRoleDAO.insert(userRole);
+
+        return gson.toJson(user);
     }
 }

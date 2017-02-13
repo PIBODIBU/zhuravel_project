@@ -322,14 +322,6 @@
             </md-content>
         </div>
     </div>
-
-    <md-button class="md-fab fab"
-               aria-label="Edit profile"
-               ng-if="isMyPage"
-               ng-click="ctrl.redirect('/user/me/edit')">
-        <md-tooltip md-direction="bottom" md-direction="left">Edit profile</md-tooltip>
-        <md-icon md-svg-src="account-edit"></md-icon>
-    </md-button>
 </md-content>
 
 <script type="text/javascript">
