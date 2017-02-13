@@ -171,8 +171,7 @@
                 ).then(function () {
                     $http({
                         method: 'DELETE',
-                        url: '/api/users/',
-                        data: $.param({'user_id': $scope.agents[index].id}),
+                        url: '/api/users/' + $scope.agents[index].id,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     }).then(function (response) {
                         $scope.agents.splice(index, 1);
