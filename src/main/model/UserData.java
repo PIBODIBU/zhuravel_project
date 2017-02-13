@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_data")
 public class UserData {
-    private Integer id;
+    private Integer userDataId;
     private User user;
     private String passportSeries;
     private String passportNumber;
@@ -25,12 +25,12 @@ public class UserData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    public Integer getId() {
-        return id;
+    public Integer getUserDataId() {
+        return userDataId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserDataId(Integer id) {
+        this.userDataId = id;
     }
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, orphanRemoval = true)

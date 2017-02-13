@@ -12,7 +12,7 @@ public class UserDataSerializer implements JsonSerializer<UserData> {
         JsonObject object = new JsonObject();
         PassportFileSerializer passportFileSerializer = new PassportFileSerializer();
 
-        object.addProperty("id", userData.getId());
+        object.addProperty("id", userData.getUserDataId());
         object.addProperty("passportSeries", userData.getPassportSeries());
         object.addProperty("passportNumber", userData.getPassportNumber());
         object.addProperty("passportValidity", userData.getPassportValidity());

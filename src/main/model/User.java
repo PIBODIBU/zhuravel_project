@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "users")
 public class User {
-    private Integer id;
+    private Integer userId;
     private String name;
     private String surname;
     private String middleName;
@@ -27,12 +27,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    public Integer getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer id) {
+        this.userId = id;
     }
 
     @Column(name = "name", length = 50, nullable = false)

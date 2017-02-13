@@ -14,7 +14,7 @@ public class UserSerializer implements JsonSerializer<User> {
         JsonObject object = new JsonObject();
         UserDataSerializer userDataSerializer = new UserDataSerializer();
 
-        object.addProperty("id", user.getId());
+        object.addProperty("id", user.getUserId());
         object.addProperty("name", user.getName());
         object.addProperty("surname", user.getSurname());
         object.addProperty("middleName", user.getMiddleName());

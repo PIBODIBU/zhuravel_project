@@ -1,7 +1,6 @@
 package main.security;
 
 import main.controller.LoginController;
-import main.dao.OrderDAO;
 import main.model.Order;
 import main.model.User;
 import main.model.UserRole;
@@ -164,7 +163,7 @@ public class SecurityManager {
 
     public static class Orders {
         public static Boolean ownsAsAgent(Order order, User user) {
-            return Objects.equals(order.getAgent().getId(), user.getId());
+            return Objects.equals(order.getAgent().getUserId(), user.getUserId());
         }
     }
 }

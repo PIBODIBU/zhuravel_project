@@ -2,23 +2,18 @@ package main.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import main.dao.PassportFileDAO;
 import main.dao.UserDAO;
-import main.dao.impl.PassportFileDAOImpl;
 import main.dao.impl.UserDAOImpl;
-import main.helper.Const;
 import main.helper.FileUploader;
 import main.hibernate.HibernateUtil;
 import main.hibernate.serializer.OrderSerializer;
 import main.hibernate.serializer.UserSerializer;
 import main.model.Order;
-import main.model.PassportFile;
 import main.model.User;
 import main.model.UserData;
 import main.security.SecurityManager;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +47,7 @@ public class ProfileController {
             return null;
         }
 
-        user = userDAO.get(securityManager.getUser().getId());
+        user = userDAO.get(securityManager.getUser().getUserId());
 
         modelAndView.addObject("userModel", user);
         modelAndView.addObject("user", gson.toJson(user));
@@ -91,7 +85,7 @@ public class ProfileController {
             return null;
         }
 
-        user = userDAO.get(securityManager.getUser().getId());
+        user = userDAO.get(securityManager.getUser().getUserId());
 
         modelAndView.setViewName("profile_edit.jsp");
         modelAndView.addObject("user", user);
@@ -170,7 +164,7 @@ public class ProfileController {
         modelAndView.addObject("isMyPage", false);
 
         // Check if user is trying to get his profile
-        if (Objects.equals(requestedUser.getId(), securityManager.getUser().getId())) {
+        if (Objects.equals(requestedUser.getUserId(), securityManager.getUser().getUserId())) {
             modelAndView.addObject("isMyPage", true);
         }
 

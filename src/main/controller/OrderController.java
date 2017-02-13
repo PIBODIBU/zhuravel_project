@@ -55,7 +55,7 @@ public class OrderController {
                     gson.toJson(orderDAO.getUndefinedOrders(
                             userDAO.get(securityManager
                                     .getUser()
-                                    .getId()))));
+                                    .getUserId()))));
 
             modelAndView.setViewName("order_list-agent.jsp");
         } else {
@@ -99,7 +99,7 @@ public class OrderController {
                     gson.toJson(orderDAO.getActiveOrdersAsAgent(
                             userDAO.get(securityManager
                                     .getUser()
-                                    .getId()))));
+                                    .getUserId()))));
 
             modelAndView.setViewName("order_list-agent.jsp");
         } else if (securityManager.has(SecurityManager.ROLE_USER)) {
@@ -107,7 +107,7 @@ public class OrderController {
                     gson.toJson(orderDAO.getActiveOrdersAsBuyer(
                             userDAO.get(securityManager
                                     .getUser()
-                                    .getId()))));
+                                    .getUserId()))));
 
             modelAndView.setViewName("order_list-user.jsp");
         } else {
@@ -151,7 +151,7 @@ public class OrderController {
                     gson.toJson(orderDAO.getDoneOrdersAsAgent(
                             userDAO.get(securityManager
                                     .getUser()
-                                    .getId()))));
+                                    .getUserId()))));
 
             modelAndView.setViewName("order_list-agent.jsp");
         } else if (securityManager.has(SecurityManager.ROLE_USER)) {
@@ -159,7 +159,7 @@ public class OrderController {
                     gson.toJson(orderDAO.getDoneOrdersAsBuyer(
                             userDAO.get(securityManager
                                     .getUser()
-                                    .getId()))));
+                                    .getUserId()))));
 
             modelAndView.setViewName("order_list-user.jsp");
         } else {
@@ -203,7 +203,7 @@ public class OrderController {
                     gson.toJson(orderDAO.getCanceledOrdersAsAgent(
                             userDAO.get(securityManager
                                     .getUser()
-                                    .getId()))));
+                                    .getUserId()))));
 
             modelAndView.setViewName("order_list-agent.jsp");
         } else if (securityManager.has(SecurityManager.ROLE_USER)) {
@@ -211,7 +211,7 @@ public class OrderController {
                     gson.toJson(orderDAO.getCanceledOrdersAsBuyer(
                             userDAO.get(securityManager
                                     .getUser()
-                                    .getId()))));
+                                    .getUserId()))));
 
             modelAndView.setViewName("order_list-user.jsp");
         } else {
@@ -255,7 +255,7 @@ public class OrderController {
                     gson.toJson(orderDAO.getArchivedOrdersAsAgent(
                             userDAO.get(securityManager
                                     .getUser()
-                                    .getId()))));
+                                    .getUserId()))));
 
             modelAndView.setViewName("order_list-agent.jsp");
         } else if (securityManager.has(SecurityManager.ROLE_USER)) {

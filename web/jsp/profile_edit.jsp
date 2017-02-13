@@ -43,12 +43,12 @@
                       enctype="multipart/form-data"
                       method="post">
 
-                    <spring:bind path="user.id">
+                    <spring:bind path="user.userId">
                         <input name="${status.expression}"
                                value="${status.value}"
                                type="hidden"/>
                     </spring:bind>
-                    <spring:bind path="userData.id">
+                    <spring:bind path="userData.userDataId">
                         <input name="${status.expression}"
                                value="${status.value}"
                                type="hidden"/>
@@ -95,8 +95,12 @@
                         <md-input-container flex="50">
                             <label>Middle name</label>
 
-                            <input path="middleName"
-                                   ng-model="user.middleName"/>
+                            <spring:bind path="user.middleName">
+                                <input name="${status.expression}"
+                                       value="${status.value}"
+                                       ng-model="user.middleName"/>
+                            </spring:bind>
+
                             <div ng-messages="editForm.middleName.$error">
                                 <div ng-message="md-maxlength">Username must be less than 30 characters long.</div>
                             </div>

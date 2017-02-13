@@ -12,14 +12,9 @@ import main.mail.MailManager;
 import main.model.ErrorStatus;
 import main.model.Order;
 import main.security.SecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.GET;
 
 @RestController
 @RequestMapping("/api/order")
@@ -231,7 +226,7 @@ public class OrderAPIController {
             return gson.toJson(errorStatus);
         }
 
-        order.setBuyer(userDAO.get(securityManager.getUser().getId()));
+        order.setBuyer(userDAO.get(securityManager.getUser().getUserId()));
         order.setBuyingItemName(name);
         order.setBuyingComment(comment);
         order.setDone(false);
@@ -289,7 +284,7 @@ public class OrderAPIController {
             return gson.toJson(errorStatus);
         }
 
-        order.setAgent(userDAO.get(securityManager.getUser().getId()));
+        order.setAgent(userDAO.get(securityManager.getUser().getUserId()));
         orderDAO.insertOrUpdate(order);
 
         return gson.toJson(errorStatus);
