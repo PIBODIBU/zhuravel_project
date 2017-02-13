@@ -15,7 +15,7 @@
 <body ng-app="BaseApp" ng-cloak>
 
 <jsp:include page="include/toolbar.jsp">
-    <jsp:param name="title" value="${user.name.concat(' ').concat(user.surname)}"/>
+    <jsp:param name="title" value="${user.name.concat(' ').concat(user.surname).concat(' ')}"/>
 </jsp:include>
 
 <md-content ng-controller="PageController as ctrl"
@@ -172,7 +172,6 @@
                                        name="${status.expression}"
                                        value="${status.value}"
                                        readonly
-                                       path="userData.passportSeries"
                                        ng-model="user.userData.passportSeries"/>
                             </spring:bind>
 
@@ -183,11 +182,15 @@
 
                         <md-input-container flex="50">
                             <label>Passport number</label>
-                            <input name="passportNumber"
-                                   readonly
-                                   required
-                                   path="userData.passportNumber"
-                                   ng-model="user.userData.passportNumber"/>
+
+                            <spring:bind path="userData.passportNumber">
+                                <input name="${status.expression}"
+                                       value="${status.value}"
+                                       readonly
+                                       required
+                                       ng-model="user.userData.passportNumber"/>
+                            </spring:bind>
+
                             <div ng-messages="editForm.passportNumber.$error">
                                 <div ng-message="required">This is required.</div>
                             </div>
@@ -195,12 +198,16 @@
 
                         <md-input-container flex="50">
                             <label>Passport validity</label>
-                            <input name="passportValidity"
-                                   required
-                                   readonly
-                                   path="userData.passportValidity"
-                                   ng-pattern="/^[0-9]{2}\.[0-9]{2}\.[0-9]{4}$/"
-                                   ng-model="user.userData.passportValidity"/>
+
+                            <spring:bind path="userData.passportValidity">
+                                <input required
+                                       name="${status.expression}"
+                                       value="${status.value}"
+                                       readonly
+                                       path="userData.passportValidity"
+                                       ng-pattern="/^[0-9]{2}\.[0-9]{2}\.[0-9]{4}$/"
+                                       ng-model="user.userData.passportValidity"/>
+                            </spring:bind>
 
                             <div class="hint">##.##.####</div>
 
@@ -212,10 +219,15 @@
 
                         <md-input-container flex="50">
                             <label>Passport registration</label>
-                            <input name="passportRegistration"
-                                   md-maxlength="100"
-                                   path="userData.passportRegistration"
-                                   ng-model="user.userData.passportRegistration"/>
+
+                            <spring:bind path="userData.passportRegistration">
+                                <input name="${status.expression}"
+                                       value="${status.value}"
+                                       md-maxlength="100"
+                                       path="userData.passportRegistration"
+                                       ng-model="user.userData.passportRegistration"/>
+                            </spring:bind>
+
                             <div ng-messages="editForm.passportRegistration.$error">
                                 <div ng-message="md-maxlength">Passport registration must be less than 30 characters
                                     long.
@@ -253,11 +265,15 @@
                     <md-content class="md-padding" layout="row" layout-wrap>
                         <md-input-container flex="50">
                             <label>Phone</label>
-                            <input name="phone"
-                                   path="userData.phone"
-                                   md-maxlength="10"
-                                   ng-pattern="/^[0-9]{10}$/"
-                                   ng-model="user.userData.phone"/>
+
+                            <spring:bind path="userData.phone">
+                                <input name="${status.expression}"
+                                       value="${status.value}"
+                                       md-maxlength="10"
+                                       ng-pattern="/^[0-9]{10}$/"
+                                       ng-model="user.userData.phone"/>
+                            </spring:bind>
+
                             <div ng-messages="editForm.phone.$error">
                                 <div ng-message="md-maxlength">Phone must be less than 30 characters
                                     long.
@@ -271,16 +287,24 @@
                     <md-content class="md-padding" layout="row" layout-wrap>
                         <md-input-container flex="50">
                             <label>Company name</label>
-                            <input name="companyName"
-                                   path="userData.companyName"
-                                   ng-model="user.userData.companyName"/>
+
+                            <spring:bind path="userData.companyName">
+                                <input name="${status.expression}"
+                                       value="${status.value}"
+                                       ng-model="user.userData.companyName"/>
+                            </spring:bind>
+
                         </md-input-container>
 
                         <md-input-container flex="50">
                             <label>Card number</label>
-                            <input name="cardNumber"
-                                   path="userData.bonusCardNumber"
-                                   ng-model="user.userData.cardNumber"/>
+
+                            <spring:bind path="userData.bonusCardNumber">
+                                <input name="${status.expression}"
+                                       value="${status.value}"
+                                       ng-model="user.userData.bonusCardNumber"/>
+                            </spring:bind>
+
                         </md-input-container>
                     </md-content>
 

@@ -3,7 +3,9 @@ package main.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.UserDAO;
+import main.dao.UserDataDAO;
 import main.dao.impl.UserDAOImpl;
+import main.dao.impl.UserDataDAOImpl;
 import main.helper.FileUploader;
 import main.hibernate.HibernateUtil;
 import main.hibernate.serializer.OrderSerializer;
@@ -104,6 +106,7 @@ public class ProfileController {
                             @ModelAttribute("userData") UserData userData, BindingResult bindingResultData) throws IOException {
         SecurityManager securityManager = new SecurityManager(httpSession);
         UserDAO userDAO = new UserDAOImpl();
+        UserDataDAO userDataDAO = new UserDataDAOImpl();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(User.class, new UserSerializer())
                 .registerTypeAdapter(Order.class, new OrderSerializer())
@@ -121,11 +124,13 @@ public class ProfileController {
         }
 
         user.setUserData(userData);
+        userData.setUser(user);
 
         // Upload passport photos
         FileUploader.uploadFromMultipart(request.getServletContext(), user, multipartFiles);
 
         userDAO.insertOrUpdate(user);
+        userDataDAO.insertOrUpdate(userData);
 
         servletResponse.sendRedirect("/user/me");
     }

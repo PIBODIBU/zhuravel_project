@@ -32,8 +32,8 @@
              layout="row"
              layout-align="start end"
              md-colors="{backgroundColor: 'default-primary-500'}">
-            <h1 ng-if="isMyPage">{{user.name}} {{user.surname}} (me)</h1>
-            <h1 ng-if="!isMyPage">{{user.name}} {{user.surname}}</h1>
+            <h1 ng-if="isMyPage">{{user.name}} {{user.surname}} {{user.middleName}} (me)</h1>
+            <h1 ng-if="!isMyPage">{{user.name}} {{user.surname}} {{user.middleName}}</h1>
         </div>
 
         <div md-whiteframe="16"
