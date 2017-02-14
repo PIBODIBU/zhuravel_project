@@ -23,6 +23,16 @@
              flex-xs="90"
              layout="column"
              layout-align="center">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h3>
+                    <span>Welcome</span>
+                </h3>
+
+                <span flex></span>
+            </div>
+        </md-toolbar>
+
         <md-tabs class="md-primary"
                  md-dynamic-height
                  md-border-bottom
@@ -283,6 +293,7 @@
 
                         <div layout="row"
                              flex="100"
+                             class="md-padding"
                              layout-align="center center">
                             <md-button class="md-raised md-primary"
                                        flex="33"
