@@ -4,6 +4,7 @@ import main.dao.PassportFileDAO;
 import main.dao.impl.PassportFileDAOImpl;
 import main.model.PassportFile;
 import main.model.User;
+import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -12,6 +13,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class FileUploader {
+    private static Logger logger;
+
+    static {
+        logger = Logger.getLogger(FileUploader.class);
+    }
+
     public static void uploadFromMultipart(ServletContext servletContext,
                                            User user,
                                            List<MultipartFile> multipartFiles) throws NullPointerException, IOException {
@@ -35,6 +42,14 @@ public class FileUploader {
             // Save meta info to db
             passportFileDAO.insert(preparePassportFile(user, file));
         }
+    }
+
+    public static Boolean deleteByName(ServletContext servletContext, String name) {
+        String realPathToUploads = servletContext.getRealPath(Const.PASSPORT_SCAN_UPLOAD_PATH);
+        String pathToFile = realPathToUploads.concat(name);
+
+        File file = new File(pathToFile);
+        return file.delete();
     }
 
     private static PassportFile preparePassportFile(User user, MultipartFile file) {

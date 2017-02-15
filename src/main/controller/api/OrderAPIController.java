@@ -21,12 +21,12 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/api/order")
 public class OrderAPIController {
-    private MailManager mailManager;
+   /* private MailManager mailManager;
 
     @Autowired
     public void setMailManager(@Qualifier("mailManager") MailManager mailManager) {
         this.mailManager = mailManager;
-    }
+    }*/
 
     @RequestMapping(value = "/archive", method = RequestMethod.POST)
     @ResponseBody

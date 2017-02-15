@@ -2,6 +2,7 @@ package main.security;
 
 import main.controller.LoginController;
 import main.model.Order;
+import main.model.PassportFile;
 import main.model.User;
 import main.model.UserRole;
 
@@ -164,6 +165,22 @@ public class SecurityManager {
     public static class Orders {
         public static Boolean ownsAsAgent(Order order, User user) {
             return Objects.equals(order.getAgent().getUserId(), user.getUserId());
+        }
+    }
+
+    public static class PassportFiles {
+        public static Boolean owns(PassportFile passportFile, User user) {
+            Boolean owns = false;
+            Integer passportFileId = passportFile.getId();
+
+            for (PassportFile iterator : user.getUserData().getPassportFiles()) {
+                if (Objects.equals(passportFileId, iterator.getId())) {
+                    owns = true;
+                    break;
+                }
+            }
+
+            return owns;
         }
     }
 }

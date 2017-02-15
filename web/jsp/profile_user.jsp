@@ -132,6 +132,7 @@
                                             flex-xs="100"
                                             flex-gt-xs="33"
                                             flex-xl="20"
+                                            class="md-padding"
                                             layout="column"
                                             ng-repeat="passportFile in user.userData.passportPhotos">
                                     <md-card
@@ -154,6 +155,23 @@
 
                                         <md-card-actions layout="row" layout-align="end center">
                                             <md-button class="md-icon-button"
+                                                       aria-label="Settings">
+                                                <md-icon md-svg-icon=""></md-icon>
+                                            </md-button>
+
+                                            <md-button class="md-icon-button"
+                                                       ng-show="showControls"
+                                                       ng-click="ctrl.deleteDocument($event, $index)"
+                                                       aria-label="Settings">
+                                                <md-tooltip md-direction="bottom"
+                                                            md-direction="left">
+                                                    Delete document
+                                                </md-tooltip>
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+
+                                            <md-button class="md-icon-button"
+                                                       ng-show="showControls"
                                                        aria-label="Done"
                                                        ng-click="ctrl.openFullPhoto(passportFile.fileName)">
                                                 <md-tooltip md-direction="bottom" md-direction="left">Open
@@ -308,6 +326,39 @@
 
             this.openFullPhoto = function (fileName) {
                 window.open('<%=Const.PASSPORT_SCAN_UPLOAD_PATH%>' + fileName, '_blank');
+            };
+
+            this.deleteDocument = function (ev, index) {
+                console.log($scope.user.userData.passportPhotos[index].id);
+
+                $mdDialog.show($mdDialog.confirm()
+                        .clickOutsideToClose(true)
+                        .title('Attention')
+                        .textContent('This action cannot be undone. Delete document?')
+                        .ariaLabel('delete_dialog')
+                        .ok('Yes')
+                        .cancel('No')
+                        .targetEvent(ev)
+                ).then(function () {
+                    $http({
+                        method: 'DELETE',
+                        url: '/api/documents/' + $scope.user.userData.passportPhotos[index].id
+                    }).then(function (response) {
+                        $scope.user.userData.passportPhotos.splice(index, 1);
+
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Document deleted')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    }, function (response) {
+                        $mdToast.show($mdToast.simple()
+                                .textContent('Error occurred. Try again later')
+                                .position('bottom')
+                                .hideDelay(3000));
+                    })
+                }, function () {
+
+                });
             };
 
             this.showOrderInfoCard = function (ev, index) {
