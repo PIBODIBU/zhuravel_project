@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-//@Service("mailManagerApp")
+@Service("mailManager")
 public class MailManager {
     private JavaMailSenderImpl mailSender;
 

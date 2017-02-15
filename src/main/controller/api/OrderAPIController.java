@@ -12,6 +12,8 @@ import main.mail.MailManager;
 import main.model.ErrorStatus;
 import main.model.Order;
 import main.security.SecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -19,14 +21,13 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/api/order")
 public class OrderAPIController {
-    /*
-        private MailManager mailManager;
+    private MailManager mailManager;
 
-        @Autowired
-        public void setMailManager(@Qualifier("mailManagerApp") MailManager mailManager) {
-            this.mailManager = mailManager;
-        }
-    */
+    @Autowired
+    public void setMailManager(@Qualifier("mailManager") MailManager mailManager) {
+        this.mailManager = mailManager;
+    }
+
     @RequestMapping(value = "/archive", method = RequestMethod.POST)
     @ResponseBody
     public String archiveOrder(HttpSession session,
