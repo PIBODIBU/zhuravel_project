@@ -21,12 +21,12 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/api/order")
 public class OrderAPIController {
-   /* private MailManager mailManager;
+    private MailManager mailManager;
 
     @Autowired
     public void setMailManager(@Qualifier("mailManager") MailManager mailManager) {
         this.mailManager = mailManager;
-    }*/
+    }
 
     @RequestMapping(value = "/archive", method = RequestMethod.POST)
     @ResponseBody
@@ -139,7 +139,7 @@ public class OrderAPIController {
         order.setSoldComment(comment);
         orderDAO.insertOrUpdate(order);
 
-        new MailManager().notifyUserAboutCompletedOrder(order.getBuyer(), order);
+        mailManager.notifyUserAboutCompletedOrder(order.getBuyer(), order);
 
         return gson.toJson(errorStatus);
     }
@@ -242,6 +242,8 @@ public class OrderAPIController {
             errorStatus.setErrorMessage("Server error occurred");
             return gson.toJson(errorStatus);
         }
+
+        mailManager.notifySystemAboutNewOrder(order);
 
         return gson.toJson(order);
     }

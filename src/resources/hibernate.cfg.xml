@@ -25,5 +25,6 @@
         <mapping class="main.model.UserData"/>
         <mapping class="main.model.Order"/>
         <mapping class="main.model.PassportFile"/>
+        <mapping class="main.model.Setting"/>
     </session-factory>
 </hibernate-configuration>
