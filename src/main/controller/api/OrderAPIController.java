@@ -11,6 +11,7 @@ import main.hibernate.serializer.OrderSerializer;
 import main.mail.MailManager;
 import main.model.ErrorStatus;
 import main.model.Order;
+import main.model.User;
 import main.security.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -257,6 +258,7 @@ public class OrderAPIController {
         OrderDAO orderDAO = new OrderDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
         Order order;
+        User agent;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
                 .create();
@@ -287,8 +289,11 @@ public class OrderAPIController {
             return gson.toJson(errorStatus);
         }
 
-        order.setAgent(userDAO.get(securityManager.getUser().getUserId()));
+        agent = userDAO.get(securityManager.getUser().getUserId());
+        order.setAgent(agent);
         orderDAO.insertOrUpdate(order);
+
+        mailManager.notifySystemAboutOrderAccepting(order, agent);
 
         return gson.toJson(errorStatus);
     }

@@ -10,6 +10,9 @@
     <context:component-scan base-package="main.controller"/>
     <context:component-scan base-package="main.controller.api"/>
     <context:component-scan base-package="main.mail"/>
+    <context:component-scan base-package="main.dao"/>
+    <context:component-scan base-package="main.dao.impl"/>
+    <context:component-scan base-package="main.security"/>
 
     <mvc:resources mapping="/resources/**" location="/static/"/>
     <mvc:resources mapping="/uploads/**" location="/uploads/"/>

@@ -36,6 +36,7 @@
                         flex-gt-xs="50"
                         flex-xl="25"
                         layout="column"
+                        class="grey-bg"
                         ng-repeat="order in orders">
                 <md-card flex md-whiteframe="4">
                     <md-card-header class="md-card-header"

@@ -2,14 +2,20 @@ package main.dao.impl;
 
 import main.dao.SettingDAO;
 import main.hibernate.HibernateUtil;
+import main.model.ServiceEmail;
 import main.model.Setting;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 import org.hibernate.type.StringType;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Service("settingDAO")
 public class SettingDAOImpl extends BasicDAOImpl<Setting> implements SettingDAO {
-    private static final String SETTING_SERVICE_EMAILS = "service_emails";
+    public static final String SETTING_SERVICE_EMAILS = "service_emails";
 
     @Override
     public Setting getByName(String name) {
@@ -44,5 +50,28 @@ public class SettingDAOImpl extends BasicDAOImpl<Setting> implements SettingDAO 
         emails = setting.getValue().split(",");
 
         return emails;
+    }
+
+    @Override
+    public List<ServiceEmail> getServiceEmailModels() {
+        String[] emails = getServiceEmails();
+        List<ServiceEmail> serviceEmails = new ArrayList<>();
+
+        for (String email : emails) {
+            serviceEmails.add(new ServiceEmail(email));
+        }
+
+        return serviceEmails;
+    }
+
+    @Override
+    public void insertOrUpdate(Setting model) {
+        Setting candidate = getByName(model.getName());
+
+        if (candidate != null) {
+            model.setId(candidate.getId());
+        }
+
+        super.insertOrUpdate(model);
     }
 }

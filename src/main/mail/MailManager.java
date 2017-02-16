@@ -5,15 +5,12 @@ import main.dao.impl.SettingDAOImpl;
 import main.model.Order;
 import main.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Arrays;
 
 @Service("mailManager")
 public class MailManager {
@@ -22,6 +19,36 @@ public class MailManager {
     @Autowired
     public void setMailSender(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
+    }
+
+    public void notifySystemAboutOrderAccepting(Order order, User agent) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = null;
+        SettingDAO settingDAO = new SettingDAOImpl();
+
+        try {
+            messageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            messageHelper.setFrom(mailSender.getUsername());
+            messageHelper.setTo(settingDAO.getServiceEmails());
+            messageHelper.setSubject("New order is accepted!");
+            messageHelper.setText("<html>\n" +
+                            "<body>\n" +
+                            "<h3>Hello!</h3>\n" +
+                            "\n" +
+                            "<div>\n" +
+                            "    New order is accepted by " + agent.getName() + " " + agent.getSurname() + ".\n" +
+                            "</div>\n" +
+                            "\n" +
+                            "</body>\n" +
+                            "</html>",
+                    true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            System.out.println(e.toString());
+            return;
+        }
     }
 
     public void notifySystemAboutNewOrder(Order order) {

@@ -5,12 +5,14 @@ import main.model.Order;
 import main.model.PassportFile;
 import main.model.User;
 import main.model.UserRole;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Service("securityManager")
 public class SecurityManager {
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_AGENT = "ROLE_AGENT";
@@ -152,6 +154,7 @@ public class SecurityManager {
 
     public void setHttpSession(HttpSession httpSession) {
         this.httpSession = httpSession;
+        this.setUser((User) this.httpSession.getAttribute(LoginController.ATTRIBUTE_USER));
     }
 
     public User getUser() {
