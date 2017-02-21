@@ -33,11 +33,11 @@
 
                 <md-menu-divider></md-menu-divider>
 
-                <c:if test="${sessionScope.user.isRole('ROLE_USER')}">
+                <c:if test="${sessionScope.user.isRole('ROLE_AGENT')}">
                     <md-menu-item>
-                        <md-button ng-click="ctrl.openNewOrderDialog($event)">
-                            <md-icon md-svg-icon="playlist-plus"></md-icon>
-                            New order
+                        <md-button ng-click="ctrl.redirect('/settings/')">
+                            <md-icon md-svg-icon="settings"></md-icon>
+                            Settings
                         </md-button>
                     </md-menu-item>
 

@@ -162,7 +162,6 @@ public class ProfileController {
         }
 
         requestedUser = userDAO.get(id);
-        HibernateUtil.shutdown();
 
         modelAndView.addObject("user", gson.toJson(requestedUser));
         modelAndView.addObject("userModel", requestedUser);

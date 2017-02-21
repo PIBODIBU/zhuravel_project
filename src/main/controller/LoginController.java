@@ -58,7 +58,6 @@ public class LoginController {
 
         // Get user
         user = userDAO.getByUsernameOrEmail(username, password);
-        HibernateUtil.shutdown();
 
         // Bad credentials
         if (user == null) {

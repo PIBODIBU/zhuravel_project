@@ -6,7 +6,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 public class HibernateUtil {
-
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
@@ -21,7 +20,7 @@ public class HibernateUtil {
             throw new ExceptionInInitializerError(ex);
         }
     }
-    
+
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
