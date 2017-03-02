@@ -9,6 +9,7 @@ import main.dao.impl.UserDAOImpl;
 import main.hibernate.serializer.OrderSerializer;
 import main.model.Order;
 import main.security.SecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,19 @@ import java.io.IOException;
 @Scope("session")
 @RequestMapping("/order")
 public class OrderController {
+    private UserDAO userDAO;
+    private OrderDAO orderDAO;
+
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    @Autowired
+    public void setOrderDAO(OrderDAO orderDAO) {
+        this.orderDAO = orderDAO;
+    }
+
     @RequestMapping(value = "/undefined", method = RequestMethod.GET)
     public ModelAndView undefinedOrders(HttpSession session,
                                         HttpServletResponse servletResponse) throws IOException {
@@ -71,8 +85,6 @@ public class OrderController {
                                      HttpServletResponse servletResponse) throws IOException {
         SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
-        UserDAO userDAO = new UserDAOImpl();
-        OrderDAO orderDAO = new OrderDAOImpl();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();

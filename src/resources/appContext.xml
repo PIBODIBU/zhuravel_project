@@ -38,8 +38,38 @@
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://127.0.0.1:3306/zhuravell"/>
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/zhuravel?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8"/>
         <property name="username" value="root"/>
         <property name="password" value="root"/>
+    </bean>
+
+    <bean id="hibernate3AnnotatedSessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>main.model.Order</value>
+                <value>main.model.User</value>
+                <value>main.model.UserRole</value>
+                <value>main.model.UserData</value>
+                <value>main.model.PassportFile</value>
+                <value>main.model.Setting</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="userDAO" class="main.dao.impl.UserDAOImpl">
+        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"/>
+    </bean>
+
+    <bean id="orderDAO" class="main.dao.impl.OrderDAOImpl">
+        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"/>
     </bean>
 </beans>

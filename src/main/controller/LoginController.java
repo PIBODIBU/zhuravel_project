@@ -4,6 +4,7 @@ import main.dao.UserDAO;
 import main.dao.impl.UserDAOImpl;
 import main.hibernate.HibernateUtil;
 import main.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +23,13 @@ import java.io.IOException;
 @Controller
 public class LoginController {
     public static final String ATTRIBUTE_USER = "user";
+
+    private UserDAO userDAO;
+
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(HttpSession session,
@@ -53,7 +61,7 @@ public class LoginController {
             return;
         }
 
-        UserDAO userDAO = new UserDAOImpl();
+//        UserDAO userDAO = new UserDAOImpl();
         User user;
 
         // Get user

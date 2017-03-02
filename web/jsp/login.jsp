@@ -53,6 +53,7 @@
                                        required
                                        md-no-asterisk
                                        name="username"
+                                       autofocus
                                        ng-model="login.username">
 
                                 <div ng-messages="loginForm.username.$error">

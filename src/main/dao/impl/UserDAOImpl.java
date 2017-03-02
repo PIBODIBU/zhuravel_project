@@ -8,6 +8,7 @@ import main.model.User;
 import main.security.SecurityManager;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
@@ -18,10 +19,16 @@ import java.util.Iterator;
 import java.util.List;
 
 public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
+    private SessionFactory sessionFactory;
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public ArrayList<User> getAll() {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
         ArrayList<User> users;
 
         session.beginTransaction();
@@ -34,12 +41,14 @@ public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
 
         session.getTransaction().commit();
 
+        session.close();
+
         return users;
     }
 
     @Override
     public Integer insert(User model) {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
 
         Integer id = -1;
 
@@ -47,25 +56,29 @@ public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
         id = ((Integer) session.save(model));
         session.getTransaction().commit();
 
+        session.close();
+
         return id;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public User get(Integer id) {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
 
         session.beginTransaction();
         User user = ((User) session.get(User.class, id));
         session.refresh(user);
         session.getTransaction().commit();
 
+        session.close();
+
         return user;
     }
 
     @Override
     public User getByUsernameOrEmail(String usernameOrEmail, String password) {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
         User user = null;
         Criteria criteria;
 
@@ -93,13 +106,15 @@ public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
 
         session.getTransaction().commit();
 
+        session.close();
+
         return user;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<User> getBuyers() {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
         SecurityManager securityManager = new SecurityManager();
         Iterator<User> iterator;
         List<User> buyers = new ArrayList<>();
@@ -125,13 +140,15 @@ public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
 
         session.getTransaction().commit();
 
+        session.close();
+
         return buyers;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<User> getAgents() {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
         SecurityManager securityManager = new SecurityManager();
         Iterator<User> iterator;
         List<User> agents = new ArrayList<>();
@@ -156,6 +173,8 @@ public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
         }
 
         session.getTransaction().commit();
+
+        session.close();
 
         return agents;
     }

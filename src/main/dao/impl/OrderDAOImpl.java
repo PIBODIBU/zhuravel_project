@@ -5,20 +5,30 @@ import main.hibernate.HibernateUtil;
 import main.model.Order;
 import main.model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class OrderDAOImpl extends BasicDAOImpl<Order> implements OrderDAO {
+    private SessionFactory sessionFactory;
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public Order get(Integer id) {
-        Session session = HibernateUtil.getSession();
+//        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
 
         session.beginTransaction();
         Order order = ((Order) session.get(Order.class, id));
         session.refresh(order);
         session.getTransaction().commit();
+
+        session.close();
 
         return order;
     }
@@ -26,7 +36,8 @@ public class OrderDAOImpl extends BasicDAOImpl<Order> implements OrderDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Order> getAll() {
-        Session session = HibernateUtil.getSession();
+//        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
 
         session.beginTransaction();
 
@@ -34,6 +45,8 @@ public class OrderDAOImpl extends BasicDAOImpl<Order> implements OrderDAO {
         orders.forEach(session::refresh);
 
         session.getTransaction().commit();
+
+        session.close();
 
         return orders;
     }
