@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.OrderDAO;
 import main.dao.UserDAO;
-import main.dao.impl.OrderDAOImpl;
-import main.dao.impl.UserDAOImpl;
 import main.hibernate.serializer.ErrorStatusSerializer;
 import main.hibernate.serializer.OrderSerializer;
 import main.mail.MailManager;
@@ -23,10 +21,22 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/api/order")
 public class OrderAPIController {
     private MailManager mailManager;
+    private UserDAO userDAO;
+    private OrderDAO orderDAO;
 
     @Autowired
     public void setMailManager(@Qualifier("mailManager") MailManager mailManager) {
         this.mailManager = mailManager;
+    }
+
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    @Autowired
+    public void setOrderDAO(OrderDAO orderDAO) {
+        this.orderDAO = orderDAO;
     }
 
     @RequestMapping(value = "/archive", method = RequestMethod.POST)
@@ -35,7 +45,6 @@ public class OrderAPIController {
                                @RequestParam(value = "order_id") Integer orderId) {
         SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
-        OrderDAO orderDAO = new OrderDAOImpl();
         Order order;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
@@ -92,7 +101,6 @@ public class OrderAPIController {
                                 @RequestParam(value = "comment") String comment) {
         SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
-        OrderDAO orderDAO = new OrderDAOImpl();
         Order order;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
@@ -151,7 +159,6 @@ public class OrderAPIController {
                               @RequestParam(value = "order_id") Integer orderId) {
         SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
-        OrderDAO orderDAO = new OrderDAOImpl();
         Order order;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
@@ -208,8 +215,6 @@ public class OrderAPIController {
                            @RequestParam(value = "comment") String comment) {
         SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
-        OrderDAO orderDAO = new OrderDAOImpl();
-        UserDAO userDAO = new UserDAOImpl();
         Order order = new Order();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Order.class, new OrderSerializer())
@@ -255,8 +260,6 @@ public class OrderAPIController {
                                      @RequestParam(value = "order_id") Integer orderId) {
         SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
-        OrderDAO orderDAO = new OrderDAOImpl();
-        UserDAO userDAO = new UserDAOImpl();
         Order order;
         User agent;
         Gson gson = new GsonBuilder()

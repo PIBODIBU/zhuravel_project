@@ -20,7 +20,6 @@ public class OrderDAOImpl extends BasicDAOImpl<Order> implements OrderDAO {
     @SuppressWarnings("unchecked")
     @Override
     public Order get(Integer id) {
-//        Session session = HibernateUtil.getSession();
         Session session = sessionFactory.openSession();
 
         session.beginTransaction();
@@ -36,7 +35,6 @@ public class OrderDAOImpl extends BasicDAOImpl<Order> implements OrderDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Order> getAll() {
-//        Session session = HibernateUtil.getSession();
         Session session = sessionFactory.openSession();
 
         session.beginTransaction();

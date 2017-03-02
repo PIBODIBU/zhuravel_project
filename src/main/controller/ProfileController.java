@@ -4,16 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.UserDAO;
 import main.dao.UserDataDAO;
-import main.dao.impl.UserDAOImpl;
-import main.dao.impl.UserDataDAOImpl;
 import main.helper.FileUploader;
-import main.hibernate.HibernateUtil;
 import main.hibernate.serializer.OrderSerializer;
 import main.hibernate.serializer.UserSerializer;
 import main.model.Order;
 import main.model.User;
 import main.model.UserData;
 import main.security.SecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -32,12 +30,24 @@ import java.util.Objects;
 @Scope("session")
 @RequestMapping("/user")
 public class ProfileController {
+    private UserDAO userDAO;
+    private UserDataDAO userDataDAO;
+
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    @Autowired
+    public void setUserDataDAO(UserDataDAO userDataDAO) {
+        this.userDataDAO = userDataDAO;
+    }
+
     @RequestMapping("/me")
     public ModelAndView getMyPage(HttpSession httpSession,
                                   HttpServletResponse servletResponse) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         SecurityManager securityManager = new SecurityManager(httpSession);
-        UserDAO userDAO = new UserDAOImpl();
         User user;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(User.class, new UserSerializer())
@@ -75,7 +85,6 @@ public class ProfileController {
                                     HttpServletResponse servletResponse) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         SecurityManager securityManager = new SecurityManager(httpSession);
-        UserDAO userDAO = new UserDAOImpl();
         User user;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(User.class, new UserSerializer())
@@ -105,8 +114,6 @@ public class ProfileController {
                             @ModelAttribute("user") User user, BindingResult bindingResultUser,
                             @ModelAttribute("userData") UserData userData, BindingResult bindingResultData) throws IOException {
         SecurityManager securityManager = new SecurityManager(httpSession);
-        UserDAO userDAO = new UserDAOImpl();
-        UserDataDAO userDataDAO = new UserDataDAOImpl();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(User.class, new UserSerializer())
                 .registerTypeAdapter(Order.class, new OrderSerializer())
@@ -141,7 +148,6 @@ public class ProfileController {
                                     HttpServletResponse servletResponse) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         SecurityManager securityManager = new SecurityManager(httpSession);
-        UserDAO userDAO = new UserDAOImpl();
         User requestedUser;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(User.class, new UserSerializer())

@@ -5,9 +5,6 @@ import com.google.gson.GsonBuilder;
 import main.dao.UserDAO;
 import main.dao.UserDataDAO;
 import main.dao.UserRoleDAO;
-import main.dao.impl.UserDAOImpl;
-import main.dao.impl.UserDataDAOImpl;
-import main.dao.impl.UserRoleDAOImpl;
 import main.hibernate.serializer.ErrorStatusSerializer;
 import main.hibernate.serializer.UserSerializer;
 import main.model.ErrorStatus;
@@ -15,6 +12,7 @@ import main.model.User;
 import main.model.UserData;
 import main.model.UserRole;
 import main.security.SecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -22,13 +20,31 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("api/users")
 public class UserAPIController {
+    private UserDAO userDAO;
+    private UserRoleDAO userRoleDAO;
+    private UserDataDAO userDataDAO;
+
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    @Autowired
+    public void setUserRoleDAO(UserRoleDAO userRoleDAO) {
+        this.userRoleDAO = userRoleDAO;
+    }
+
+    @Autowired
+    public void setUserDataDAO(UserDataDAO userDataDAO) {
+        this.userDataDAO = userDataDAO;
+    }
+
     @RequestMapping(value = "/{user_id}", method = RequestMethod.DELETE)
     @ResponseBody
     public String deleteUser(HttpSession session,
                              @PathVariable("user_id") Integer userId) {
         SecurityManager securityManager = new SecurityManager(session);
         ErrorStatus errorStatus = new ErrorStatus(false);
-        UserDAO userDAO = new UserDAOImpl();
         User user;
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ErrorStatus.class, new ErrorStatusSerializer())
@@ -64,9 +80,6 @@ public class UserAPIController {
     public String addAgent(HttpSession session,
                            @RequestParam("data") String jsonData) {
         SecurityManager securityManager = new SecurityManager(session);
-        UserDAO userDAO = new UserDAOImpl();
-        UserRoleDAO userRoleDAO = new UserRoleDAOImpl();
-        UserDataDAO userDataDAO = new UserDataDAOImpl();
         ErrorStatus errorStatus = new ErrorStatus(false);
         User user;
         UserData userData;

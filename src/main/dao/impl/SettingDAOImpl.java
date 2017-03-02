@@ -6,6 +6,7 @@ import main.model.ServiceEmail;
 import main.model.Setting;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Expression;
 import org.hibernate.type.StringType;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,15 @@ import java.util.List;
 public class SettingDAOImpl extends BasicDAOImpl<Setting> implements SettingDAO {
     public static final String SETTING_SERVICE_EMAILS = "service_emails";
 
+    private SessionFactory sessionFactory;
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public Setting getByName(String name) {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionFactory.openSession();
         Criteria criteria;
         Setting setting = null;
 
@@ -35,6 +42,8 @@ public class SettingDAOImpl extends BasicDAOImpl<Setting> implements SettingDAO 
         }
 
         session.getTransaction().commit();
+
+        session.close();
 
         return setting;
     }

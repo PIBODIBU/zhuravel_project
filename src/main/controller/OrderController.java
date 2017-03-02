@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.OrderDAO;
 import main.dao.UserDAO;
-import main.dao.impl.OrderDAOImpl;
-import main.dao.impl.UserDAOImpl;
 import main.hibernate.serializer.OrderSerializer;
 import main.model.Order;
 import main.security.SecurityManager;
@@ -42,8 +40,6 @@ public class OrderController {
                                         HttpServletResponse servletResponse) throws IOException {
         SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
-        UserDAO userDAO = new UserDAOImpl();
-        OrderDAO orderDAO = new OrderDAOImpl();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
@@ -135,8 +131,6 @@ public class OrderController {
                                    HttpServletResponse servletResponse) throws IOException {
         SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
-        UserDAO userDAO = new UserDAOImpl();
-        OrderDAO orderDAO = new OrderDAOImpl();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
@@ -187,8 +181,6 @@ public class OrderController {
                                      HttpServletResponse servletResponse) throws IOException {
         SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
-        UserDAO userDAO = new UserDAOImpl();
-        OrderDAO orderDAO = new OrderDAOImpl();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();
@@ -239,8 +231,6 @@ public class OrderController {
                                        HttpServletResponse servletResponse) throws IOException {
         SecurityManager securityManager = new SecurityManager(session);
         ModelAndView modelAndView = new ModelAndView();
-        UserDAO userDAO = new UserDAOImpl();
-        OrderDAO orderDAO = new OrderDAOImpl();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Order.class, new OrderSerializer())
                 .create();

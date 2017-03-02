@@ -4,17 +4,12 @@ import main.dao.PassportFileDAO;
 import main.dao.UserDAO;
 import main.dao.UserDataDAO;
 import main.dao.UserRoleDAO;
-import main.dao.impl.PassportFileDAOImpl;
-import main.dao.impl.UserDAOImpl;
-import main.dao.impl.UserDataDAOImpl;
-import main.dao.impl.UserRoleDAOImpl;
-import main.helper.Const;
 import main.helper.FileUploader;
-import main.model.PassportFile;
 import main.model.User;
 import main.model.UserData;
 import main.model.UserRole;
 import main.security.SecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,13 +21,37 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
+    private UserDAO userDAO;
+    private UserDataDAO userDataDAO;
+    private UserRoleDAO userRoleDAO;
+    private PassportFileDAO passportFileDAO;
+
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    @Autowired
+    public void setUserDataDAO(UserDataDAO userDataDAO) {
+        this.userDataDAO = userDataDAO;
+    }
+
+    @Autowired
+    public void setUserRoleDAO(UserRoleDAO userRoleDAO) {
+        this.userRoleDAO = userRoleDAO;
+    }
+
+    @Autowired
+    public void setPassportFileDAO(PassportFileDAO passportFileDAO) {
+        this.passportFileDAO = passportFileDAO;
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public void registerNewBuyer(HttpSession session,
                                  HttpServletRequest request,
@@ -44,10 +63,6 @@ public class RegisterController {
             return;
         }
 
-        UserDAO userDAO = new UserDAOImpl();
-        UserDataDAO userDataDAO = new UserDataDAOImpl();
-        UserRoleDAO userRoleDAO = new UserRoleDAOImpl();
-        PassportFileDAO passportFileDAO = new PassportFileDAOImpl();
         UserData userData = user.getUserData();
         Integer userId;
         UserRole userRole = new UserRole();

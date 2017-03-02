@@ -3,7 +3,6 @@ package main.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import main.dao.SettingDAO;
-import main.dao.impl.SettingDAOImpl;
 import main.hibernate.serializer.ServiceEmailSerializer;
 import main.model.ServiceEmail;
 import main.security.SecurityManager;
@@ -21,12 +20,22 @@ import java.io.IOException;
 @RequestMapping("/settings")
 public class SettingsController {
     private SecurityManager securityManager;
+    private SettingDAO settingDAO;
+
+    @Autowired
+    public void setSettingDAO(SettingDAO settingDAO) {
+        this.settingDAO = settingDAO;
+    }
+
+    @Autowired
+    public void setSecurityManager(SecurityManager securityManager) {
+        this.securityManager = securityManager;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView listSettings(HttpSession session,
                                      HttpServletResponse servletResponse) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
-        SettingDAO settingDAO = new SettingDAOImpl();
         securityManager.setHttpSession(session);
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ServiceEmail.class, new ServiceEmailSerializer())
@@ -49,8 +58,5 @@ public class SettingsController {
         return modelAndView;
     }
 
-    @Autowired
-    public void setSecurityManager(SecurityManager securityManager) {
-        this.securityManager = securityManager;
-    }
+
 }

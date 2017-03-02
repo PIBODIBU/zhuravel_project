@@ -19,6 +19,16 @@ public class SettingsAPIController {
     private SettingDAO settingDAO;
     private SecurityManager securityManager;
 
+    @Autowired
+    public void setSettingDAO(@Qualifier("settingDAO") SettingDAO settingDAO) {
+        this.settingDAO = settingDAO;
+    }
+
+    @Autowired
+    public void setSecurityManager(@Qualifier("securityManager") SecurityManager securityManager) {
+        this.securityManager = securityManager;
+    }
+
     @RequestMapping(value = "/set/", method = RequestMethod.POST)
     @ResponseBody
     public String setSetting(HttpSession session,
@@ -44,15 +54,5 @@ public class SettingsAPIController {
         settingDAO.insertOrUpdate(setting);
 
         return gson.toJson(errorStatus);
-    }
-
-    @Autowired
-    public void setSettingDAO(@Qualifier("settingDAO") SettingDAO settingDAO) {
-        this.settingDAO = settingDAO;
-    }
-
-    @Autowired
-    public void setSecurityManager(@Qualifier("securityManager") SecurityManager securityManager) {
-        this.securityManager = securityManager;
     }
 }
