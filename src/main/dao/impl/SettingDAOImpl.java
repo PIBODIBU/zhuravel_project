@@ -18,8 +18,6 @@ import java.util.List;
 public class SettingDAOImpl extends BasicDAOImpl<Setting> implements SettingDAO {
     public static final String SETTING_SERVICE_EMAILS = "service_emails";
 
-    private SessionFactory sessionFactory;
-
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

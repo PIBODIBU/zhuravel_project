@@ -19,8 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class UserDAOImpl extends BasicDAOImpl<User> implements UserDAO {
-    private SessionFactory sessionFactory;
-
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

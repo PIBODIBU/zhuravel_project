@@ -1,20 +1,17 @@
 package main.dao.impl;
 
 import main.dao.BasicDAO;
-import main.hibernate.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
 
-    @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
     @Override
@@ -39,7 +36,7 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
 
     @Override
     public Integer insert(T model) {
-        Session session = sessionFactory.openSession();
+        Session session = getSessionFactory().openSession();
 
         Integer id;
 
@@ -54,7 +51,12 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
 
     @Override
     public void insertOrUpdate(T model) {
-        Session session = sessionFactory.openSession();
+        if (getSessionFactory() == null) {
+            System.out.println("FUUUUCK");
+            return;
+        }
+
+        Session session = getSessionFactory().openSession();
 
         session.beginTransaction();
         session.saveOrUpdate(model);
@@ -69,7 +71,7 @@ public abstract class BasicDAOImpl<T> implements BasicDAO<T> {
 
     @Override
     public void delete(T model) {
-        Session session = sessionFactory.openSession();
+        Session session = getSessionFactory().openSession();
 
         session.beginTransaction();
         session.delete(model);

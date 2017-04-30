@@ -5,8 +5,8 @@
       <element id="artifact" artifact-name="SimpleOrder:war exploded" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="lib">
-          <element id="library" level="project" name="Spring-4.3.4.RELEASE" />
           <element id="library" level="project" name="Spring MVC-4.3.4.RELEASE" />
+          <element id="library" level="project" name="Spring-4.3.4.RELEASE" />
         </element>
       </element>
     </root>

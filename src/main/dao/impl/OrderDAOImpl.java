@@ -11,8 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class OrderDAOImpl extends BasicDAOImpl<Order> implements OrderDAO {
-    private SessionFactory sessionFactory;
-
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

@@ -6,18 +6,38 @@ var app = angular.module('BaseApp',
 app.config(function ($mdIconProvider, $mdThemingProvider) {
     $mdIconProvider.defaultIconSet('/resources/mdi.svg');
 
+    var customPrimary = {
+        '50': '#1c2a58',
+        '100': '#1c2a58',
+        '200': '#1c2a58',
+        '300': '#1c2a58',
+        '400': '#1c2a58',
+        '500': '#1c2a58',
+        '600': '#1c2a58',
+        '700': '#1c2a58',
+        '800': '#1c2a58',
+        '900': '#1c2a58',
+        'A100': '#1c2a58',
+        'A200': '#1c2a58',
+        'A400': '#1c2a58',
+        'A700': '#1c2a58'
+    };
+    $mdThemingProvider
+        .definePalette('customPrimary',
+            customPrimary);
+
     $mdThemingProvider.theme('default')
-        .primaryPalette('green')
+        .primaryPalette('customPrimary')
         .accentPalette('orange');
+
+    $mdThemingProvider.theme('docs-dark', 'default')
+        .primaryPalette('yellow')
+        .dark();
 
     $mdThemingProvider.enableBrowserColor({
         palette: 'primary', // Default is 'primary', any basic material palette and extended palettes are available
         hue: '800' // Default is '800'
     });
-
-    $mdThemingProvider.theme('docs-dark', 'default')
-        .primaryPalette('yellow')
-        .dark();
 });
 
 app.controller('ToolbarController', ['$rootScope', '$scope', '$window', '$mdDialog', '$mdToast', '$http',

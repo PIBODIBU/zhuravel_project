@@ -44,8 +44,31 @@
         <property name="password" value="root"/>
     </bean>
 
-    <bean id="hibernate3AnnotatedSessionFactory"
+    <!--<bean id="hibernate3AnnotatedSessionFactory"
           class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>main.model.Order</value>
+                <value>main.model.User</value>
+                <value>main.model.UserRole</value>
+                <value>main.model.UserData</value>
+                <value>main.model.PassportFile</value>
+                <value>main.model.Setting</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+-->
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="annotatedClasses">
             <list>
@@ -68,26 +91,26 @@
 
     <!--DAO beans-->
     <bean id="orderDAO" class="main.dao.impl.OrderDAOImpl">
-        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="passportFileDAO" class="main.dao.impl.PassportFileDAOImpl">
-        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="settingDAO" class="main.dao.impl.SettingDAOImpl">
-        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="userDAO" class="main.dao.impl.UserDAOImpl">
-        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="userDataDAO" class="main.dao.impl.UserDataDAOImpl">
-        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="userRoleDAO" class="main.dao.impl.UserRoleDAOImpl">
-        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 </beans>
